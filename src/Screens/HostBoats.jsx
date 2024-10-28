@@ -1,0 +1,115 @@
+import {
+  View,
+  StatusBar,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+} from "react-native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import Myboats from "../Components/HostBoats/Myboats";
+import Option from "../Components/HostBoats/Option";
+import NewScreen from "../Components/HostBoats/NewScreen";
+import BoatData from "../Components/HostBoats/BoatData";
+import AddPlans from "../Components/HostBoats/AddPlans";
+import AddDocImage from "../Components/HostBoats/AddDocImages";
+import Location from "../Components/HostBoats/Location";
+import AddBoatImages from "../Components/HostBoats/AddBoatImages";
+import Cancellation from "../Components/HostBoats/Cancellation";
+import Accessories from "../Components/HostBoats/Accessories";
+import Allowed from "../Components/HostBoats/Allowed";
+
+import backImage from "../../assets/Icons/hostheaderback.png";
+import markImage from "../../assets/Icons/dashboardmark.png";
+
+const HostBoats = () => {
+  const Stack = createNativeStackNavigator(); //Navigator Screen
+
+  const HomeHeaderRight = () => {
+    return (
+      <View
+        className="p-5 mt-2"
+        style={{
+          marginTop: StatusBar.currentHeight,
+          borderTopRightRadius: 20,
+          borderTopLeftRadius: 20,
+          backgroundColor: "#17233c",
+        }}
+      >
+        <View className="relative flex flex-row items-center justify-center space-x-3">
+          <TouchableOpacity style={styles.headerback}>
+            <Image source={backImage}></Image>
+          </TouchableOpacity>
+          <Image source={markImage}></Image>
+        </View>
+      </View>
+    );
+  };
+
+  return (
+    <Stack.Navigator initialRouteName="HomeScreenBody">
+      <Stack.Screen
+        name="Myboats"
+        component={Myboats}
+        options={{ header: () => <HomeHeaderRight /> }}
+      />
+      <Stack.Screen
+        name="Option"
+        component={Option}
+        options={{ header: () => <HomeHeaderRight /> }}
+      />
+      <Stack.Screen
+        name="NewScreen"
+        component={NewScreen}
+        options={{ header: () => <HomeHeaderRight /> }}
+      />
+      <Stack.Screen
+        name="BoatData"
+        component={BoatData}
+        options={{ header: () => <HomeHeaderRight /> }}
+      />
+      <Stack.Screen
+        name="AddPlans"
+        component={AddPlans}
+        options={{ header: () => <HomeHeaderRight /> }}
+      />
+      <Stack.Screen
+        name="AddDocImage"
+        component={AddDocImage}
+        options={{ header: () => <HomeHeaderRight /> }}
+      />
+      <Stack.Screen
+        name="Location"
+        component={Location}
+        options={{ header: () => <HomeHeaderRight /> }}
+      />
+      <Stack.Screen
+        name="AddBoatImages"
+        component={AddBoatImages}
+        options={{ header: () => <HomeHeaderRight /> }}
+      />
+      <Stack.Screen
+        name="Cancellation"
+        component={Cancellation}
+        options={{ header: () => <HomeHeaderRight /> }}
+      />
+      <Stack.Screen
+        name="Accessories"
+        component={Accessories}
+        options={{ header: () => <HomeHeaderRight /> }}
+      />
+      <Stack.Screen
+        name="Allowed"
+        component={Allowed}
+        options={{ header: () => <HomeHeaderRight /> }}
+      />
+    </Stack.Navigator>
+  );
+};
+const styles = StyleSheet.create({
+  headerback: {
+    position: "absolute",
+    left: 0,
+  },
+});
+export default HostBoats;

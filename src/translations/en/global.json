@@ -1,0 +1,17 @@
+{
+  "global": {
+    "home": {
+      "message": "Today is a beach day!",
+      "currentLang": "Current Language:"
+    },
+    "changeLang": {
+      "button": "Change Language",
+      "message": "The language has been changed."
+    },
+    "languages": {
+      "en": "English",
+      "es": "Spanish",
+      "tr": "Türkçe"
+    }
+  }
+}

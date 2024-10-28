@@ -1,0 +1,17 @@
+{
+  "global": {
+    "home": {
+      "message": "Bugün plaj günü!",
+      "currentLang": "Şuanki Dil:"
+    },
+    "changeLang": {
+      "button": "Dili Değiştir",
+      "message": "Dil değiştirildi."
+    },
+    "languages": {
+      "en": "English",
+      "es": "Spanish",
+      "tr": "Türkçe"
+    }
+  }
+}

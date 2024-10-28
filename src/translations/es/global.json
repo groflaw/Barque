@@ -1,0 +1,17 @@
+{
+  "global": {
+    "home": {
+      "message": "Hoy toca Playita!",
+      "currentLang": "Current Language:"
+    },
+    "changeLang": {
+      "button": "Change Language",
+      "message": "The language has been changed."
+    },
+    "languages": {
+      "en": "English",
+      "es": "Spanish",
+      "tr": "Türkçe"
+    }
+  }
+}
