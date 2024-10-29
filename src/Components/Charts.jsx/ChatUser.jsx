@@ -45,17 +45,17 @@ const styles = StyleSheet.create({
   },
   name: {
     color: "#000000",
-    fontSize: 16, // No units needed
+    fontSize: 16,
     fontFamily: "Lato", // Make sure the font is loaded properly
     fontWeight: "700", // Use 'bold' or numeric values
-    lineHeight: 24, // No units needed
+    lineHeight: 24,
   },
   summary: {
     color: "#17233c",
-    fontSize: 14, // No units needed
-    fontFamily: "Lato", // Ensure the font is loaded
-    fontWeight: "300", // You can use numeric values
-    lineHeight: 20, // No units needed
+    fontSize: 14,
+    fontFamily: "Lato",
+    fontWeight: "300",
+    lineHeight: 20,
   },
 });
 export default ChatUser;

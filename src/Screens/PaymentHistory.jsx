@@ -10,6 +10,8 @@ import {
 import Navbar from "../Components/Navbar";
 import backImage from "../../assets/Icons/hostheaderback.png";
 import markImage from "../../assets/Icons/dashboardmark.png";
+import { useEffect } from "react";
+
 const PaymentHistory = () => {
   return (
     <>
@@ -66,38 +68,38 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   title: {
-    color: "#030303", // Dark gray color
-    fontSize: 20, // Font size as a number (no 'px' needed)
-    fontFamily: "Lexend Deca", // Ensure this font is loaded
+    color: "#030303",
+    fontSize: 20,
+    fontFamily: "Lexend Deca",
     fontWeight: "700",
   },
   totalPrice: {
     color: "#17233c",
     fontSize: 16,
-    fontFamily: "Lexend Deca", // Ensure this font is loaded in your project
-    fontWeight: "500", // Note: fontWeight accepts numeric values; '500' is valid
+    fontFamily: "Lexend Deca",
+    fontWeight: "500",
     lineHeight: 24,
   },
   forpay: {
     color: "#17233c",
-    fontSize: 16, // No 'px' needed; size is in density-independent pixels
-    fontFamily: "Lexend Deca", // Ensure this font is loaded in your project
+    fontSize: 16,
+    fontFamily: "Lexend Deca",
     fontWeight: "500",
   },
   card: {
-    backgroundColor: "#ffffff", // Background color
-    borderRadius: 8, // Border radius
-    borderWidth: 1, // Border width
-    borderColor: "#efefef", // Border color
-    shadowColor: "#000", // Shadow color
+    backgroundColor: "#ffffff",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#efefef",
+    shadowColor: "#000",
     shadowOffset: {
-      width: 0, // Horizontal shadow offset
-      height: 4, // Vertical shadow offset
+      width: 0,
+      height: 4,
     },
-    shadowOpacity: 0.25, // Shadow opacity
-    shadowRadius: 12, // Shadow radius
-    elevation: 5, // Android shadow equivalent
-    padding: 16, // Padding inside the card (adjust as needed)
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+    elevation: 5,
+    padding: 16,
   },
   itemText: {
     color: "#17233c",

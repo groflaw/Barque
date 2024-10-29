@@ -15,6 +15,7 @@ const Location = () => {
   const nextStep = () => {
     navigation.navigate("AddBoatImages");
   };
+
   return (
     <ScrollView>
       <View style={styles.container}>

@@ -19,13 +19,14 @@ import bottle from "../../../assets/Icons/bottle.png";
 import child from "../../../assets/Icons/child.png";
 import fish from "../../../assets/Icons/fish.png";
 import speaker from "../../../assets/Icons/speaker.png";
-
+import { useEffect } from "react";
 const Allowed = () => {
   const [isChecked, setIsChecked] = useState(false);
   const navigation = useNavigation();
   const nextStep = () => {
     navigation.navigate("Allowed");
   };
+
   return (
     <ScrollView>
       <View style={styles.container}>

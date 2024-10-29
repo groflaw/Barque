@@ -17,16 +17,10 @@ import HomeBody from "../Components/HomeBody/HomeBody";
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
 
-const socket = io("http://192.168.100.73:8080");
-
 const HomeScreen = () => {
   const Stack = createNativeStackNavigator(); //Navigator Screen
 
   const { user } = useSelector((state) => state.Slice);
-
-  useEffect(() => {
-    socket.emit("addUser", user);
-  }, [socket]);
 
   const HomeHeaderRight = () => {
     return (

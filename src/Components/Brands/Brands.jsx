@@ -9,6 +9,7 @@ import {
 import Svg, { Path } from "react-native-svg";
 
 import searchImage from "../../../assets/Icons/Iconsearch.png";
+import { useEffect } from "react";
 
 const IconComponent = () => (
   <Svg width={21} height={21} viewBox="0 0 24 24">

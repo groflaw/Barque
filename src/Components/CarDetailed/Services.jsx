@@ -1,6 +1,7 @@
 import { ScrollView, StyleSheet, View, Text, Image } from "react-native";
 import captionImage from "../../../assets/Icons/captionImage.png";
 import peopleImage from "../../../assets/Icons/Iconpeopleoutline.png";
+import { useEffect } from "react";
 const Services = () => {
   return (
     <View

@@ -9,12 +9,13 @@ import {
 import { useNavigation } from "@react-navigation/native";
 
 import photoImage from "../../../assets/Icons/photo.png";
-
+import { useEffect } from "react";
 const AddDocImage = () => {
   const navigation = useNavigation();
   const nextStep = () => {
     navigation.navigate("Location");
   };
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -75,8 +76,8 @@ const styles = StyleSheet.create({
     borderColor: "#efefef", // Border color
     shadowColor: "#000", // Shadow color
     shadowOffset: {
-      width: 0, // Horizontal shadow offset
-      height: 4, // Vertical shadow offset
+      width: 0,
+      height: 4,
     },
     shadowOpacity: 0.25, // Shadow opacity
     shadowRadius: 12, // Shadow radius

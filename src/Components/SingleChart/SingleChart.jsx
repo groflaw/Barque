@@ -23,44 +23,37 @@ const SingleChart = ({ route }) => {
   const [newMessage, setNewMessage] = useState("");
   const [withNewMessage, setWithNewMessage] = useState(thisChat.chats);
 
-  const socket = useRef();
-
-  useEffect(() => {
-    socket.current = io("http://192.168.100.73:8080");
-  }, []);
-
   const handleChangeText = (text) => {
     setNewMessage(text);
   };
 
   const handleSendMessage = () => {
-    setWithNewMessage(prevMessages => [
-        ...prevMessages,
-        { type: "send", message: newMessage },
-      ]);
+    setWithNewMessage((prevMessages) => [
+      ...prevMessages,
+      { type: "send", message: newMessage },
+    ]);
     socket.current.emit("sendMessage", { message: newMessage, room: 200 });
     setNewMessage("");
   };
 
   useEffect(() => {
     socket.current.on("receiveMessage", (data) => {
-      setWithNewMessage(prevMessages => [
+      setWithNewMessage((prevMessages) => [
         ...prevMessages,
         { type: "received", message: data.message },
       ]);
     });
   }, []);
 
-
   return (
     <KeyboardAvoidingView
       style={{ marginTop: StatusBar.currentHeight, flex: 1 }}
-      className="h-screen relative"
+      className="relative h-screen"
     >
-      <View className="py-4 px-6 space-y-2">
+      <View className="px-6 py-4 space-y-2">
         <TouchableOpacity
           onPress={() => navigation.navigate("Chat")}
-          className="h-12 w-12 rounded-xl border border-gray-400 flex flex-row items-center justify-center"
+          className="flex flex-row items-center justify-center w-12 h-12 border border-gray-400 rounded-xl"
         >
           <ChevronLeftIcon size={24} color="black" />
         </TouchableOpacity>
@@ -86,14 +79,14 @@ const SingleChart = ({ route }) => {
             >
               {chat.message}
             </Text>
-            <Text className=" text-right text-gray-300">
+            <Text className="text-right text-gray-300 ">
               {thisChat.lastTextTime}
             </Text>
           </View>
         ))}
       </ScrollView>
 
-      <View className="mb-0 px-6 py-2">
+      <View className="px-6 py-2 mb-0">
         <View className="flex flex-row items-center bg-white py-2.5 px-3 rounded-full">
           <TextInput
             placeholder="Enter message..."

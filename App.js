@@ -25,10 +25,10 @@ import { store } from "./src/Store/Store";
 import i18n from "./i18n";
 
 export default function App() {
-  const Stack = createNativeStackNavigator(); //Navigator and Screen
+  const Stack = createNativeStackNavigator();
 
-  LogBox.ignoreLogs(["new NativeEventEmitter"]); // Ignore log notification by message
-  LogBox.ignoreAllLogs(); //Ignore all log
+  LogBox.ignoreLogs(["new NativeEventEmitter"]);
+  LogBox.ignoreAllLogs();
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

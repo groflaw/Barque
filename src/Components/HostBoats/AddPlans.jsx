@@ -10,12 +10,13 @@ import { useNavigation } from "@react-navigation/native";
 
 import Number from "../Basic/Number";
 import Option from "../Basic/Option";
-
+import { useEffect } from "react";
 const AddPlans = () => {
   const navigation = useNavigation();
   const nextStep = () => {
     navigation.navigate("AddDocImage");
   };
+
   return (
     <>
       <ScrollView>
@@ -98,8 +99,8 @@ const styles = StyleSheet.create({
     borderColor: "#efefef", // Border color
     shadowColor: "#000", // Shadow color
     shadowOffset: {
-      width: 0, // Horizontal shadow offset
-      height: 4, // Vertical shadow offset
+      width: 0,
+      height: 4,
     },
     shadowOpacity: 0.25, // Shadow opacity
     shadowRadius: 12, // Shadow radius

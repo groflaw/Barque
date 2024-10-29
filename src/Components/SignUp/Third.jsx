@@ -9,103 +9,173 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import PhoneInput from "react-native-international-phone-number";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import { useState } from "react";
-
-import Option from "../Basic/Option";
 import CheckBox from "../Basic/CheckBox";
+import CustomTextInput from "../Basic/Input";
+import LoadingIndicator from "../Basic/LoadingIndicator";
+
+import { Signup } from "../../Actions/Auth/auth.acitons";
 
 const Third = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const loading = useSelector((state) => state.Global.loading);
 
-  const nextStep = () => {
-    navigation.navigate("Second");
-  };
+  const [personInfo, setPersonInfo] = useState({
+    firstName: "",
+    lastName: "",
+    email: "example@example.com",
+    birthDay: "01/01/1990",
+    password: "",
+    phoneNumber: "",
+  });
 
-  const [isChecked, setIsChecked] = useState(false);
+  const [checkPolish, setCheckPolish] = useState(false);
+  const [checkSMS, setCheckSMS] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [inputValue, setInputValue] = useState("");
 
-  function handleInputValue(phoneNumber) {
+  const handleInputValue = (phoneNumber) => {
     setInputValue(phoneNumber);
-  }
+    if (selectedCountry) {
+      const fullPhoneNumber = `${selectedCountry.callingCode} ${phoneNumber}`;
+      setPersonInfo((prevState) => ({
+        ...prevState,
+        phoneNumber: fullPhoneNumber,
+      }));
+    }
+  };
 
-  function handleSelectedCountry(country) {
+  const handleSelectedCountry = (country) => {
     setSelectedCountry(country);
-  }
+    if (country) {
+      const fullPhoneNumber = `${country.callingCode} ${inputValue}`;
+      setPersonInfo((prevState) => ({
+        ...prevState,
+        phoneNumber: fullPhoneNumber,
+      }));
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setPersonInfo((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
   return (
     <>
       <ScrollView>
         <View style={styles.container}>
-          <Text style={styles.Title}> Crear una Cuenta </Text>
-          <TextInput
-            placeholder="Nombre"
-            className="pt-2 pb-2 pl-2 pr-2 bg-white mt-9"
-          ></TextInput>
-          <TextInput
-            placeholder="Apellido"
-            className="pt-2 pb-2 pl-2 pr-2 mt-5 bg-white"
-          ></TextInput>
-          <TextInput
-            placeholder="Email"
-            className="pt-2 pb-2 pl-2 pr-2 mt-5 bg-white"
-          ></TextInput>
-          <TextInput
-            placeholder="Contraseña"
-            className="pt-2 pb-2 pl-2 pr-2 mt-5 bg-white"
-          ></TextInput>
+          {loading ? (
+            <LoadingIndicator />
+          ) : (
+            // Show loading indicator when loading is true
+            <View style={styles.container}>
+              <Text style={styles.Title}> Crear una Cuenta </Text>
 
-          <View className="flex flex-row items-center justify-between mt-5">
-            {/* <Option width={"22%"}></Option>
-            <TextInput
-              placeholder="Número de teléfono"
-              className="pt-1 pb-2 pl-2 pr-2 bg-white w-72"
-            ></TextInput> */}
-            <PhoneInput
-              value={inputValue}
-              onChangePhoneNumber={handleInputValue}
-              selectedCountry={selectedCountry}
-              onChangeSelectedCountry={handleSelectedCountry}
-            />
-          </View>
+              <CustomTextInput
+                placeholder="First Name"
+                value={personInfo.firstName} // Ensure you're using the correct property
+                onChange={handleChange}
+                name="firstName"
+                sort={false}
+              />
 
-          <TextInput
-            placeholder="Fecha de nacimiento"
-            className="pt-2 pb-2 pl-2 pr-2 mt-5 bg-white"
-          ></TextInput>
-          <Text style={styles.rule} className="mt-5">
-            Debes tener al menos 18 años para registrarte. Otros usuarios de
-            Barquea no verán tu cumpleaños.
-          </Text>
-          <View
-            className="flex flex-row items-start mt-3 "
-            style={styles.checkContainer}
-          >
-            <CheckBox value={isChecked} onValueChange={setIsChecked}></CheckBox>
-            <Text style={styles.checkLabel} className="mt-2">
-              Aceptar las Condiciones de servicio y la Política de privacidad.
-            </Text>
-          </View>
-          <View
-            className="flex flex-row items-start mt-3"
-            style={styles.checkContainer}
-          >
-            <CheckBox value={isChecked} onValueChange={setIsChecked}></CheckBox>
-            <Text style={styles.checkLabel}>
-              'Doy mi consentimiento para recibir material de marketing
-              promocional a través de un sistema automatizado de mensajes de
-              texto SMS al número de teléfono que he proporcionado para mi
-              cuenta. El consentimiento no es una condición para registrarse en
-              una cuenta o comprar cualquier servicio Ver la política de
-              mensajes de texto SMS de Barquea'
-            </Text>
-          </View>
-          <TouchableOpacity>
-            <Text style={styles.Button} className="text-center mt-9">
-              Confirmar
-            </Text>
-          </TouchableOpacity>
+              <CustomTextInput
+                placeholder="Last Name"
+                value={personInfo.lastName} // Ensure you're using the correct property
+                onChange={handleChange}
+                name="lastName"
+                sort={false}
+              />
+
+              <CustomTextInput
+                placeholder="example@example.com"
+                value={personInfo.email} // Ensure you're using the correct property
+                onChange={handleChange}
+                name="email"
+                sort={false}
+              />
+
+              <CustomTextInput
+                placeholder="Enter a password of at least 6 characters."
+                value={personInfo.password} // Ensure you're using the correct property
+                onChange={handleChange}
+                name="password"
+                sort={true}
+              />
+
+              <View className="flex flex-row items-center justify-between mt-5 mb-3">
+                <PhoneInput
+                  value={inputValue}
+                  onChangePhoneNumber={handleInputValue}
+                  selectedCountry={selectedCountry}
+                  onChangeSelectedCountry={handleSelectedCountry}
+                />
+              </View>
+
+              <CustomTextInput
+                placeholder="01/01/1990"
+                value={personInfo.birthDay} // Ensure you're using the correct property
+                onChange={handleChange}
+                name="birthDay"
+                sort={false}
+              />
+
+              <Text style={styles.rule} className="mt-5">
+                Debes tener al menos 18 años para registrarte. Otros usuarios de
+                Barquea no verán tu cumpleaños.
+              </Text>
+
+              <View
+                className="flex flex-row items-start mt-3"
+                style={styles.checkContainer}
+              >
+                <CheckBox value={checkPolish} onValueChange={setCheckPolish} />
+                <Text style={styles.checkLabel} className="mt-2">
+                  Aceptar las Condiciones de servicio y la Política de
+                  privacidad.
+                </Text>
+              </View>
+
+              <View
+                className="flex flex-row items-start mt-3"
+                style={styles.checkContainer}
+              >
+                <CheckBox value={checkSMS} onValueChange={setCheckSMS} />
+                <Text style={styles.checkLabel}>
+                  'Doy mi consentimiento para recibir material de marketing
+                  promocional a través de un sistema automatizado de mensajes de
+                  texto SMS al número de teléfono que he proporcionado para mi
+                  cuenta. El consentimiento no es una condición para registrarse
+                  en una cuenta o comprar cualquier servicio. Ver la política de
+                  mensajes de texto SMS de Barquea.'
+                </Text>
+              </View>
+
+              <TouchableOpacity
+                disabled={
+                  !checkSMS || // Button is disabled if checkSMS is not checked
+                  !checkPolish || // Button is disabled if checkPolish is not checked
+                  selectedCountry == null || // Button is disabled if no country is selected
+                  inputValue.trim() === "" // Button is disabled if the inputValue is empty
+                }
+                onPress={() => {
+                  dispatch(Signup(personInfo));
+                }}
+              >
+                <Text style={styles.Button} className="text-center mt-9">
+                  Confirmar
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </ScrollView>
     </>

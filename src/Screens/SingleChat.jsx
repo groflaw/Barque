@@ -51,10 +51,10 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: "#030303",
-    fontSize: 20, // No units needed
-    fontFamily: "Lato", // Ensure the font is loaded
-    fontWeight: "700", // You can use numeric values
-    lineHeight: 28, // No units needed
+    fontSize: 20,
+    fontFamily: "Lato",
+    fontWeight: "700",
+    lineHeight: 28,
   },
   ChatCard: {
     padding: 15,

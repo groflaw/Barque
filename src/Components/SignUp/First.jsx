@@ -11,23 +11,30 @@ import { useNavigation } from "@react-navigation/native";
 const First = () => {
   const navigation = useNavigation();
 
-  const nextStep = () => {
-    navigation.navigate("Second");
+  const nextStep = (url) => {
+    navigation.navigate(url);
   };
   return (
     <>
       <ScrollView>
         <View style={styles.container}>
-          <Text style={styles.Title}>Cuenta</Text>
+          <Text style={styles.Title} className="mt-5">
+            Account
+          </Text>
           <Text style={styles.head} className="mt-4">
-            NO HAS INICIADO SESIÓN
+            YOU HAVE NOT LOGGED IN
           </Text>
           <Text style={styles.content} className="mt-4">
-            Inicie sesión o cree una cuenta ahora
+            Log in or create an account now
           </Text>
-          <TouchableOpacity onPress={nextStep}>
+          <TouchableOpacity onPress={() => nextStep("Login")}>
             <Text style={styles.button} className="text-center mt-7">
-              Iniciar Ahora
+              Log In Now
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => nextStep("Second")}>
+            <Text style={styles.button} className="text-center mt-7">
+              Register
             </Text>
           </TouchableOpacity>
         </View>
@@ -46,7 +53,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 1, // Opacity for iOS
     shadowRadius: 10, // Radius for iOS
     elevation: 5, // Shadow for Android
-    padding: 10, // Optional: Add padding if needed
+    padding: 20, // Optional: Add padding if needed
   },
   Title: {
     color: "#102a5e",

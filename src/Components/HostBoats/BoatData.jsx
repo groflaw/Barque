@@ -11,11 +11,13 @@ import Navbar from "../Navbar";
 import CustomTextInput from "../Basic/Input";
 import Option from "../Basic/Option";
 import Number from "../Basic/Number";
+import { useEffect } from "react";
 const BoatData = () => {
   const navigation = useNavigation();
   const nextStep = () => {
     navigation.navigate("AddPlans");
   };
+
   return (
     <>
       <ScrollView>

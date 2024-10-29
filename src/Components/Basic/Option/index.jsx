@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -37,15 +38,15 @@ const styles = StyleSheet.create({
     color: "#94a3b8", // This won't affect the container itself but will be used for text
     fontSize: 14, // Font size in points
     fontFamily: "Lexend Deca", // Ensure this font is available in your project
-    shadowColor: "#030303", // Color for shadow
+    shadowColor: "#030303",
     shadowOffset: {
-      width: 2, // Horizontal shadow offset
-      height: 2, // Vertical shadow offset
+      width: 2,
+      height: 2,
     },
-    shadowOpacity: 0.1, // Shadow transparency
-    shadowRadius: 4, // Blur effect for the shadow
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
     borderRadius: 5,
-    elevation: 2, // Android shadow (elevation value)
+    elevation: 2,
   },
   Numericinput: {
     flex: 1,

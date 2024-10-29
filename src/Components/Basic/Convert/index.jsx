@@ -2,6 +2,8 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 
 import convertBoatImage from "../../../../assets/Icons/convertBoat.png";
 import asyncImage from "../../../../assets/Icons/async.png";
+import { useEffect } from "react";
+
 const Convert = () => {
   return (
     <>
@@ -40,8 +42,8 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   boat: {
-    backgroundColor: "#17233c", // Dark blue color
-    borderRadius: 8, // Rounded corners with 8px radius
+    backgroundColor: "#17233c",
+    borderRadius: 8,
     padding: 15,
     margin: 10,
   },
@@ -53,25 +55,25 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   head: {
-    color: "#17233c", // Dark blue color
-    fontSize: 15, // Font size (in points)
-    fontFamily: "Lexend Deca", // Custom font family
-    fontWeight: "500", // Font weight (numeric strings)
+    color: "#17233c",
+    fontSize: 15,
+    fontFamily: "Lexend Deca",
+    fontWeight: "500",
     lineHeight: 22,
   },
   des: {
-    color: "#17233c", // Dark blue color
-    fontSize: 11, // Font size in points
-    fontFamily: "Lexend Deca", // Custom font family
-    fontWeight: "300", // Light font weight
+    color: "#17233c",
+    fontSize: 11,
+    fontFamily: "Lexend Deca",
+    fontWeight: "300",
     lineHeight: 16,
-    flexWrap: "wrap", // Ensure text wraps within the container
+    flexWrap: "wrap",
   },
   button: {
-    color: "#0751c1", // Blue color
-    fontSize: 15, // Font size (in points)
-    fontFamily: "Lexend Deca", // Custom font family
-    fontWeight: "600", // Font weight (bold)
+    color: "#0751c1",
+    fontSize: 15,
+    fontFamily: "Lexend Deca",
+    fontWeight: "600",
     lineHeight: 26,
   },
 });

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import awardImage from "../../../assets/Icons/Iconaward.png";
 import starImage from "../../../assets/Icons/Iconstar.png";
 import reviewImage from "../../../assets/Icons/Review.png";
-
+import { useEffect } from "react";
 const Host = () => {
   return (
     <View style={styles.container}>
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   title: {
     color: "#17233c", // Hex color format
     fontSize: 20, // Numeric value, no 'px'
-    fontFamily: "Lexend Deca", // Ensure the font is loaded in your project
+    fontFamily: "Lexend Deca",
     fontWeight: "700", // String for font weight
     lineHeight: 26, // Numeric value, no 'px'
   },

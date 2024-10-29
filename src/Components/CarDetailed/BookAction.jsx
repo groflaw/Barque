@@ -1,5 +1,6 @@
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import boatMarkImage from "../../../assets/Icons/boatMark.png";
+import { useEffect } from "react";
 const BookAction = () => {
   return (
     <View

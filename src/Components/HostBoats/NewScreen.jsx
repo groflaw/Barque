@@ -2,7 +2,6 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import seeImage from "../../../assets/Background/see.png";
-import seeboat from "../../../assets/Icons/seeboat.png";
 
 const NewScreen = () => {
   const navigation = useNavigation();
@@ -13,14 +12,13 @@ const NewScreen = () => {
     <>
       <View className="relative bg-slate-400">
         <Image source={seeImage} className="w-full"></Image>
-        <Text className="absolute top-36 left-20" style={styles.title}>
+        <Text className="absolute top-28 left-20" style={styles.title}>
           Cuentanos de tu embacarción
         </Text>
-        <Text className="absolute w-80 top-48 left-16" style={styles.des}>
+        <Text className="absolute w-80 top-40 left-16" style={styles.des}>
           Con estos datos podremos encontrar mejores clientes para ti. Es un
           proceso sencillo y rápido que te hara conseguir más rentas
         </Text>
-        <Image className="absolute top-80 left-28" source={seeboat}></Image>
       </View>
       <View style={styles.bottom} className="absolute bottom-0 w-full">
         <TouchableOpacity onPress={nextStep}>

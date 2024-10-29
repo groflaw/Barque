@@ -2,7 +2,7 @@ import { View, Image, StyleSheet, Text, ScrollView } from "react-native";
 import IconStarImage from "../../../assets/Icons/Iconstar.png";
 
 import ReviewImage from "../../../assets/Icons/Review.png";
-
+import { useEffect } from "react";
 const ReviewCard = () => {
   return (
     <View className="flex flex-row items-center justify-between pt-1 pb-1 pl-3 pr-3 ml-3 mr-3 bg-white w-72 rounded-xl">

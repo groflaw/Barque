@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, Image } from "react-native";
 import shipRoundImage from "../../../assets/Icons/shipround.png";
 
 import fullTickImage from "../../../assets/Icons/fulltick.png";
+import { useEffect } from "react";
 const Plans = () => {
   return (
     <View style={styles.container}>
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
   Title: {
     color: "#102a5e",
     fontSize: 20, // Numeric value, converted from '20px'
-    fontFamily: "Lexend Deca", // Ensure the font is loaded properly
+    fontFamily: "Lexend Deca",
     fontWeight: "700", // Bold font weight
     lineHeight: 30, // Numeric value, converted from '30px'
   },
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
   head: {
     color: "#17233c",
     fontSize: 18, // Numeric value, without 'px'
-    fontFamily: "Lexend Deca", // Ensure the font is loaded properly
+    fontFamily: "Lexend Deca",
     fontWeight: "500", // Medium font weight
     lineHeight: 22, // Numeric value, without 'px'
   },
@@ -103,14 +104,14 @@ const styles = StyleSheet.create({
   description: {
     color: "#000000", // Text color
     fontSize: 15, // Numeric value, no 'px'
-    fontFamily: "Lexend Deca", // Ensure the font is loaded
+    fontFamily: "Lexend Deca",
     lineHeight: 16,
   },
   driver: {
     marginLeft: 4,
     color: "#004eff", // Text color
     fontSize: 14, // Numeric value; no 'px'
-    fontFamily: "Lexend Deca", // Ensure the font is loaded correctly
+    fontFamily: "Lexend Deca",
     fontWeight: "700", // Bold font weight
     lineHeight: 16,
   },

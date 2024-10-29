@@ -1,6 +1,6 @@
 import { View, StyleSheet, Text, Image } from "react-native";
 import tickImage from "../../../assets/Icons/tick.png";
-
+import { useEffect } from "react";
 const Accessories = () => {
   return (
     <View style={styles.container}>

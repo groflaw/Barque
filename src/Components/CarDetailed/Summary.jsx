@@ -1,7 +1,7 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 
 import IconStarImage from "../../../assets/Icons/Iconstar.png";
-
+import { useEffect } from "react";
 const Summary = () => {
   return (
     <View style={styles.container} className="flex">

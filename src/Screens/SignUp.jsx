@@ -11,6 +11,7 @@ import First from "../Components/SignUp/First";
 import Second from "../Components/SignUp/Second";
 import Third from "../Components/SignUp/Third";
 import Forth from "../Components/SignUp/Forth";
+import Login from "../Components/SignUp/Login";
 
 import backImage from "../../assets/Icons/headerback.png";
 import markImage from "../../assets/Icons/headermark.png";
@@ -58,6 +59,11 @@ const SignUp = () => {
       <Stack.Screen
         name="Forth"
         component={Forth}
+        options={{ header: () => <HomeHeaderRight /> }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={Login}
         options={{ header: () => <HomeHeaderRight /> }}
       />
     </Stack.Navigator>

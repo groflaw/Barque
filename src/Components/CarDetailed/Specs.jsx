@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, Image } from "react-native";
 import fullTick from "../../../assets/Icons/fulltick.png";
+import { useEffect } from "react";
 const Specs = () => {
   return (
     <View style={styles.container}>
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
   value: {
     color: "#101c2c",
     fontSize: 15, // Numeric value, converted from '15px'
-    fontFamily: "Lexend Deca", // Ensure the font is loaded properly
+    fontFamily: "Lexend Deca",
     fontWeight: "500", // Medium font weight
     lineHeight: 20, // Numeric value, converted from '20px'
   },

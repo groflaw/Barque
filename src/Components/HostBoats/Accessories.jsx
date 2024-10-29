@@ -19,13 +19,14 @@ import music from "../../../assets/Icons/music.png";
 import bluetooth from "../../../assets/Icons/bluetooth.png";
 import tv from "../../../assets/Icons/tv.png";
 import fishing from "../../../assets/Icons/fishing.png";
-
+import { useEffect } from "react";
 const Accessories = () => {
   const [isChecked, setIsChecked] = useState(false);
   const navigation = useNavigation();
   const nextStep = () => {
     navigation.navigate("Allowed");
   };
+
   return (
     <ScrollView>
       <View style={styles.container}>

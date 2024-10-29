@@ -128,42 +128,42 @@ const styles = StyleSheet.create({
   },
   Title: {
     color: "#ffffff",
-    fontSize: 20, // fontSize is specified in points
-    fontFamily: "Lexend Deca", // Ensure this font is linked correctly in your project
-    fontWeight: "700", // Use numeric fontWeight
-    lineHeight: 26, // lineHeight is also in points
+    fontSize: 20,
+    fontFamily: "Lexend Deca",
+    fontWeight: "700",
+    lineHeight: 26,
   },
   Name: {
     color: "#ffffff",
-    fontSize: 17, // fontSize is specified in points
-    fontFamily: "Lexend Deca", // Ensure this font is linked correctly in your project
-    fontWeight: "700", // Use numeric fontWeight
-    lineHeight: 27, // lineHeight is also in points
+    fontSize: 17,
+    fontFamily: "Lexend Deca",
+    fontWeight: "700",
+    lineHeight: 27,
   },
   review: {
     color: "#ffffff",
-    fontSize: 9, // font size specified in points
-    fontFamily: "Lexend Deca", // Ensure this font is linked correctly in your project
-    fontWeight: "700", // Use numeric fontWeight
-    lineHeight: 14, // line height is also in points
+    fontSize: 9,
+    fontFamily: "Lexend Deca",
+    fontWeight: "700",
+    lineHeight: 14,
   },
   statistics: {
     color: "#ffffff",
-    fontSize: 12, // font size specified in points
-    fontFamily: "Lexend Deca", // Ensure this font is linked correctly in your project
-    fontWeight: "700", // Use numeric fontWeight
+    fontSize: 12,
+    fontFamily: "Lexend Deca",
+    fontWeight: "700",
   },
   key: {
     color: "#ffffff",
-    fontSize: 13, // font size specified in points
-    fontFamily: "Lexend Deca", // Ensure this font is linked correctly in your project
-    fontWeight: "600", // U
+    fontSize: 13,
+    fontFamily: "Lexend Deca",
+    fontWeight: "600",
   },
   responRate: {
-    borderRadius: 4, // borderRadius specified in points
+    borderRadius: 4,
     backgroundColor: "#dbdfe4",
     width: "50%",
-    padding: 5, // Add padding to ensure text does not touch the edges
+    padding: 5,
   },
   action: {
     paddingLeft: 25,
@@ -171,19 +171,19 @@ const styles = StyleSheet.create({
     paddingBottom: 25,
   },
   card: {
-    backgroundColor: "#ffffff", // Background color
-    borderRadius: 8, // Border radius
-    borderWidth: 1, // Border width
-    borderColor: "#efefef", // Border color
-    shadowColor: "#000", // Shadow color
+    backgroundColor: "#ffffff",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#efefef",
+    shadowColor: "#000",
     shadowOffset: {
-      width: 0, // Horizontal shadow offset
-      height: 4, // Vertical shadow offset
+      width: 0,
+      height: 4,
     },
-    shadowOpacity: 0.25, // Shadow opacity
-    shadowRadius: 12, // Shadow radius
-    elevation: 5, // Android shadow equivalent
-    padding: 16, // Padding inside the card (adjust as needed)
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+    elevation: 5,
+    padding: 16,
   },
   item: {
     color: "#17233c",

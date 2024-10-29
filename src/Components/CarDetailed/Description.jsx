@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
-
+import { useEffect } from "react";
 const Description = () => {
   return (
     <View style={styles.container}>
