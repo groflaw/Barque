@@ -26,8 +26,8 @@ const Third = () => {
   const [personInfo, setPersonInfo] = useState({
     firstName: "",
     lastName: "",
-    email: "example@example.com",
-    birthDay: "01/01/1990",
+    email: "",
+    birthDay: "",
     password: "",
     phoneNumber: "",
   });
@@ -36,6 +36,7 @@ const Third = () => {
   const [checkSMS, setCheckSMS] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [inputValue, setInputValue] = useState("");
+  const [errorMessages, setErrorMessages] = useState({});
 
   const handleInputValue = (phoneNumber) => {
     setInputValue(phoneNumber);
@@ -68,6 +69,16 @@ const Third = () => {
     }));
   };
 
+  const handleSignup = async () => {
+    const result = await dispatch(Signup(personInfo));
+
+    if (result.errors) {
+      setErrorMessages(result.errors); // Set error messages in state
+    } else {
+      navigation.navigate("Login");
+    }
+  };
+
   return (
     <>
       <ScrollView>
@@ -78,7 +89,6 @@ const Third = () => {
             // Show loading indicator when loading is true
             <View style={styles.container}>
               <Text style={styles.Title}> Crear una Cuenta </Text>
-
               <CustomTextInput
                 placeholder="First Name"
                 value={personInfo.firstName} // Ensure you're using the correct property
@@ -86,7 +96,9 @@ const Third = () => {
                 name="firstName"
                 sort={false}
               />
-
+              {errorMessages.firstName && (
+                <Text style={styles.error}>{errorMessages.firstName}</Text>
+              )}
               <CustomTextInput
                 placeholder="Last Name"
                 value={personInfo.lastName} // Ensure you're using the correct property
@@ -94,7 +106,9 @@ const Third = () => {
                 name="lastName"
                 sort={false}
               />
-
+              {errorMessages.lastName && (
+                <Text style={styles.error}>{errorMessages.lastName}</Text>
+              )}
               <CustomTextInput
                 placeholder="example@example.com"
                 value={personInfo.email} // Ensure you're using the correct property
@@ -102,7 +116,9 @@ const Third = () => {
                 name="email"
                 sort={false}
               />
-
+              {errorMessages.email && (
+                <Text style={styles.error}>{errorMessages.email}</Text>
+              )}
               <CustomTextInput
                 placeholder="Enter a password of at least 6 characters."
                 value={personInfo.password} // Ensure you're using the correct property
@@ -110,7 +126,9 @@ const Third = () => {
                 name="password"
                 sort={true}
               />
-
+              {errorMessages.password && (
+                <Text style={styles.error}>{errorMessages.password}</Text>
+              )}
               <View className="flex flex-row items-center justify-between mt-5 mb-3">
                 <PhoneInput
                   value={inputValue}
@@ -119,7 +137,6 @@ const Third = () => {
                   onChangeSelectedCountry={handleSelectedCountry}
                 />
               </View>
-
               <CustomTextInput
                 placeholder="01/01/1990"
                 value={personInfo.birthDay} // Ensure you're using the correct property
@@ -127,12 +144,13 @@ const Third = () => {
                 name="birthDay"
                 sort={false}
               />
-
+              {errorMessages.birthDay && (
+                <Text style={styles.error}>{errorMessages.birthDay}</Text>
+              )}
               <Text style={styles.rule} className="mt-5">
                 Debes tener al menos 18 años para registrarte. Otros usuarios de
                 Barquea no verán tu cumpleaños.
               </Text>
-
               <View
                 className="flex flex-row items-start mt-3"
                 style={styles.checkContainer}
@@ -143,7 +161,6 @@ const Third = () => {
                   privacidad.
                 </Text>
               </View>
-
               <View
                 className="flex flex-row items-start mt-3"
                 style={styles.checkContainer}
@@ -158,7 +175,6 @@ const Third = () => {
                   mensajes de texto SMS de Barquea.'
                 </Text>
               </View>
-
               <TouchableOpacity
                 disabled={
                   !checkSMS || // Button is disabled if checkSMS is not checked
@@ -167,13 +183,16 @@ const Third = () => {
                   inputValue.trim() === "" // Button is disabled if the inputValue is empty
                 }
                 onPress={() => {
-                  dispatch(Signup(personInfo));
+                  handleSignup();
                 }}
               >
                 <Text style={styles.Button} className="text-center mt-9">
                   Confirmar
                 </Text>
               </TouchableOpacity>
+              {errorMessages.general && (
+                <Text style={styles.error}>{errorMessages.general}</Text>
+              )}
             </View>
           )}
         </View>
@@ -221,6 +240,11 @@ const styles = StyleSheet.create({
     fontSize: 18, // Font size as a number
     fontFamily: "Lexend Deca", // Ensure this font is loaded
     fontWeight: "500", // Font weight as a string
+  },
+  error: {
+    color: "red", // Red color for the error message
+    fontSize: 12, // Small font size
+    marginTop: 2, // Space between the input and the error message
   },
 });
 export default Third;

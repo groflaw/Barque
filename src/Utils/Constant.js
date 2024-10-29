@@ -1,1 +1,1 @@
-export const Backend_API = "http://baraqua-server.vercel.app/api";
+export const Backend_API = "https://baraqua-server.vercel.app/api";

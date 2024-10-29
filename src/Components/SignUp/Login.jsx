@@ -21,9 +21,10 @@ const Login = () => {
   const loading = useSelector((state) => state.Global.loading);
 
   const [personInfo, setPersonInfo] = useState({
-    email: "example@example.com",
+    email: "",
     password: "",
   });
+  const [errorMessages, setErrorMessages] = useState({});
 
   const nextStep = (url) => {
     navigation.navigate(url);
@@ -37,6 +38,17 @@ const Login = () => {
       [name]: value,
     }));
   };
+
+  const handleLogin = async () => {
+    const result = await dispatch(Signin(personInfo));
+
+    if (result.errors) {
+      setErrorMessages(result.errors); // Set error messages in state
+    } else {
+      navigation.navigate("Main");
+    }
+  };
+
   return (
     <>
       <ScrollView>
@@ -63,6 +75,9 @@ const Login = () => {
                   name="email"
                   sort={false}
                 />
+                {errorMessages.email && (
+                  <Text style={styles.error}>{errorMessages.email}</Text>
+                )}
               </View>
               <View className="mt-3">
                 <Text style={styles.content}>Password</Text>
@@ -73,6 +88,9 @@ const Login = () => {
                   name="password"
                   sort={true}
                 />
+                {errorMessages.password && (
+                  <Text style={styles.error}>{errorMessages.password}</Text>
+                )}
               </View>
               <View className="flex flex-row items-center mt-3">
                 <CustomSwitch></CustomSwitch>
@@ -82,7 +100,7 @@ const Login = () => {
               </View>
               <TouchableOpacity
                 onPress={() => {
-                  dispatch(Signin(personInfo));
+                  handleLogin();
                 }}
               >
                 <Text style={styles.button} className="text-center mt-7">
@@ -147,6 +165,11 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     lineHeight: 20,
     padding: 10, // Recommended to add some padding for better UI.
+  },
+  error: {
+    color: "red", // Red color for the error message
+    fontSize: 12, // Small font size
+    marginTop: 2, // Space between the input and the error message
   },
 });
 export default Login;

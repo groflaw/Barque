@@ -7,31 +7,39 @@ import {
   isValidEmail,
   isValidPassword,
   isValidDate,
+  isValidString,
 } from "../../Utils/Validate";
 import { setLoading } from "../../Store/Global";
 import { addUser } from "../../Store/Slices";
 
 export const Signup = (personInfo) => async (dispatch) => {
   await dispatch(setLoading(true));
+  let errors = {};
   try {
     const emailValidation = isValidEmail(personInfo.email);
     const passwordValidation = isValidPassword(personInfo.password);
     const dateValidation = isValidDate(personInfo.birthDay);
-    const errorMessages = [];
+    const firstNameValidation = isValidString(personInfo.firstName);
+    const lastNameValidation = isValidString(personInfo.lastName);
 
     if (!emailValidation.valid) {
-      errorMessages.push(emailValidation.message);
+      errors.email = emailValidation.message;
     }
     if (!passwordValidation.valid) {
-      errorMessages.push(passwordValidation.message);
+      errors.password = passwordValidation.message;
     }
     if (!dateValidation.valid) {
-      errorMessages.push(dateValidation.message);
+      errors.birthDay = dateValidation.message;
+    }
+    if (!firstNameValidation.valid) {
+      errors.firstName = firstNameValidation.message;
+    }
+    if (!lastNameValidation.valid) {
+      errors.lastName = lastNameValidation.message;
     }
 
-    if (errorMessages.length > 0) {
-      alert(errorMessages.join("\n"));
-      return;
+    if (Object.keys(errors).length > 0) {
+      return { errors };
     }
 
     const response = await axios.post(`${Backend_API}/users`, personInfo, {
@@ -40,48 +48,51 @@ export const Signup = (personInfo) => async (dispatch) => {
         "Content-Type": "application/json",
       },
     });
-    if (response.status == 201) {
-      Alert.alert("Signup successfully.");
-    } else {
-      Alert.alert(response.data.error);
+    if (response.data.flag == false) {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
     }
   } catch (error) {
-    Alert.alert("There was an error fetching the data.");
+    errors.general = "There was an error fetching the data.";
+    return { errors };
   } finally {
-    await dispatch(setLoading(false)); // Hide loading indicator once done
+    await dispatch(setLoading(false));
   }
+  return {};
 };
 
 export const Signin = (personInfo) => async (dispatch) => {
   await dispatch(setLoading(true));
+  let errors = {};
+
   try {
     const emailValidation = isValidEmail(personInfo.email);
     const passwordValidation = isValidPassword(personInfo.password);
-    const errorMessages = [];
 
     if (!emailValidation.valid) {
-      errorMessages.push(emailValidation.message);
+      errors.email = emailValidation.message;
     }
     if (!passwordValidation.valid) {
-      errorMessages.push(passwordValidation.message);
+      errors.password = passwordValidation.message;
     }
-    if (errorMessages.length > 0) {
-      alert(errorMessages.join("\n"));
-      return;
+    if (Object.keys(errors).length > 0) {
+      return { errors };
     }
 
     const response = await axios.get(
       `${Backend_API}/users/${personInfo.email}/${personInfo.password}`
     );
-    if (response.status == 200) {
+    if (response.data.flag == true) {
       dispatch(addUser(response.data));
-      alert(JSON.stringify(response.data.existingUser));
     } else {
-      Alert.alert(response.data.error);
+      errors[response.data.sort] = response.data.error;
+      return { errors };
     }
   } catch (error) {
-    Alert.alert("There was an error fetching the data.");
+    errors.general = "There was an error fetching the data.";
+    return { errors };
   } finally {
     await dispatch(setLoading(false)); // Hide loading indicator once done
   }
+  return {};
 };
