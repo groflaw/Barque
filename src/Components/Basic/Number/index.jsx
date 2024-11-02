@@ -5,22 +5,41 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
+import { useState, useEffect } from "react";
 
-import { useEffect } from "react";
+const Number = ({ value, onChange, width, name }) => {
+  const [numberValue, setNumberValue] = useState(value);
 
-const Number = ({ width }) => {
+  useEffect(() => {
+    setNumberValue(value || 0);
+  }, [value]);
+
+  const handleIncrease = () => {
+    const newValue = numberValue + 1;
+    setNumberValue(newValue);
+    onChange({ target: { name, value: newValue } });
+  };
+
+  const handleDecrease = () => {
+    const newValue = Math.max(numberValue - 1, 0);
+    setNumberValue(newValue);
+    onChange({ target: { name, value: newValue } });
+  };
+
   return (
     <View style={[styles.NumericContainer, { width }]} className="mt-2">
       <TextInput
         style={styles.Numericinput}
         keyboardType="numeric"
         editable={true}
+        value={numberValue + ""}
+        onChangeText={(text) => onChange({ target: { name, value: text } })}
       />
       <View style={styles.NumericbuttonsContainer}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleIncrease}>
           <Text>▲</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleDecrease}>
           <Text>▼</Text>
         </TouchableOpacity>
       </View>
@@ -33,7 +52,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     borderRadius: 6,
-    paddingLeft: 10,
     paddingRight: 10,
     backgroundColor: "#fff",
     borderRadius: 5,
@@ -55,8 +73,10 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     color: "#333",
-    borderRightWidth: 1,
-    borderColor: "#e0e0e0",
+    height: 40,
+    borderRadius: 4,
+    paddingHorizontal: 10,
+    backgroundColor: "#fff",
   },
   NumericbuttonsContainer: {
     flexDirection: "column",

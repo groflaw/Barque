@@ -10,13 +10,24 @@ import { useNavigation } from "@react-navigation/native";
 
 import Number from "../Basic/Number";
 import Option from "../Basic/Option";
-import { useEffect } from "react";
+
 const AddPlans = () => {
   const navigation = useNavigation();
+
   const nextStep = () => {
     navigation.navigate("AddDocImage");
   };
 
+  const Options = [
+    {
+      _id: 1,
+      name: "Yes",
+    },
+    {
+      _id: 2,
+      name: "No",
+    },
+  ];
   return (
     <>
       <ScrollView>
@@ -51,7 +62,7 @@ const AddPlans = () => {
               <Text className="mt-2 ml-3 mr-3">a</Text>
               <Number width={90}></Number>
             </View>
-            <Option width={150}></Option>
+            {/* <Option width={150}></Option> */}
           </View>
           <View className="mt-5">
             <TouchableOpacity onPress={nextStep}>

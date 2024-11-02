@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "CarRent",
-    "slug": "CarRent",
+    "slug": "barquea",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -11,7 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -19,11 +21,20 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.foreve0914.CarRent"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-localization"]
+    "plugins": [
+      "expo-localization"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "f4475b4e-7692-46c0-bbda-2ec774c6c42d"
+      }
+    },
+    "owner": "foreve0914"
   }
 }

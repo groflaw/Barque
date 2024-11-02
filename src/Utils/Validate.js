@@ -66,3 +66,13 @@ export const isValidString = (inputString) => {
   }
   return { valid: true, message: "Valid input string." };
 };
+
+export const isValidNumber = (value) => {
+  if (value <= 0) {
+    return {
+      valid: false,
+      message: "This field must not be empty",
+    };
+  }
+  return { valid: true, message: "Valid input number" };
+};

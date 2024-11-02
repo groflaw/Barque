@@ -33,13 +33,11 @@ const Boarding = () => {
     navigation.navigate("Main");
   };
 
-  // Automatic navigation after 2 seconds
   useEffect(() => {
     const timer = setTimeout(() => {
       onSkipFun();
     }, 2000);
 
-    // Clear timeout on unmount
     return () => clearTimeout(timer);
   }, []);
 

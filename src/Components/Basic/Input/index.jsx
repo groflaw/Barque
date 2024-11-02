@@ -20,8 +20,8 @@ const CustomTextInput = ({ placeholder, value, onChange, name, sort }) => {
     <View style={InputStyles.container}>
       <TextInput
         placeholderTextColor="#aaa"
-        style={InputStyles.input}
         placeholder={placeholder}
+        style={InputStyles.input}
         value={value}
         onChangeText={(text) => onChange({ target: { name, value: text } })}
         secureTextEntry={isSecure}

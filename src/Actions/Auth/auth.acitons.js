@@ -1,7 +1,6 @@
 import { Type_Signup, Type_Login } from "./types.action";
 import { Backend_API } from "../../Utils/Constant";
 import axios from "axios";
-import { Alert } from "react-native";
 
 import {
   isValidEmail,
@@ -10,7 +9,7 @@ import {
   isValidString,
 } from "../../Utils/Validate";
 import { setLoading } from "../../Store/Global";
-import { addUser } from "../../Store/Slices";
+import { addUser } from "../../Store/Slice";
 
 export const Signup = (personInfo) => async (dispatch) => {
   await dispatch(setLoading(true));
