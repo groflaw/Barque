@@ -86,12 +86,11 @@ const Third = () => {
           {loading ? (
             <LoadingIndicator />
           ) : (
-            // Show loading indicator when loading is true
             <View style={styles.container}>
               <Text style={styles.Title}> Crear una Cuenta </Text>
               <CustomTextInput
                 placeholder="First Name"
-                value={personInfo.firstName} // Ensure you're using the correct property
+                value={personInfo.firstName}
                 onChange={handleChange}
                 name="firstName"
                 sort={false}
@@ -101,7 +100,7 @@ const Third = () => {
               )}
               <CustomTextInput
                 placeholder="Last Name"
-                value={personInfo.lastName} // Ensure you're using the correct property
+                value={personInfo.lastName}
                 onChange={handleChange}
                 name="lastName"
                 sort={false}
@@ -111,7 +110,7 @@ const Third = () => {
               )}
               <CustomTextInput
                 placeholder="example@example.com"
-                value={personInfo.email} // Ensure you're using the correct property
+                value={personInfo.email}
                 onChange={handleChange}
                 name="email"
                 sort={false}
@@ -121,7 +120,7 @@ const Third = () => {
               )}
               <CustomTextInput
                 placeholder="Enter a password of at least 6 characters."
-                value={personInfo.password} // Ensure you're using the correct property
+                value={personInfo.password}
                 onChange={handleChange}
                 name="password"
                 sort={true}
@@ -139,7 +138,7 @@ const Third = () => {
               </View>
               <CustomTextInput
                 placeholder="01/01/1990"
-                value={personInfo.birthDay} // Ensure you're using the correct property
+                value={personInfo.birthDay}
                 onChange={handleChange}
                 name="birthDay"
                 sort={false}
@@ -177,10 +176,10 @@ const Third = () => {
               </View>
               <TouchableOpacity
                 disabled={
-                  !checkSMS || // Button is disabled if checkSMS is not checked
-                  !checkPolish || // Button is disabled if checkPolish is not checked
-                  selectedCountry == null || // Button is disabled if no country is selected
-                  inputValue.trim() === "" // Button is disabled if the inputValue is empty
+                  !checkSMS ||
+                  !checkPolish ||
+                  selectedCountry == null ||
+                  inputValue.trim() === ""
                 }
                 onPress={() => {
                   handleSignup();
@@ -211,7 +210,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     color: "#102a5e",
     fontSize: 20,
-    fontFamily: "Lexend Deca", // Ensure this font is linked in your project
+    fontFamily: "Lexend Deca",
     fontWeight: "500",
     lineHeight: 26,
   },
@@ -220,7 +219,7 @@ const styles = StyleSheet.create({
     color: "#102a5e",
     fontSize: 12,
     fontFamily: "Lexend Deca",
-    fontWeight: "300", // Use 'bold', 'normal', or numeric values as needed
+    fontWeight: "300",
   },
   checkContainer: {
     flexDirection: "row",

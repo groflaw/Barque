@@ -11,9 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -27,14 +25,14 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-localization"
-    ],
+    "plugins": ["expo-localization"],
     "extra": {
       "eas": {
         "projectId": "f4475b4e-7692-46c0-bbda-2ec774c6c42d"
       }
     },
-    "owner": "foreve0914"
-  }
+    "owner": "foreve0914",
+    "sdkVersion": "48.0.0"
+  },
+  "name": "Baraqua"
 }

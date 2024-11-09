@@ -6,14 +6,70 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import * as ImagePicker from "expo-image-picker";
+import { useDispatch, useSelector } from "react-redux";
+
+import { uploadDocImage } from "../../Actions/AddBoat/addboat";
 
 import photoImage from "../../../assets/Icons/photo.png";
-import { useEffect } from "react";
+
 const AddDocImage = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+
+  const curboat = useSelector((state) => state.Global.curboat);
+
+  const [image, setImage] = useState({
+    navigation: null,
+    authorization: null,
+  });
+
   const nextStep = () => {
     navigation.navigate("Location");
+  };
+
+  const formDataFromImagePicker = (result) => {
+    const formData = new FormData();
+
+    const asset = result.assets[0];
+    formData.append(`photo`, {
+      uri: asset.uri,
+      name: asset.fileName ?? asset.uri.split("/").pop(),
+      type: "image/jpeg",
+    });
+    if (asset.exif) {
+      formData.append(`exif`, JSON.stringify(asset.exif));
+    }
+
+    return formData;
+  };
+
+  const pickImage = async (options, type) => {
+    let temp = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      ...options,
+    });
+    if (!temp.canceled) {
+      setImage((prev) => ({
+        ...prev,
+        [type]: temp.assets[0].uri,
+      }));
+      const result = await dispatch(
+        uploadDocImage(curboat._id, formDataFromImagePicker(temp), type)
+      );
+      if (result.errors) {
+        setErrorMessages(result.errors);
+      } else {
+        setPlans(result.plans);
+      }
+    }
+  };
+
+  const pickImageWithResults = async (type) => {
+    await pickImage({}, type);
   };
 
   return (
@@ -32,13 +88,56 @@ const AddDocImage = () => {
         </Text>
 
         <View style={styles.card} className="mt-5">
-          <View style={styles.imagecard} className="flex items-center">
-            <TouchableOpacity>
-              <Image source={photoImage}></Image>
+          <View className="flex items-center mt-6">
+            <TouchableOpacity
+              onPress={() => pickImageWithResults("navigation")}
+            >
+              <Image
+                source={
+                  image.navigation ? { uri: image.navigation } : photoImage
+                }
+                style={{
+                  width: image.navigation ? 310 : 40,
+                  height: image.navigation ? 160 : 40,
+                }}
+              />
             </TouchableOpacity>
-            <Text className="mt-2">Subir Foto de Frente</Text>
+            <Text className="mt-3" style={styles.des}>
+              Upload
+            </Text>
+            <Text className="mb-2" style={styles.des}>
+              Navigation License
+            </Text>
           </View>
         </View>
+
+        <View style={styles.card} className="mt-5">
+          <View className="flex items-center mt-6">
+            <TouchableOpacity
+              onPress={() => pickImageWithResults("authorization")}
+            >
+              <Image
+                source={
+                  image.authorization
+                    ? { uri: image.authorization }
+                    : photoImage
+                }
+                style={{
+                  width: image.authorization ? 310 : 40,
+                  height: image.authorization ? 160 : 40,
+                }}
+              />
+            </TouchableOpacity>
+            <Text className="mt-2" style={styles.des}>
+              Upload
+            </Text>
+            <Text style={styles.des}>Authorization</Text>
+            <Text className="mb-2" style={styles.des}>
+              (Only if the names on the ID do not match)
+            </Text>
+          </View>
+        </View>
+
         <View className="mt-5">
           <TouchableOpacity onPress={nextStep}>
             <Text style={styles.continue} className="text-center">
@@ -65,33 +164,34 @@ const styles = StyleSheet.create({
     fontWeight: 700,
   },
   des: {
-    color: "#000000", // Black color
-    fontSize: 13, // Font size of 12
-    fontFamily: "Lexend Deca", // Custom font family
+    color: "#000000",
+    fontSize: 13,
+    fontFamily: "Lexend Deca",
   },
   card: {
-    backgroundColor: "#ffffff", // Background color
-    borderRadius: 8, // Border radius
-    borderWidth: 1, // Border width
-    borderColor: "#efefef", // Border color
-    shadowColor: "#000", // Shadow color
+    width: 340,
+    height: 250,
+    backgroundColor: "#ffffff",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#efefef",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 4,
     },
-    shadowOpacity: 0.25, // Shadow opacity
-    shadowRadius: 12, // Shadow radius
-    elevation: 5, // Android shadow equivalent
-    padding: 60, // Padding inside the card (adjust as needed)
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+    elevation: 5,
   },
   continue: {
-    borderRadius: 6, // Border radius as a number
-    backgroundColor: "#17233c", // Background color
-    padding: 20, // Add some padding for better touch area
-    color: "#ffffff", // Text color
-    fontSize: 13, // Font size as a number
-    fontFamily: "Mulish", // Font family
-    fontWeight: "900", // Font weight
+    borderRadius: 6,
+    backgroundColor: "#17233c",
+    padding: 20,
+    color: "#ffffff",
+    fontSize: 13,
+    fontFamily: "Mulish",
+    fontWeight: "900",
   },
 });
 export default AddDocImage;

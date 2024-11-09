@@ -2,8 +2,16 @@ import { useEffect, useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 
-const Option = ({ width, options, name, onChange, placeholder }) => {
-  const [selectedValue, setSelectedValue] = useState(null);
+const Option = ({
+  defaultValue,
+  width,
+  options,
+  name,
+  onChange,
+  placeholder,
+  _id,
+}) => {
+  const [selectedValue, setSelectedValue] = useState(defaultValue);
 
   const pickerOptions = options.map((option) => ({
     label: option.name,
@@ -12,10 +20,10 @@ const Option = ({ width, options, name, onChange, placeholder }) => {
 
   return (
     <View
-      style={[styles.OptionContainer]}
-      className="flex flex-row items-center"
+      style={[styles.OptionContainer, { width }]}
+      className="flex flex-row items-center justify-between"
     >
-      <View className="w-80">
+      <View style={{ width: "88%" }}>
         <Text style={styles.Item}>
           {
             selectedValue
@@ -24,12 +32,15 @@ const Option = ({ width, options, name, onChange, placeholder }) => {
           }
         </Text>
       </View>
-      <View className="flex items-center justify-center h-10 ml-3 w-9">
+      <View
+        className="flex items-center justify-center h-10 ml-3"
+        style={{ width: "9%" }}
+      >
         <RNPickerSelect
           items={pickerOptions}
           onValueChange={(value) => {
             setSelectedValue(value);
-            onChange({ target: { name, value } });
+            onChange({ target: { name, value, _id } });
           }}
           value={selectedValue}
           placeholder={{ label: placeholder, value: null }} // Properly set placeholder here

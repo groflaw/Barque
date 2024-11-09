@@ -17,8 +17,9 @@ import {
   getCabinscount,
   getCapacity,
   getPowers,
-  submitBasic,
 } from "../../Actions/BasicBoat/basicboat";
+
+import { submitBasic } from "../../Actions/AddBoat/addboat";
 import { setLoading } from "../../Store/Global";
 
 import Navbar from "../Navbar";
@@ -84,18 +85,18 @@ const BoatData = () => {
   }, [dispatch]);
 
   const [boatdata, setBoatData] = useState({
-    model: "",
-    description: "",
-    location: "",
+    model: "123",
+    description: "123",
+    location: "123",
     year: 1990,
-    size: 0,
-    boattype: 0,
-    boatbrand: 0,
-    enginecount: 0,
-    bathroomcount: 0,
-    power: 0,
-    capacity: 0,
-    cabinscount: 0,
+    size: 10,
+    boattype: 2,
+    boatbrand: 2,
+    enginecount: 2,
+    bathroomcount: 2,
+    power: 2,
+    capacity: 2,
+    cabinscount: 2,
   });
 
   const handleChange = (e) => {

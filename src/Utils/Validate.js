@@ -68,7 +68,7 @@ export const isValidString = (inputString) => {
 };
 
 export const isValidNumber = (value) => {
-  if (value <= 0) {
+  if (value <= 0 || value == null) {
     return {
       valid: false,
       message: "This field must not be empty",

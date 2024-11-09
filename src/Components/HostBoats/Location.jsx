@@ -20,25 +20,25 @@ const Location = () => {
     <ScrollView>
       <View style={styles.container}>
         <Text style={styles.title} className="mt-5">
-          Ubicación de la embarcación{" "}
+          Location of the boat
         </Text>
         <Text style={styles.des} className="mt-4">
-          Indicanos la locación exacta de la embarcación. Para proteger tu
-          privacidad esta información solo la verán los usuarios que ya tienen
-          una reserva confirmada.
+          Tell us the exact location of the boat. To protect your privacy this
+          information will only be seen by users who already have a confirmed
+          reservation.
         </Text>
         <View className="mt-8 mb-3">
-          <Text>Nombre de la embarcación </Text>
+          <Text>Boat Name</Text>
           <CustomTextInput></CustomTextInput>
         </View>
         <Option></Option>
-        <Text className="mt-5">Dirección</Text>
+        <Text className="mt-5">Address</Text>
         <View className="mt-5 mb-3">
-          <Text>Nombre de la marina</Text>
+          <Text>Marina name</Text>
           <CustomTextInput></CustomTextInput>
         </View>
         <View>
-          <Text>Dirección </Text>
+          <Text>Address </Text>
           <CustomTextInput></CustomTextInput>
         </View>
         <View className="mt-5">
