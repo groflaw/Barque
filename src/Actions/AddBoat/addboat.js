@@ -191,6 +191,79 @@ export const uploadDocImage = (id, data, type) => async (dispatch) => {
   }
 };
 
+export const submitLocation = (id, location) => async (dispatch) => {
+  await dispatch(setLoading(true));
+  let errors = {};
+  try {
+    const boatnameValidation = isValidString(location.boatname);
+    const locationtypeValidation = isValidNumber(location.locationtype);
+    const marinanameValidation = isValidString(location.marinaname);
+    const addressValidation = isValidString(location.address);
+    if (!boatnameValidation.valid) {
+      errors.boatname = boatnameValidation.message;
+    }
+    if (!locationtypeValidation.valid) {
+      errors.locationtype = locationtypeValidation.message;
+    }
+    if (!marinanameValidation.valid) {
+      errors.marinaname = marinanameValidation.message;
+    }
+    if (!addressValidation.valid) {
+      errors.address = addressValidation.message;
+    }
+    if (Object.keys(errors).length > 0) {
+      return { errors };
+    }
+    const response = await axios.post(
+      `${Backend_API}/boats/addLocation/${id}`,
+      location,
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.data.flag == true) {
+      dispatch(setCurboat(response.data.data));
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
+    }
+  } catch (error) {
+    errors.general = "There was an error fetching the data";
+    return { errors };
+  } finally {
+    await dispatch(setLoading(false));
+  }
+  return {};
+};
+
+export const uploadBoatImage = (id, data, type) => async (dispatch) => {
+  await dispatch(setLoading(true));
+  let errors = {};
+  try {
+    const response = await axios.post(
+      `https://baraqua-server.vercel.app/api/boats/addboatImage/${id}/${type}`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    if (response.data.flag == true) {
+      dispatch(setCurboat(response.data.data));
+      return response.data.data;
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
+    }
+  } catch (error) {
+  } finally {
+    await dispatch(setLoading(false));
+  }
+};
 export const getboatInfo = (id) => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};

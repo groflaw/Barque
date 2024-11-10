@@ -9,6 +9,7 @@ import {
   getcabinscount,
   getcapacity,
   getpowers,
+  getlocationtype,
 } from "../../Store/BasicBoat";
 
 export const getAllBoatTypes = () => async (dispatch) => {
@@ -120,6 +121,23 @@ export const getPowers = () => async (dispatch) => {
     const response = await axios.get(`${Backend_API}/boats/getallboatpower`);
     if (response.data.flag == true) {
       dispatch(getpowers(response.data.data));
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
+    }
+  } catch (error) {
+    errors.general = "There was an error fetching the data.";
+    return { errors };
+  }
+  return {};
+};
+
+export const getLocationType = () => async (dispatch) => {
+  let errors = {};
+  try {
+    const response = await axios.get(`${Backend_API}/boats/getLocationType`);
+    if (response.data.flag == true) {
+      dispatch(getlocationtype(response.data.data));
     } else {
       errors[response.data.sort] = response.data.error;
       return { errors };

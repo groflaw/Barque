@@ -25,11 +25,9 @@ const Option = ({
     >
       <View style={{ width: "88%" }}>
         <Text style={styles.Item}>
-          {
-            selectedValue
-              ? options.find((item) => item._id === selectedValue)?.name
-              : placeholder // Show placeholder text when no value selected
-          }
+          {selectedValue
+            ? options.find((item) => item._id === selectedValue)?.name
+            : placeholder}
         </Text>
       </View>
       <View
@@ -43,7 +41,7 @@ const Option = ({
             onChange({ target: { name, value, _id } });
           }}
           value={selectedValue}
-          placeholder={{ label: placeholder, value: null }} // Properly set placeholder here
+          placeholder={{ label: placeholder, value: null }}
         />
       </View>
     </View>

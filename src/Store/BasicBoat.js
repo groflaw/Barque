@@ -10,6 +10,7 @@ const BasicBoat = createSlice({
     bathroomcount: [],
     capacity: [],
     cabinscount: [],
+    locationtype: [],
   },
   reducers: {
     getalltypes: (state, action) => {
@@ -33,6 +34,9 @@ const BasicBoat = createSlice({
     getcabinscount: (state, action) => {
       state.cabinscount = action.payload;
     },
+    getlocationtype: (state, action) => {
+      state.locationtype = action.payload;
+    },
   },
 });
 
@@ -44,5 +48,6 @@ export const {
   getbathroomcount,
   getcapacity,
   getcabinscount,
+  getlocationtype,
 } = BasicBoat.actions;
 export default BasicBoat.reducer;

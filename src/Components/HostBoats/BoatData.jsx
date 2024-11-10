@@ -313,29 +313,29 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "#17233c",
-    fontSize: 20, // No 'px' in React Native, just a number
+    fontSize: 20,
     fontFamily: "Lexend Deca",
-    fontWeight: "700", // Font weight can be a string or number
-    lineHeight: 26, // Line height is also a number
+    fontWeight: "700",
+    lineHeight: 26,
   },
   item: {
     color: "#17233c",
-    fontSize: 14, // Use a number without 'px'
+    fontSize: 14,
     fontFamily: "Lexend Deca",
   },
   continue: {
-    borderRadius: 6, // Border radius as a number
-    backgroundColor: "#17233c", // Background color
-    padding: 20, // Add some padding for better touch area
-    color: "#ffffff", // Text color
-    fontSize: 13, // Font size as a number
-    fontFamily: "Mulish", // Font family
-    fontWeight: "900", // Font weight
+    borderRadius: 6,
+    backgroundColor: "#17233c",
+    padding: 20,
+    color: "#ffffff",
+    fontSize: 13,
+    fontFamily: "Mulish",
+    fontWeight: "900",
   },
   error: {
-    color: "red", // Red color for the error message
-    fontSize: 12, // Small font size
-    marginTop: 2, // Space between the input and the error message
+    color: "red",
+    fontSize: 12,
+    marginTop: 2,
   },
 });
 

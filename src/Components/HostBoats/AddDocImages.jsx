@@ -26,6 +26,7 @@ const AddDocImage = () => {
     navigation: null,
     authorization: null,
   });
+  const [errorMessages, setErrorMessages] = useState({});
 
   const nextStep = () => {
     navigation.navigate("Location");
@@ -62,8 +63,6 @@ const AddDocImage = () => {
       );
       if (result.errors) {
         setErrorMessages(result.errors);
-      } else {
-        setPlans(result.plans);
       }
     }
   };
@@ -74,7 +73,7 @@ const AddDocImage = () => {
 
   return (
     <ScrollView>
-      <View style={styles.container}>
+      <View style={styles.container} className="items-center justify-center">
         <Text style={styles.title} className="mt-4">
           Agrega documentación
         </Text>
@@ -87,7 +86,7 @@ const AddDocImage = () => {
           Asegurate de que las imagenes tengan buena calidad y sean legibles.
         </Text>
 
-        <View style={styles.card} className="mt-5">
+        <View style={styles.card} className="items-center justify-center mt-5">
           <View className="flex items-center mt-6">
             <TouchableOpacity
               onPress={() => pickImageWithResults("navigation")}
@@ -111,7 +110,7 @@ const AddDocImage = () => {
           </View>
         </View>
 
-        <View style={styles.card} className="mt-5">
+        <View style={styles.card} className="items-center justify-center mt-5">
           <View className="flex items-center mt-6">
             <TouchableOpacity
               onPress={() => pickImageWithResults("authorization")}
@@ -138,7 +137,7 @@ const AddDocImage = () => {
           </View>
         </View>
 
-        <View className="mt-5">
+        <View className="mt-5 w-80">
           <TouchableOpacity onPress={nextStep}>
             <Text style={styles.continue} className="text-center">
               CONTINUAR
