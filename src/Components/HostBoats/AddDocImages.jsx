@@ -22,10 +22,14 @@ const AddDocImage = () => {
 
   const curboat = useSelector((state) => state.Global.curboat);
 
-  const [image, setImage] = useState({
-    navigation: null,
-    authorization: null,
-  });
+  const [image, setImage] = useState(
+    curboat.docImage
+      ? curboat.docImage
+      : {
+          navigation: null,
+          authorization: null,
+        }
+  );
   const [errorMessages, setErrorMessages] = useState({});
 
   const nextStep = () => {

@@ -35,7 +35,7 @@ export const setBoatFlag = (id, flag) => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};
   try {
-    const response = await axios.get(
+    const response = await axios.post(
       `${Backend_API}/boats/setBoatFlag/${id}`,
       { flag },
       {
@@ -46,7 +46,7 @@ export const setBoatFlag = (id, flag) => async (dispatch) => {
       }
     );
     if (response.data.flag == true) {
-      return response.data.data;
+      console.log("Settings successfully");
     } else {
       errors[response.data.sort] = response.data.error;
       return { errors };
@@ -327,6 +327,7 @@ export const getboatInfo = (id) => async (dispatch) => {
     const response = await axios.get(`${Backend_API}/boats/getbasicInfo/${id}`);
     if (response.data.flag == true) {
       dispatch(setCurboat(response.data.data));
+      return {};
     } else {
       errors[response.data.sort] = response.data.error;
       return { errors };
@@ -337,6 +338,7 @@ export const getboatInfo = (id) => async (dispatch) => {
   } finally {
     await dispatch(setLoading(false));
   }
+  return {};
 };
 
 export const submitCancellation = (id, cancellation) => async (dispatch) => {

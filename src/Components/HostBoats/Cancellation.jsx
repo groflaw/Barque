@@ -18,24 +18,26 @@ import { submitCancellation } from "../../Actions/AddBoat/addboat";
 const Cancellation = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-
-  const [cancellation, setCancellation] = useState(null);
-  const [errorMessages, setErrorMessages] = useState({});
-
   const curboat = useSelector((state) => state.Global.curboat);
   const loading = useSelector((state) => state.Global.loading);
 
+  const [cancellation, setCancellation] = useState(
+    curboat.cancellation ? curboat.cancellation : null
+  );
+  const [errorMessages, setErrorMessages] = useState({});
+
   const handleSubmit = async () => {
+    navigation.navigate("Accessories");
+  };
+  const handleChange = async (value) => {
+    await setCancellation(value);
     const result = await dispatch(
       submitCancellation(curboat._id, cancellation)
     );
     if (result.errors) {
       setErrorMessages(result.errors);
-    } else {
-      navigation.navigate("Accessories");
     }
   };
-
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -53,7 +55,7 @@ const Cancellation = () => {
               <View className="flex items-center w-24 ">
                 <Radio
                   selected={cancellation === 1}
-                  onPress={() => setCancellation(1)}
+                  onPress={() => handleChange(1)}
                 ></Radio>
                 <Text style={[styles.item, { backgroundColor: "#2a8500" }]}>
                   FLEXIBLE
@@ -73,7 +75,7 @@ const Cancellation = () => {
               <View className="flex items-center w-24 ">
                 <Radio
                   selected={cancellation === 2}
-                  onPress={() => setCancellation(2)}
+                  onPress={() => handleChange(2)}
                 ></Radio>
                 <Text style={[styles.item, { backgroundColor: "#f4bf64" }]}>
                   MODERADA
@@ -97,7 +99,7 @@ const Cancellation = () => {
               <View className="flex items-center w-24 ">
                 <Radio
                   selected={cancellation === 3}
-                  onPress={() => setCancellation(3)}
+                  onPress={() => handleChange(3)}
                 ></Radio>
                 <Text style={[styles.item, { backgroundColor: "#ff3b30" }]}>
                   ESTRICTA

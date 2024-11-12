@@ -12,8 +12,8 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-import { addPlan, delPlan, getboatInfo } from "../../Actions/AddBoat/addboat";
-
+import { addPlan, delPlan } from "../../Actions/AddBoat/addboat";
+import Option from "../Basic/Option";
 const AddPlans = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -249,7 +249,7 @@ const AddPlans = () => {
                     />
                   )}
                 </View>
-                {/* <View className="flex flex-row items-center justify-between">
+                <View className="flex flex-row items-center justify-between">
                   <Option
                     defaultValue={item.captain}
                     options={Captions}
@@ -258,10 +258,10 @@ const AddPlans = () => {
                     name="captain"
                     _id={item._id}
                   ></Option>
-                </View> */}
-                {/* {errorMessages.captain && (
+                </View>
+                {errorMessages.captain && (
                   <Text style={styles.error}>{errorMessages.captain}</Text>
-                )} */}
+                )}
                 <View className="flex flex-row items-center justify-around w-full mt-3">
                   <TouchableOpacity
                     onPress={() => handleSubmit(item._id)}

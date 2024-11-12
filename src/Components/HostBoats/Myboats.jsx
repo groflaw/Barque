@@ -15,7 +15,11 @@ import CustomSwitch from "../Basic/Switch";
 import LoadingIndicator from "../Basic/LoadingIndicator";
 
 import { getAllBoatTypes } from "../../Actions/BasicBoat/basicboat";
-import { getMyboats } from "../../Actions/AddBoat/addboat";
+import {
+  getMyboats,
+  setBoatFlag,
+  getboatInfo,
+} from "../../Actions/AddBoat/addboat";
 
 import { setLoading } from "../../Store/Global";
 
@@ -35,10 +39,24 @@ const Myboats = () => {
     navigation.navigate("Option");
   };
 
-  const handleSwitch = (id, status) => {
-    console.log(`Boat ID: ${id}, Switch Status: ${status}`);
+  const handleSwitch = async (id, status) => {
+    setMyboats((prevBoats) =>
+      prevBoats.map((boat) =>
+        boat._id === id ? { ...boat, flag: status } : boat
+      )
+    );
+    let result = await dispatch(setBoatFlag(id, status));
+    if (result.errors) {
+      setErrorMessages(result.errors);
+    }
+  };
 
-    // You can handle the state change (e.g., update backend or local state) here
+  const handleEdit = async (id) => {
+    let result = await dispatch(getboatInfo(id));
+    if (result.errors) {
+      setErrorMessages(result.errors);
+    }
+    navigation.navigate("Option");
   };
 
   useEffect(() => {
@@ -59,7 +77,13 @@ const Myboats = () => {
         console.error("Error fetching boat types:", error);
       }
     };
-    fetchMyBoats();
+    console.log(curuser._id);
+
+    if (curuser._id == undefined) {
+      navigation.navigate("SignUp");
+    } else {
+      fetchMyBoats();
+    }
   }, []);
 
   return (
@@ -91,10 +115,16 @@ const Myboats = () => {
                   </View>
                 </View>
                 <View>
-                  <Text style={styles.edit} className="mb-2 text-center">
-                    Editor
-                  </Text>
-                  <CustomSwitch id={item._id} onSwitchChange={handleSwitch} />
+                  <TouchableOpacity onPress={() => handleEdit(item._id)}>
+                    <Text style={styles.edit} className="mb-2 text-center">
+                      Editor
+                    </Text>
+                  </TouchableOpacity>
+                  <CustomSwitch
+                    id={item._id}
+                    flag={item.flag}
+                    onSwitchChange={handleSwitch}
+                  />
                 </View>
               </View>
             );

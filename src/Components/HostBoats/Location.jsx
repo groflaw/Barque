@@ -25,12 +25,16 @@ const Location = () => {
   const curboat = useSelector((state) => state.Global.curboat);
   const loading = useSelector((state) => state.Global.loading);
 
-  const [location, setLocation] = useState({
-    boatname: "",
-    locationtype: null,
-    marinaname: "",
-    address: "",
-  });
+  const [location, setLocation] = useState(
+    curboat.location
+      ? curboat.location
+      : {
+          boatname: "",
+          locationtype: null,
+          marinaname: "",
+          address: "",
+        }
+  );
   const [errorMessages, setErrorMessages] = useState({});
 
   const handleChange = (e) => {
@@ -92,6 +96,7 @@ const Location = () => {
               )}
             </View>
             <Option
+              defaultValue={location.locationtype}
               options={locationtypes}
               onChange={handleChange}
               name="locationtype"

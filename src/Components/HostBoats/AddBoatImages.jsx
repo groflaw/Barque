@@ -21,16 +21,20 @@ const AddBoatImages = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const [image, setImage] = useState({
-    cover: null,
-    photo2: null,
-    photo3: null,
-    photo4: null,
-    photo5: null,
-  });
-
   const curboat = useSelector((state) => state.Global.curboat);
   const loading = useSelector((state) => state.Global.loading);
+
+  const [image, setImage] = useState(
+    curboat.boatImage
+      ? curboat.boatImage
+      : {
+          cover: null,
+          photo2: null,
+          photo3: null,
+          photo4: null,
+          photo5: null,
+        }
+  );
 
   const nextStep = () => {
     navigation.navigate("Cancellation");

@@ -6,6 +6,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
 
 import Myboats from "../Components/HostBoats/Myboats";
 import Option from "../Components/HostBoats/Option";
@@ -24,8 +25,12 @@ import markImage from "../../assets/Icons/dashboardmark.png";
 
 const HostBoats = () => {
   const Stack = createNativeStackNavigator(); //Navigator Screen
+  const navigation = useNavigation();
 
   const HomeHeaderRight = () => {
+    const gotoMain = () => {
+      navigation.navigate("HostBoats");
+    };
     return (
       <View
         className="p-5 mt-2"
@@ -37,7 +42,12 @@ const HostBoats = () => {
         }}
       >
         <View className="relative flex flex-row items-center justify-center space-x-3">
-          <TouchableOpacity style={styles.headerback}>
+          <TouchableOpacity
+            style={styles.headerback}
+            onPress={() => {
+              gotoMain();
+            }}
+          >
             <Image source={backImage}></Image>
           </TouchableOpacity>
           <Image source={markImage}></Image>

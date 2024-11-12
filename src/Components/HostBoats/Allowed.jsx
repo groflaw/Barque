@@ -21,29 +21,27 @@ import LoadingIndicator from "../Basic/LoadingIndicator";
 const Allowed = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-
-  const [all, setAll] = useState([]);
-  const [errorMessages, setErrorMessages] = useState({});
-
   const allowes = useSelector((state) => state.BasicBoat.allowes);
   const curboat = useSelector((state) => state.Global.curboat);
   const loading = useSelector((state) => state.Global.loading);
 
-  const handleCheckboxChange = (checked, id) => {
+  const [all, setAll] = useState(curboat.allowes ? curboat.allowes : []);
+  const [errorMessages, setErrorMessages] = useState({});
+
+  const handleCheckboxChange = async (checked, id) => {
     if (checked) {
       setAll((prevAccess) => [...prevAccess, id]);
     } else {
       setAll((prevAccess) => prevAccess.filter((itemId) => itemId !== id));
     }
-  };
-
-  const handleSubmit = async () => {
     const result = await dispatch(submitAllowes(curboat._id, all));
     if (result.errors) {
       setErrorMessages(result.errors);
-    } else {
-      navigation.navigate("Myboats");
     }
+  };
+
+  const handleSubmit = async () => {
+    navigation.navigate("Myboats");
   };
 
   useEffect(() => {

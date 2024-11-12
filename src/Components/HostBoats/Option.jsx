@@ -21,8 +21,8 @@ import vesseldata from "../../../assets/Icons/vesseldata.png";
 const Option = () => {
   const navigation = useNavigation();
 
-  const nextStep = () => {
-    navigation.navigate("NewScreen");
+  const nextStep = (url) => {
+    navigation.navigate(url);
   };
   return (
     <>
@@ -30,7 +30,11 @@ const Option = () => {
         <View style={styles.container}>
           <Text style={styles.title}>Editar embarcación</Text>
 
-          <TouchableOpacity onPress={nextStep}>
+          <TouchableOpacity
+            onPress={() => {
+              nextStep("NewScreen");
+            }}
+          >
             <View className="flex flex-row mt-5" style={styles.item}>
               <Image source={boatdata}></Image>
               <Text style={styles.itemText} className="ml-7">
@@ -39,7 +43,11 @@ const Option = () => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              nextStep("AddPlans");
+            }}
+          >
             <View className="flex flex-row mt-3" style={styles.item}>
               <Image source={boatplan}></Image>
               <Text style={styles.itemText} className="ml-7">
@@ -48,7 +56,11 @@ const Option = () => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              nextStep("Location");
+            }}
+          >
             <View className="flex flex-row mt-3" style={styles.item}>
               <Image source={boatlocaiton}></Image>
               <Text style={styles.itemText} className="ml-7">
@@ -57,7 +69,11 @@ const Option = () => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              nextStep("AddBoatImages");
+            }}
+          >
             <View className="flex flex-row mt-3" style={styles.item}>
               <Image source={boatImage}></Image>
               <Text style={styles.itemText} className="ml-7">
@@ -66,7 +82,11 @@ const Option = () => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              nextStep("Cancellation");
+            }}
+          >
             <View className="flex flex-row mt-3" style={styles.item}>
               <Image source={boatcancel}></Image>
               <Text style={styles.itemText} className="ml-7">
@@ -75,7 +95,11 @@ const Option = () => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              nextStep("Accessories");
+            }}
+          >
             <View className="flex flex-row mt-3" style={styles.item}>
               <Image source={boataccesoris}></Image>
               <Text style={styles.itemText} className="ml-7">
@@ -84,7 +108,11 @@ const Option = () => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              nextStep("Allowed");
+            }}
+          >
             <View className="flex flex-row mt-3" style={styles.item}>
               <Image source={boatallow}></Image>
               <Text style={styles.itemText} className="ml-7">
@@ -93,7 +121,11 @@ const Option = () => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              nextStep("AddDocImage");
+            }}
+          >
             <View className="flex flex-row mt-3" style={styles.item}>
               <Image source={vesseldata}></Image>
               <Text style={styles.itemText} className="ml-7">

@@ -21,12 +21,14 @@ const Accessories = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const [access, setAccess] = useState([]);
-  const [errorMessages, setErrorMessages] = useState({});
-
   const accessories = useSelector((state) => state.BasicBoat.accessories);
   const curboat = useSelector((state) => state.Global.curboat);
   const loading = useSelector((state) => state.Global.loading);
+
+  const [access, setAccess] = useState(
+    curboat.accessories ? curboat.accessories : []
+  );
+  const [errorMessages, setErrorMessages] = useState({});
 
   useEffect(() => {
     const fetchBoatTypes = async () => {
@@ -44,21 +46,20 @@ const Accessories = () => {
     fetchBoatTypes();
   }, [dispatch]);
 
-  const handleCheckboxChange = (checked, id) => {
+  const handleCheckboxChange = async (checked, id) => {
     if (checked) {
       setAccess((prevAccess) => [...prevAccess, id]);
     } else {
       setAccess((prevAccess) => prevAccess.filter((itemId) => itemId !== id));
     }
-  };
-
-  const handleSubmit = async () => {
     const result = await dispatch(submitAccessories(curboat._id, access));
     if (result.errors) {
       setErrorMessages(result.errors);
-    } else {
-      navigation.navigate("Allowed");
     }
+  };
+
+  const handleSubmit = async () => {
+    navigation.navigate("Allowed");
   };
   return (
     <ScrollView>

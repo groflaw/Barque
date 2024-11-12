@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 
-const CustomSwitch = ({ id, onSwitchChange }) => {
-  const [isOn, setIsOn] = useState(false);
+const CustomSwitch = ({ id, flag, onSwitchChange }) => {
+  const [isOn, setIsOn] = useState(flag); // Initialize with the flag value
 
   const toggleSwitch = () => {
     setIsOn((previousState) => {
       const newState = !previousState;
-      onSwitchChange(id, newState); // Call handleSwitch with the id and the new state
+      onSwitchChange(id, newState);
       return newState;
     });
   };
