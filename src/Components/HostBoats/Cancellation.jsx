@@ -6,99 +6,137 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
 import Radio from "../Basic/Radio";
+import LoadingIndicator from "../Basic/LoadingIndicator";
+
+import { submitCancellation } from "../../Actions/AddBoat/addboat";
 
 const Cancellation = () => {
-  const [selected, setSelected] = useState(null);
   const navigation = useNavigation();
-  const nextStep = () => {
-    navigation.navigate("Accessories");
+  const dispatch = useDispatch();
+
+  const [cancellation, setCancellation] = useState(null);
+  const [errorMessages, setErrorMessages] = useState({});
+
+  const curboat = useSelector((state) => state.Global.curboat);
+  const loading = useSelector((state) => state.Global.loading);
+
+  const handleSubmit = async () => {
+    const result = await dispatch(
+      submitCancellation(curboat._id, cancellation)
+    );
+    if (result.errors) {
+      setErrorMessages(result.errors);
+    } else {
+      navigation.navigate("Accessories");
+    }
   };
 
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.title} className="mt-5 ">
-          Elige tu política de cancelación{" "}
-        </Text>
-        <View
-          style={styles.card}
-          className="flex flex-row items-center justify-center mt-4"
-        >
-          <View className="flex items-center w-24 ">
-            <Radio
-              selected={selected === "option1"}
-              onPress={() => setSelected("option1")}
-            ></Radio>
-            <Text style={[styles.item, { backgroundColor: "#2a8500" }]}>
-              FLEXIBLE
+        {loading ? (
+          <LoadingIndicator />
+        ) : (
+          <>
+            <Text style={styles.title} className="mt-5 ">
+              Elige tu política de cancelación{" "}
             </Text>
-          </View>
-          <View>
-            <Text style={styles.itemText} className="w-56 ml-2 ">
-              Cancelaciones de reservas gratis en todo momento con devolución
-              del dinero.
-            </Text>
-          </View>
-        </View>
-        <View
-          style={styles.card}
-          className="flex flex-row items-center justify-center mt-4"
-        >
-          <View className="flex items-center w-24 ">
-            <Radio
-              selected={selected === "option1"}
-              onPress={() => setSelected("option1")}
-            ></Radio>
-            <Text style={[styles.item, { backgroundColor: "#f4bf64" }]}>
-              MODERADA
-            </Text>
-          </View>
-          <View>
-            <Text style={styles.itemText} className="w-56 ml-2 ">
-              Cancelaciones de reservas gratis antes de las 24 horas del día que
-              inicia el viaje.
-            </Text>
-            <Text style={styles.itemText} className="w-56 ml-2 ">
-              Cancelaciones el mismo día de la reserva tendrá un cargo del 50%
-              del costo de un día de reserva.
-            </Text>
-          </View>
-        </View>
-        <View
-          style={styles.card}
-          className="flex flex-row items-center justify-center mt-4"
-        >
-          <View className="flex items-center w-24 ">
-            <Radio
-              selected={selected === "option1"}
-              onPress={() => setSelected("option1")}
-            ></Radio>
-            <Text style={[styles.item, { backgroundColor: "#ff3b30" }]}>
-              ESTRICTA
-            </Text>
-          </View>
-          <View>
-            <Text style={styles.itemText} className="w-56 ml-2 ">
-              Cancelaciones de reserva gratis antes de las 48 horas del día que
-              inicia el viaje.
-            </Text>
-            <Text style={styles.itemText} className="w-56 ml-2 ">
-              Cancelaciones dentro de las 48 horas previas de la reserva tendrá
-              un cargo del 50% del costo de un día de reserva.
-            </Text>
-          </View>
-        </View>
-        <View className="mt-5">
-          <TouchableOpacity onPress={nextStep}>
-            <Text style={styles.continue} className="text-center">
-              CONTINUAR
-            </Text>
-          </TouchableOpacity>
-        </View>
+            <View
+              style={styles.card}
+              className="flex flex-row items-center justify-center mt-4"
+            >
+              <View className="flex items-center w-24 ">
+                <Radio
+                  selected={cancellation === 1}
+                  onPress={() => setCancellation(1)}
+                ></Radio>
+                <Text style={[styles.item, { backgroundColor: "#2a8500" }]}>
+                  FLEXIBLE
+                </Text>
+              </View>
+              <View>
+                <Text style={styles.itemText} className="w-56 ml-2 ">
+                  Cancelaciones de reservas gratis en todo momento con
+                  devolución del dinero.
+                </Text>
+              </View>
+            </View>
+            <View
+              style={styles.card}
+              className="flex flex-row items-center justify-center mt-4"
+            >
+              <View className="flex items-center w-24 ">
+                <Radio
+                  selected={cancellation === 2}
+                  onPress={() => setCancellation(2)}
+                ></Radio>
+                <Text style={[styles.item, { backgroundColor: "#f4bf64" }]}>
+                  MODERADA
+                </Text>
+              </View>
+              <View>
+                <Text style={styles.itemText} className="w-56 ml-2 ">
+                  Cancelaciones de reservas gratis antes de las 24 horas del día
+                  que inicia el viaje.
+                </Text>
+                <Text style={styles.itemText} className="w-56 ml-2 ">
+                  Cancelaciones el mismo día de la reserva tendrá un cargo del
+                  50% del costo de un día de reserva.
+                </Text>
+              </View>
+            </View>
+            <View
+              style={styles.card}
+              className="flex flex-row items-center justify-center mt-4"
+            >
+              <View className="flex items-center w-24 ">
+                <Radio
+                  selected={cancellation === 3}
+                  onPress={() => setCancellation(3)}
+                ></Radio>
+                <Text style={[styles.item, { backgroundColor: "#ff3b30" }]}>
+                  ESTRICTA
+                </Text>
+              </View>
+              <View>
+                <Text style={styles.itemText} className="w-56 ml-2 ">
+                  Cancelaciones de reserva gratis antes de las 48 horas del día
+                  que inicia el viaje.
+                </Text>
+                <Text style={styles.itemText} className="w-56 ml-2 ">
+                  Cancelaciones dentro de las 48 horas previas de la reserva
+                  tendrá un cargo del 50% del costo de un día de reserva.
+                </Text>
+              </View>
+            </View>
+            <View className="mt-5">
+              <TouchableOpacity
+                onPress={() => {
+                  handleSubmit();
+                }}
+              >
+                <Text style={styles.continue} className="text-center">
+                  CONTINUAR
+                </Text>
+              </TouchableOpacity>
+              {errorMessages.general && (
+                <Text style={styles.error} className="text-center">
+                  {errorMessages.general}
+                </Text>
+              )}
+              {errorMessages.cancellation && (
+                <Text style={styles.error} className="text-center">
+                  {errorMessages.cancellation}
+                </Text>
+              )}
+            </View>
+          </>
+        )}
       </View>
     </ScrollView>
   );
@@ -112,51 +150,56 @@ const styles = StyleSheet.create({
     paddingRight: 25,
   },
   title: {
-    color: "#17233c", // Custom dark blue color
-    fontSize: 20, // Font size of 20
-    fontFamily: "Lexend Deca", // Custom font family
-    fontWeight: "700", // Font weight set to bold
+    color: "#17233c",
+    fontSize: 20,
+    fontFamily: "Lexend Deca",
+    fontWeight: "700",
   },
   card: {
-    backgroundColor: "#ffffff", // Background color
-    borderRadius: 8, // Border radius
-    borderWidth: 1, // Border width
-    borderColor: "#efefef", // Border color
-    shadowColor: "#000", // Shadow color
+    backgroundColor: "#ffffff",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#efefef",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 4,
     },
-    shadowOpacity: 0.25, // Shadow opacity
-    shadowRadius: 12, // Shadow radius
-    elevation: 5, // Android shadow equivalent
-    padding: 40, // Padding inside the card (adjust as needed)
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+    elevation: 5,
+    padding: 40,
   },
   item: {
     borderRadius: 12,
-    // backgroundColor: "#2a8500",
-    paddingVertical: 4, // Adjust padding for better touch area
-    paddingHorizontal: 15, // Adjust padding for better touch area
+
+    paddingVertical: 4,
+    paddingHorizontal: 15,
     color: "#ffffff",
     fontSize: 10,
-    fontFamily: "Lexend Deca", // Make sure the font is available in your app
+    fontFamily: "Lexend Deca",
     fontWeight: "700",
-    textAlign: "center", // Center the text horizontally
+    textAlign: "center",
   },
   itemText: {
     color: "#172b4d",
     fontSize: 13,
-    fontFamily: "Lexend Deca", // Ensure this font is properly linked in your project
+    fontFamily: "Lexend Deca",
   },
 
   continue: {
-    borderRadius: 6, // Border radius as a number
-    backgroundColor: "#17233c", // Background color
-    padding: 20, // Add some padding for better touch area
-    color: "#ffffff", // Text color
-    fontSize: 13, // Font size as a number
-    fontFamily: "Mulish", // Font family
-    fontWeight: "900", // Font weight
+    borderRadius: 6,
+    backgroundColor: "#17233c",
+    padding: 20,
+    color: "#ffffff",
+    fontSize: 13,
+    fontFamily: "Mulish",
+    fontWeight: "900",
+  },
+  error: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 2,
   },
 });
 

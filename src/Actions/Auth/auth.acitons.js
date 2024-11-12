@@ -82,7 +82,7 @@ export const Signin = (personInfo) => async (dispatch) => {
       `${Backend_API}/users/${personInfo.email}/${personInfo.password}`
     );
     if (response.data.flag == true) {
-      dispatch(addUser(response.data));
+      dispatch(addUser(response.data.existingUser));
     } else {
       errors[response.data.sort] = response.data.error;
       return { errors };

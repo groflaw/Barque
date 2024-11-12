@@ -6,96 +6,104 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import CheckBox from "../Basic/CheckBox";
 import { useNavigation } from "@react-navigation/native";
 
-import pets from "../../../assets/Icons/pets.png";
-import liquor from "../../../assets/Icons/liquor.png";
-import vaping from "../../../assets/Icons/vaping.png";
-import shoes from "../../../assets/Icons/shoes.png";
-import bottle from "../../../assets/Icons/bottle.png";
-import child from "../../../assets/Icons/child.png";
-import fish from "../../../assets/Icons/fish.png";
-import speaker from "../../../assets/Icons/speaker.png";
-import { useEffect } from "react";
+import { getAllowes } from "../../Actions/BasicBoat/basicboat";
+import { submitAllowes } from "../../Actions/AddBoat/addboat";
+import { setLoading } from "../../Store/Global";
+
+import CheckBox from "../Basic/CheckBox";
+import LoadingIndicator from "../Basic/LoadingIndicator";
+
 const Allowed = () => {
-  const [isChecked, setIsChecked] = useState(false);
   const navigation = useNavigation();
-  const nextStep = () => {
-    navigation.navigate("Allowed");
+  const dispatch = useDispatch();
+
+  const [all, setAll] = useState([]);
+  const [errorMessages, setErrorMessages] = useState({});
+
+  const allowes = useSelector((state) => state.BasicBoat.allowes);
+  const curboat = useSelector((state) => state.Global.curboat);
+  const loading = useSelector((state) => state.Global.loading);
+
+  const handleCheckboxChange = (checked, id) => {
+    if (checked) {
+      setAll((prevAccess) => [...prevAccess, id]);
+    } else {
+      setAll((prevAccess) => prevAccess.filter((itemId) => itemId !== id));
+    }
   };
 
+  const handleSubmit = async () => {
+    const result = await dispatch(submitAllowes(curboat._id, all));
+    if (result.errors) {
+      setErrorMessages(result.errors);
+    } else {
+      navigation.navigate("Myboats");
+    }
+  };
+
+  useEffect(() => {
+    const fetchBoatTypes = async () => {
+      try {
+        await dispatch(setLoading(true));
+        let result = await dispatch(getAllowes());
+        if (result.errors) {
+          setErrorMessages(result.errors);
+        }
+        await dispatch(setLoading(false));
+      } catch (error) {
+        console.error("Error fetching boat types:", error);
+      }
+    };
+    fetchBoatTypes();
+  }, [dispatch]);
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.title} className="mb-5">
-          Que está permitido en la embarcación?
-        </Text>
-        <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl">
-          <View className="flex flex-row items-center">
-            <Image source={pets}></Image>
-            <Text className="ml-4">Aire Acondicionado</Text>
-          </View>
-          <CheckBox value={isChecked} onValueChange={setIsChecked}></CheckBox>
-        </View>
-        <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl">
-          <View className="flex flex-row items-center">
-            <Image source={liquor}></Image>
-            <Text className="ml-4">Aire Acondicionado</Text>
-          </View>
-          <CheckBox value={isChecked} onValueChange={setIsChecked}></CheckBox>
-        </View>
-        <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl">
-          <View className="flex flex-row items-center">
-            <Image source={vaping}></Image>
-            <Text className="ml-4">Aire Acondicionado</Text>
-          </View>
-          <CheckBox value={isChecked} onValueChange={setIsChecked}></CheckBox>
-        </View>
-        <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl">
-          <View className="flex flex-row items-center">
-            <Image source={shoes}></Image>
-            <Text className="ml-4">Aire Acondicionado</Text>
-          </View>
-          <CheckBox value={isChecked} onValueChange={setIsChecked}></CheckBox>
-        </View>
-        <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl">
-          <View className="flex flex-row items-center">
-            <Image source={bottle}></Image>
-            <Text className="ml-4">Aire Acondicionado</Text>
-          </View>
-          <CheckBox value={isChecked} onValueChange={setIsChecked}></CheckBox>
-        </View>
-        <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl">
-          <View className="flex flex-row items-center">
-            <Image source={child}></Image>
-            <Text className="ml-4">Aire Acondicionado</Text>
-          </View>
-          <CheckBox value={isChecked} onValueChange={setIsChecked}></CheckBox>
-        </View>
-        <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl">
-          <View className="flex flex-row items-center">
-            <Image source={fish}></Image>
-            <Text className="ml-4">Aire Acondicionado</Text>
-          </View>
-          <CheckBox value={isChecked} onValueChange={setIsChecked}></CheckBox>
-        </View>
-        <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl">
-          <View className="flex flex-row items-center">
-            <Image source={speaker}></Image>
-            <Text className="ml-4">Aire Acondicionado</Text>
-          </View>
-          <CheckBox value={isChecked} onValueChange={setIsChecked}></CheckBox>
-        </View>
-        <View className="mt-5">
-          <TouchableOpacity onPress={nextStep}>
-            <Text style={styles.continue} className="text-center">
-              CONTINUAR
+        {loading ? (
+          <LoadingIndicator />
+        ) : (
+          <>
+            <Text style={styles.title} className="mb-5">
+              What is allowed on the boat?
             </Text>
-          </TouchableOpacity>
-        </View>
+            {allowes.map((item, index) => {
+              return (
+                <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl">
+                  <View className="flex flex-row items-center">
+                    <Image
+                      source={{ uri: item.icon }}
+                      width={20}
+                      height={30}
+                    ></Image>
+                    <Text className="ml-4">{item.title}</Text>
+                  </View>
+                  <CheckBox
+                    value={all.includes(item._id)}
+                    onValueChange={(checked) =>
+                      handleCheckboxChange(checked, item._id)
+                    }
+                  ></CheckBox>
+                </View>
+              );
+            })}
+            <View className="mt-5">
+              <TouchableOpacity
+                onPress={() => {
+                  handleSubmit();
+                }}
+              >
+                <Text style={styles.continue} className="text-center">
+                  CONTINUAR
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
       </View>
     </ScrollView>
   );
@@ -108,24 +116,24 @@ const styles = StyleSheet.create({
     paddingRight: 25,
   },
   title: {
-    color: "#17233c", // Custom dark blue color
-    fontSize: 20, // Font size of 20
-    fontFamily: "Lexend Deca", // Custom font family
-    fontWeight: "700", // Font weight set to bold
+    color: "#17233c",
+    fontSize: 20,
+    fontFamily: "Lexend Deca",
+    fontWeight: "700",
   },
   des: {
     color: "#172b4d",
     fontSize: 13,
-    fontFamily: "Lexend Deca", // Ensure this font is properly linked in your project
+    fontFamily: "Lexend Deca",
   },
   continue: {
-    borderRadius: 6, // Border radius as a number
-    backgroundColor: "#17233c", // Background color
-    padding: 20, // Add some padding for better touch area
-    color: "#ffffff", // Text color
-    fontSize: 13, // Font size as a number
-    fontFamily: "Mulish", // Font family
-    fontWeight: "900", // Font weight
+    borderRadius: 6,
+    backgroundColor: "#17233c",
+    padding: 20,
+    color: "#ffffff",
+    fontSize: 13,
+    fontFamily: "Mulish",
+    fontWeight: "900",
   },
 });
 export default Allowed;

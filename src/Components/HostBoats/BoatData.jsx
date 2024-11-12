@@ -41,6 +41,7 @@ const BoatData = () => {
   const cabinscount = useSelector((state) => state.BasicBoat.cabinscount);
 
   const loading = useSelector((state) => state.Global.loading);
+  const curuser = useSelector((state) => state.Slice.user);
 
   const [errorMessages, setErrorMessages] = useState({});
 
@@ -85,6 +86,7 @@ const BoatData = () => {
   }, [dispatch]);
 
   const [boatdata, setBoatData] = useState({
+    user: curuser._id,
     model: "123",
     description: "123",
     location: "123",

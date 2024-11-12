@@ -83,7 +83,7 @@ const AddBoatImages = () => {
         {loading ? (
           <LoadingIndicator />
         ) : (
-          <>
+          <View className="items-center justify-center">
             <Text style={styles.title} className="mt-5">
               Add pictures
             </Text>
@@ -185,14 +185,14 @@ const AddBoatImages = () => {
                 <Text className="mt-2">Photo 5</Text>
               </View>
             </View>
-            <View className="mt-5">
+            <View className="w-11/12 mt-5">
               <TouchableOpacity onPress={nextStep}>
                 <Text style={styles.continue} className="text-center">
                   CONTINUAR
                 </Text>
               </TouchableOpacity>
             </View>
-          </>
+          </View>
         )}
       </View>
     </ScrollView>

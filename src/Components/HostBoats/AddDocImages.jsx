@@ -137,7 +137,7 @@ const AddDocImage = () => {
           </View>
         </View>
 
-        <View className="mt-5 w-80">
+        <View className="w-11/12 mt-5">
           <TouchableOpacity onPress={nextStep}>
             <Text style={styles.continue} className="text-center">
               CONTINUAR

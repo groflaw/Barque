@@ -6,106 +6,110 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import CheckBox from "../Basic/CheckBox";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
-import aircondition from "../../../assets/Icons/aircondition.png";
-import gps from "../../../assets/Icons/gps.png";
-import grill from "../../../assets/Icons/grill.png";
-import cocina from "../../../assets/Icons/cocina.png";
-import freshwater from "../../../assets/Icons/freshwater.png";
-import music from "../../../assets/Icons/music.png";
-import bluetooth from "../../../assets/Icons/bluetooth.png";
-import tv from "../../../assets/Icons/tv.png";
-import fishing from "../../../assets/Icons/fishing.png";
-import { useEffect } from "react";
+import CheckBox from "../Basic/CheckBox";
+import LoadingIndicator from "../Basic/LoadingIndicator";
+
+import { getAccessories } from "../../Actions/BasicBoat/basicboat";
+import { submitAccessories } from "../../Actions/AddBoat/addboat";
+import { setLoading } from "../../Store/Global";
+
 const Accessories = () => {
-  const [isChecked, setIsChecked] = useState(false);
   const navigation = useNavigation();
-  const nextStep = () => {
-    navigation.navigate("Allowed");
+  const dispatch = useDispatch();
+
+  const [access, setAccess] = useState([]);
+  const [errorMessages, setErrorMessages] = useState({});
+
+  const accessories = useSelector((state) => state.BasicBoat.accessories);
+  const curboat = useSelector((state) => state.Global.curboat);
+  const loading = useSelector((state) => state.Global.loading);
+
+  useEffect(() => {
+    const fetchBoatTypes = async () => {
+      try {
+        await dispatch(setLoading(true));
+        let result = await dispatch(getAccessories());
+        if (result.errors) {
+          setErrorMessages(result.errors);
+        }
+        await dispatch(setLoading(false));
+      } catch (error) {
+        console.error("Error fetching boat types:", error);
+      }
+    };
+    fetchBoatTypes();
+  }, [dispatch]);
+
+  const handleCheckboxChange = (checked, id) => {
+    if (checked) {
+      setAccess((prevAccess) => [...prevAccess, id]);
+    } else {
+      setAccess((prevAccess) => prevAccess.filter((itemId) => itemId !== id));
+    }
   };
 
+  const handleSubmit = async () => {
+    const result = await dispatch(submitAccessories(curboat._id, access));
+    if (result.errors) {
+      setErrorMessages(result.errors);
+    } else {
+      navigation.navigate("Allowed");
+    }
+  };
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.title} className="mt-5">
-          Accesorios disponibles
-        </Text>
-        <Text style={styles.des} className="mt-5">
-          Selecciona los accesorios con que dispone tu embarcación{" "}
-        </Text>
-        <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl">
-          <View className="flex flex-row items-center">
-            <Image source={aircondition}></Image>
-            <Text className="ml-4">Aire Acondicionado</Text>
-          </View>
-          <CheckBox value={isChecked} onValueChange={setIsChecked}></CheckBox>
-        </View>
-        <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl">
-          <View className="flex flex-row items-center">
-            <Image source={gps}></Image>
-            <Text className="ml-4">Navegación GPS</Text>
-          </View>
-          <CheckBox value={isChecked} onValueChange={setIsChecked}></CheckBox>
-        </View>
-        <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl">
-          <View className="flex flex-row items-center">
-            <Image source={grill}></Image>
-            <Text className="ml-4">Parrillera</Text>
-          </View>
-          <CheckBox value={isChecked} onValueChange={setIsChecked}></CheckBox>
-        </View>
-        <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl">
-          <View className="flex flex-row items-center">
-            <Image source={cocina}></Image>
-            <Text className="ml-4">Cocina</Text>
-          </View>
-          <CheckBox value={isChecked} onValueChange={setIsChecked}></CheckBox>
-        </View>
-        <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl">
-          <View className="flex flex-row items-center">
-            <Image source={freshwater}></Image>
-            <Text className="ml-4">Bomba de agua dulce</Text>
-          </View>
-          <CheckBox value={isChecked} onValueChange={setIsChecked}></CheckBox>
-        </View>
-        <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl">
-          <View className="flex flex-row items-center">
-            <Image source={music}></Image>
-            <Text className="ml-4">Sistema de Audio</Text>
-          </View>
-          <CheckBox value={isChecked} onValueChange={setIsChecked}></CheckBox>
-        </View>
-        <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl">
-          <View className="flex flex-row items-center">
-            <Image source={bluetooth}></Image>
-            <Text className="ml-4">Bluetooth para audio</Text>
-          </View>
-          <CheckBox value={isChecked} onValueChange={setIsChecked}></CheckBox>
-        </View>
-        <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl">
-          <View className="flex flex-row items-center">
-            <Image source={tv}></Image>
-            <Text className="ml-4">TV</Text>
-          </View>
-          <CheckBox value={isChecked} onValueChange={setIsChecked}></CheckBox>
-        </View>
-        <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl">
-          <View className="flex flex-row items-center">
-            <Image source={fishing}></Image>
-            <Text className="ml-4">Equipo de pesca</Text>
-          </View>
-          <CheckBox value={isChecked} onValueChange={setIsChecked}></CheckBox>
-        </View>
-        <View className="mt-5">
-          <TouchableOpacity onPress={nextStep}>
-            <Text style={styles.continue} className="text-center">
-              CONTINUAR
+        {loading ? (
+          <LoadingIndicator />
+        ) : (
+          <>
+            <Text style={styles.title} className="mt-5">
+              Accesorios disponibles
             </Text>
-          </TouchableOpacity>
-        </View>
+            <Text style={styles.des} className="mt-5">
+              Selecciona los accesorios con que dispone tu embarcación{" "}
+            </Text>
+            {accessories.map((item, index) => {
+              return (
+                <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl">
+                  <View className="flex flex-row items-center">
+                    <Image
+                      source={{ uri: item.icon }}
+                      width={20}
+                      height={30}
+                    ></Image>
+                    <Text className="ml-4">{item.title}</Text>
+                  </View>
+                  <CheckBox
+                    value={access.includes(item._id)}
+                    onValueChange={(checked) =>
+                      handleCheckboxChange(checked, item._id)
+                    }
+                  ></CheckBox>
+                </View>
+              );
+            })}
+
+            <View className="mt-5">
+              <TouchableOpacity
+                onPress={() => {
+                  handleSubmit();
+                }}
+              >
+                <Text style={styles.continue} className="text-center">
+                  CONTINUAR
+                </Text>
+              </TouchableOpacity>
+              {errorMessages.general && (
+                <Text style={styles.error}>{errorMessages.general}</Text>
+              )}
+            </View>
+          </>
+        )}
       </View>
     </ScrollView>
   );
@@ -118,24 +122,29 @@ const styles = StyleSheet.create({
     paddingRight: 25,
   },
   title: {
-    color: "#17233c", // Custom dark blue color
-    fontSize: 20, // Font size of 20
-    fontFamily: "Lexend Deca", // Custom font family
-    fontWeight: "700", // Font weight set to bold
+    color: "#17233c",
+    fontSize: 20,
+    fontFamily: "Lexend Deca",
+    fontWeight: "700",
   },
   des: {
     color: "#172b4d",
     fontSize: 13,
-    fontFamily: "Lexend Deca", // Ensure this font is properly linked in your project
+    fontFamily: "Lexend Deca",
   },
   continue: {
-    borderRadius: 6, // Border radius as a number
-    backgroundColor: "#17233c", // Background color
-    padding: 20, // Add some padding for better touch area
-    color: "#ffffff", // Text color
-    fontSize: 13, // Font size as a number
-    fontFamily: "Mulish", // Font family
-    fontWeight: "900", // Font weight
+    borderRadius: 6,
+    backgroundColor: "#17233c",
+    padding: 20,
+    color: "#ffffff",
+    fontSize: 13,
+    fontFamily: "Mulish",
+    fontWeight: "900",
+  },
+  error: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 2,
   },
 });
 export default Accessories;

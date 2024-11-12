@@ -4,6 +4,62 @@ import axios from "axios";
 import { setLoading, setCurboat } from "../../Store/Global";
 import { isValidNumber, isValidString } from "../../Utils/Validate";
 
+export const getMyboats = (userid) => async (dispatch) => {
+  await dispatch(setLoading(true));
+  let errors = {};
+  try {
+    const response = await axios.get(
+      `${Backend_API}/boats/getMyboat/${userid}`,
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.data.flag == true) {
+      return response.data.data;
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
+    }
+  } catch (error) {
+    errors.general = "There was an error fetching the data";
+    return { errors };
+  } finally {
+    await dispatch(setLoading(false));
+  }
+  return {};
+};
+export const setBoatFlag = (id, flag) => async (dispatch) => {
+  await dispatch(setLoading(true));
+  let errors = {};
+  try {
+    const response = await axios.get(
+      `${Backend_API}/boats/setBoatFlag/${id}`,
+      { flag },
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.data.flag == true) {
+      return response.data.data;
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
+    }
+  } catch (error) {
+    errors.general = "There was an error fetching the data";
+    return { errors };
+  } finally {
+    await dispatch(setLoading(false));
+  }
+  return {};
+};
+
 export const submitBasic = (basicdata) => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};
@@ -281,4 +337,100 @@ export const getboatInfo = (id) => async (dispatch) => {
   } finally {
     await dispatch(setLoading(false));
   }
+};
+
+export const submitCancellation = (id, cancellation) => async (dispatch) => {
+  await dispatch(setLoading(true));
+  let errors = {};
+  try {
+    const cancellationValidation = isValidNumber(cancellation);
+
+    if (!cancellationValidation.valid) {
+      errors.cancellation = cancellationValidation.message;
+    }
+
+    if (Object.keys(errors).length > 0) {
+      return { errors };
+    }
+    const response = await axios.post(
+      `${Backend_API}/boats/addCancellation/${id}`,
+      { cancellation },
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.data.flag == true) {
+      dispatch(setCurboat(response.data.data));
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
+    }
+  } catch (error) {
+    errors.general = "There was an error fetching the data";
+    return { errors };
+  } finally {
+    await dispatch(setLoading(false));
+  }
+  return {};
+};
+
+export const submitAccessories = (id, accessories) => async (dispatch) => {
+  await dispatch(setLoading(true));
+  let errors = {};
+  try {
+    const response = await axios.post(
+      `${Backend_API}/boats/addAccessories/${id}`,
+      { accessories },
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.data.flag == true) {
+      dispatch(setCurboat(response.data.data));
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
+    }
+  } catch (error) {
+    errors.general = "There was an error fetching the data";
+    return { errors };
+  } finally {
+    await dispatch(setLoading(false));
+  }
+  return {};
+};
+
+export const submitAllowes = (id, allowes) => async (dispatch) => {
+  await dispatch(setLoading(true));
+  let errors = {};
+  try {
+    const response = await axios.post(
+      `${Backend_API}/boats/addAllowes/${id}`,
+      { allowes },
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.data.flag == true) {
+      dispatch(setCurboat(response.data.data));
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
+    }
+  } catch (error) {
+    errors.general = "There was an error fetching the data";
+    return { errors };
+  } finally {
+    await dispatch(setLoading(false));
+  }
+  return {};
 };

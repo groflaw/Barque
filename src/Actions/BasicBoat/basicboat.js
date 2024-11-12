@@ -10,6 +10,8 @@ import {
   getcapacity,
   getpowers,
   getlocationtype,
+  getaccessories,
+  getallowes,
 } from "../../Store/BasicBoat";
 
 export const getAllBoatTypes = () => async (dispatch) => {
@@ -138,6 +140,40 @@ export const getLocationType = () => async (dispatch) => {
     const response = await axios.get(`${Backend_API}/boats/getLocationType`);
     if (response.data.flag == true) {
       dispatch(getlocationtype(response.data.data));
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
+    }
+  } catch (error) {
+    errors.general = "There was an error fetching the data.";
+    return { errors };
+  }
+  return {};
+};
+
+export const getAccessories = () => async (dispatch) => {
+  let errors = {};
+  try {
+    const response = await axios.get(`${Backend_API}/boats/getAccessories`);
+    if (response.data.flag == true) {
+      dispatch(getaccessories(response.data.data));
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
+    }
+  } catch (error) {
+    errors.general = "There was an error fetching the data.";
+    return { errors };
+  }
+  return {};
+};
+
+export const getAllowes = () => async (dispatch) => {
+  let errors = {};
+  try {
+    const response = await axios.get(`${Backend_API}/boats/getAllowes`);
+    if (response.data.flag == true) {
+      dispatch(getallowes(response.data.data));
     } else {
       errors[response.data.sort] = response.data.error;
       return { errors };

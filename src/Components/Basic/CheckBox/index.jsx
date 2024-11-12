@@ -36,10 +36,11 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderWidth: 2,
-    borderColor: "#000",
+    borderColor: "rgba(49, 100, 244, 1)",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 8,
+    borderRadius: 1,
   },
   checkboxChecked: {
     backgroundColor: "none",
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   checkmark: {
-    color: "black",
+    color: "rgba(49, 100, 244, 1)",
     fontSize: 12,
   },
 });
