@@ -95,3 +95,31 @@ export const Signin = (personInfo) => async (dispatch) => {
   }
   return {};
 };
+
+export const setAvatar = (id, data) => async (dispatch) => {
+  await dispatch(setLoading(true));
+  let errors = {};
+  try {
+    const response = await axios.post(
+      `https://baraqua-server.vercel.app/api/users/setAvatar/${id}`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    if (response.data.flag == true) {
+      dispatch(addUser(response.data.data));
+      return response.data.data;
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
+    }
+  } catch (error) {
+    errors.general = "There was an error fetching the data";
+  } finally {
+    await dispatch(setLoading(false));
+  }
+};
