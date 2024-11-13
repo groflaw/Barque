@@ -5,7 +5,10 @@ import {
   StatusBar,
   TouchableOpacity,
 } from "react-native";
+import { useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useDispatch, useSelector } from "react-redux";
 
 import First from "../Components/SignUp/First";
 import Second from "../Components/SignUp/Second";
@@ -17,8 +20,16 @@ import backImage from "../../assets/Icons/headerback.png";
 import markImage from "../../assets/Icons/headermark.png";
 
 const SignUp = () => {
+  const navigation = useNavigation();
   const Stack = createNativeStackNavigator(); //Navigator Screen
 
+  const curuser = useSelector((state) => state.Slice.user);
+
+  useEffect(() => {
+    if (curuser._id != undefined) {
+      navigation.navigate("Profile");
+    }
+  }, []);
   const HomeHeaderRight = () => {
     return (
       <View
