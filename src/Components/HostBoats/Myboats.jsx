@@ -30,6 +30,7 @@ const Myboats = () => {
   const dispatch = useDispatch();
 
   const curuser = useSelector((state) => state.Slice.user);
+  const loading = useSelector((state) => state.Global.loading);
   const boatTypes = useSelector((state) => state.BasicBoat.boattypes);
 
   const [myboats, setMyboats] = useState([]);
@@ -72,13 +73,11 @@ const Myboats = () => {
           setErrorMessages(result.errors);
         }
         setMyboats(result);
-        await dispatch(setLoading(false));
       } catch (error) {
+        await dispatch(setLoading(false));
         console.error("Error fetching boat types:", error);
       }
     };
-    console.log(curuser._id);
-
     if (curuser._id == undefined) {
       navigation.navigate("SignUp");
     } else {
@@ -90,52 +89,56 @@ const Myboats = () => {
     <>
       <ScrollView>
         <View style={styles.container}>
-          <Text style={styles.Title}>Mis Embarcaciones</Text>
-          {myboats.map((item, index) => {
-            return (
-              <View
-                style={styles.card}
-                className="flex flex-row items-center justify-between mt-4"
-              >
-                <View className="flex flex-row items-center">
-                  <Image style={styles.cardImage} source={boatcard}></Image>
-                  <View className="ml-3">
-                    <Text style={styles.boatName}>
-                      {item.location.boatname}
-                    </Text>
-                    <Text style={styles.boatDetail}>
-                      Tipo:
-                      {boatTypes
-                        .filter((boat) => boat._id === item.boattype)
-                        .map((boat) => boat.name)}
-                    </Text>
-                    <Text style={styles.boatDetail}>
-                      {item.location.address}
-                    </Text>
+          {loading ? (
+            <LoadingIndicator />
+          ) : (
+            <>
+              <Text style={styles.Title}>Mis Embarcaciones</Text>
+              {myboats.map((item, index) => {
+                return (
+                  <View
+                    style={styles.card}
+                    className="flex flex-row items-center justify-between mt-4"
+                  >
+                    <View className="flex flex-row items-center" style={{width :'80%'}}>
+                      <Image style={styles.cardImage} source={boatcard}></Image>
+                      <View className="ml-3 text-wrap" >
+                        <Text style={styles.boatName}>
+                          {item.location2 ? item.location2.boatname : ""}
+                        </Text>
+                        <Text style={styles.boatDetail} className="text-wrap">
+                          Type: 
+                          {boatTypes
+                            .filter((boat) => boat._id === item.boattype)
+                            .map((boat) => boat.name)}
+                        </Text>
+                        <Text style={styles.boatDetail}>Location: {item.location1}</Text>
+                      </View>
+                    </View>
+                    <View style={{width : '20%'}}>
+                      <TouchableOpacity onPress={() => handleEdit(item._id)}>
+                        <Text style={styles.edit} className="mb-2 text-center">
+                          Editor
+                        </Text>
+                      </TouchableOpacity>
+                      <CustomSwitch
+                        id={item._id}
+                        flag={item.flag}
+                        onSwitchChange={handleSwitch}
+                      />
+                    </View>
                   </View>
-                </View>
-                <View>
-                  <TouchableOpacity onPress={() => handleEdit(item._id)}>
-                    <Text style={styles.edit} className="mb-2 text-center">
-                      Editor
-                    </Text>
-                  </TouchableOpacity>
-                  <CustomSwitch
-                    id={item._id}
-                    flag={item.flag}
-                    onSwitchChange={handleSwitch}
-                  />
-                </View>
+                );
+              })}
+              <View className="flex items-center mt-7 w-100">
+                <TouchableOpacity onPress={nextStep}>
+                  <Text style={styles.addBoat} className="text-center w-72">
+                    + Agregar embarcación
+                  </Text>
+                </TouchableOpacity>
               </View>
-            );
-          })}
-          <View className="flex items-center mt-7 w-100">
-            <TouchableOpacity onPress={nextStep}>
-              <Text style={styles.addBoat} className="text-center w-72">
-                + Agregar embarcación
-              </Text>
-            </TouchableOpacity>
-          </View>
+            </>
+          )}
         </View>
       </ScrollView>
       <Navbar></Navbar>
@@ -181,13 +184,16 @@ const styles = StyleSheet.create({
     color: "#17233c",
     fontSize: 18,
     fontFamily: "Lexend Deca",
-    fontWeight: "600",
+    fontWeight: 900,
   },
   boatDetail: {
     color: "#17233c",
     fontSize: 14,
     fontFamily: "Lexend Deca",
-    lineHeight: 20,
+    lineHeight: 20, 
+    flexWrap: 'wrap',
+    maxWidth: '90%',
+    
   },
   edit: {
     borderRadius: 6,

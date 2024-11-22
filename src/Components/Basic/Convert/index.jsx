@@ -1,21 +1,34 @@
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 
 import convertBoatImage from "../../../../assets/Icons/convertBoat.png";
 import asyncImage from "../../../../assets/Icons/async.png";
-import { useEffect } from "react";
+
+import { addUser } from "../../../Store/Slice";
+import { setMode } from "../../../Store/Global";
 
 const Convert = () => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const handlelogout = () => {
+    dispatch(addUser({}));
+    dispatch(setMode(false));
+    navigation.navigate("Main");
+  };
   return (
     <>
       <View style={styles.container}>
         <View className="flex flex-row items-center justify-between ">
-          <View style={styles.boat} className="relative flex w-20">
+          <View style={styles.boat} className="relative flex " >
             <Image source={convertBoatImage}></Image>
             <View className="absolute" style={styles.async}>
               <Image source={asyncImage}></Image>
             </View>
           </View>
-          <View className="flex w-72">
+          <View className="flex" style={{width:'72%'}}>
             <Text style={styles.head}>Eres dueño de un barco?</Text>
             <Text style={styles.des}>
               Pulsa este boton para cambiar a modo anfitrion y gestionar las
@@ -25,7 +38,11 @@ const Convert = () => {
         </View>
       </View>
       <View className="flex items-center">
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            handlelogout();
+          }}
+        >
           <Text className="flex text-center" style={styles.button}>
             Cerrar sesión
           </Text>
@@ -46,6 +63,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 15,
     margin: 10,
+    
   },
   async: {
     bottom: 8,

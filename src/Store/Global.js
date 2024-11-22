@@ -5,6 +5,7 @@ const Global = createSlice({
   initialState: {
     loading: false,
     curboat: {},
+    mode: false,
   },
   reducers: {
     setLoading: (state, action) => {
@@ -13,8 +14,11 @@ const Global = createSlice({
     setCurboat: (state, action) => {
       state.curboat = action.payload;
     },
+    setMode: (state, action) => {
+      state.mode = action.payload;
+    },
   },
 });
 
-export const { setLoading, setCurboat } = Global.actions;
+export const { setLoading, setCurboat, setMode } = Global.actions;
 export default Global.reducer;

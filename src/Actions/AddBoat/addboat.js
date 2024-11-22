@@ -67,7 +67,7 @@ export const submitBasic = (basicdata) => async (dispatch) => {
   try {
     const modelValidation = isValidString(basicdata.model);
     const descriptionValidation = isValidString(basicdata.model);
-    const locationValidation = isValidString(basicdata.model);
+    const locationValidation = isValidString(basicdata.location1);
     const yearValidation = isValidNumber(basicdata.year);
     const sizeValidation = isValidNumber(basicdata.size);
     const boattypeValidation = isValidNumber(basicdata.boattype);
@@ -85,7 +85,7 @@ export const submitBasic = (basicdata) => async (dispatch) => {
       errors.description = descriptionValidation.message;
     }
     if (!locationValidation.valid) {
-      errors.location = locationValidation.message;
+      errors.location1 = locationValidation.message;
     }
     if (!yearValidation.valid) {
       errors.year = yearValidation.message;

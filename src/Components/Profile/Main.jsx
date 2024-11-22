@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import Convert from "../Basic/Convert";
 
 import { setAvatar } from "../../Actions/Auth/auth.acitons";
+import { setMode } from "../../Store/Global";
 
 import personalImage from "../../../assets/Icons/personal.png";
 import credietImage from "../../../assets/Icons/credit.png";
@@ -62,6 +63,10 @@ const Main = () => {
   };
   const pickImageWithResults = async () => {
     await pickImage({});
+  };
+  const changeMode = async () => {
+    await dispatch(setMode(true));
+    navigation.navigate("Main");
   };
   return (
     <ScrollView>
@@ -132,7 +137,13 @@ const Main = () => {
             <Image source={rightArrowImage}></Image>
           </View>
         </TouchableOpacity>
-        <Convert></Convert>
+        <TouchableOpacity
+          onPress={() => {
+            changeMode();
+          }}
+        >
+          <Convert></Convert>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );

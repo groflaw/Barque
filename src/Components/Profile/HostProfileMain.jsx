@@ -7,71 +7,235 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import * as ImagePicker from "expo-image-picker";
+import { useNavigation } from "@react-navigation/native";
 
 import CustomTextInput from "../Basic/Input";
-import Option from "../Basic/Option";
+import LoadingIndicator from "../Basic/LoadingIndicator";
+
+import { AddCoHost, getUser } from "../../Actions/Auth/auth.acitons";
 
 import hostavatar from "../../../assets/Icons/hostavatar.png";
 import photoImage from "../../../assets/Icons/photo.png";
 
 const HostProfileMain = () => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const curuser = useSelector((state) => state.Slice.user);
+  const loading = useSelector((state) => state.Global.loading);
+
+  const [errorMessages, setErrorMessages] = useState({});
+  const [profile, setProfile] = useState({
+    profileImage: null,
+    frontID: null,
+    backID: null,
+    idNumber: "",
+    email: "",
+  });
+
+  const pickImage = async (field) => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setProfile((prev) => ({
+        ...prev,
+        [field]: result.assets[0].uri,
+      }));
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setProfile((prevData) => ({
+      ...prevData,
+      [name]: value, // Update the 'year' property
+    }));
+  };
+
+  const goChangePassword = () => {
+    if (curuser.cohost) {
+      navigation.navigate("ChangePassword");
+    } else {
+      setErrorMessages({ changepassword: "You should add co-host profile." });
+    }
+  };
+  const handleSubmit = async () => {
+    const result = await dispatch(AddCoHost(curuser._id, profile));
+    if (result.errors) {
+      setErrorMessages(result.errors); 
+    }
+  };
+
+  useEffect(() => {
+    const fetchCoHost = async () => {
+      let result = await dispatch(getUser(curuser.cohost));
+      setProfile({
+        profileImage: result.avatar,
+        frontID: result.idImage.front,
+        backID: result.idImage.back,
+        idNumber: result.idNumber + "",
+        email: result.email,
+      });
+    };
+    fetchCoHost();
+  }, []);
   return (
     <ScrollView>
-      <View className="flex flex-row items-center pl-5 pr-5 mt-10 w-100">
-        <Image source={hostavatar} style={styles.avatar}></Image>
-        <TouchableOpacity className="ml-10">
-          <Text style={styles.avatarbutton}>Subir Foto de Perfil</Text>
-        </TouchableOpacity>
-      </View>
-      <View className="flex px-5 mt-4">
-        <Text>Número de Identificación</Text>
-        <CustomTextInput placeholder="Carlos Mendoza"></CustomTextInput>
-      </View>
-      <View className="flex px-5 mt-4">
-        <Text>Número de Identificación</Text>
-        <CustomTextInput placeholder="Carlos Mendoza"></CustomTextInput>
-      </View>
-      <View className="px-5 mt-5">
-        <Text>Número de Telefono'</Text>
-        <View className="flex flex-row items-center justify-between ">
-          <Option width={"22%"}></Option>
-          <TextInput
-            placeholder="Número de teléfono"
-            className="pt-1 pb-2 pl-2 pr-2 bg-white w-72"
-          ></TextInput>
-        </View>
-      </View>
-      <View className="px-5 mt-5">
-        <Text>Subir Identificación</Text>
-        <View className="flex flex-row justify-around mt-3">
-          <View style={styles.imagecard} className="flex items-center">
-            <TouchableOpacity>
-              <Image source={photoImage}></Image>
+      {loading ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          <View className="flex flex-row items-center pl-5 pr-5 mt-10 w-100">
+            <Image
+              source={
+                profile.profileImage
+                  ? { uri: profile.profileImage }
+                  : hostavatar
+              }
+              style={styles.avatar}
+            ></Image>
+            <TouchableOpacity
+              className="ml-10"
+              onPress={() => pickImage("profileImage")}
+            >
+              <Text style={styles.avatarbutton}>Upload Profile Image</Text>
             </TouchableOpacity>
-            <Text className="mt-2">Subir Foto de Frente</Text>
           </View>
-          <View style={styles.imagecard} className="flex items-center">
-            <TouchableOpacity>
-              <Image source={photoImage}></Image>
+          <View className="flex px-5 mt-4">
+            <Text>ID Number</Text>
+            <CustomTextInput
+              placeholder="Carlos Mendoza"
+              value={profile.idNumber}
+              onChange={handleChange}
+              name="idNumber"
+            ></CustomTextInput>
+            {errorMessages.idNumber && (
+              <Text style={styles.error} className="text-center">
+                {errorMessages.idNumber}
+              </Text>
+            )}
+          </View>
+          <View className="flex px-5 mt-4">
+            <Text>Email Address</Text>
+            <CustomTextInput
+              placeholder="example@example.com"
+              value={profile.email}
+              onChange={handleChange}
+              name="email"
+            ></CustomTextInput>
+            {errorMessages.email && (
+              <Text style={styles.error} className="text-center">
+                {errorMessages.email}
+              </Text>
+            )}
+          </View>
+          <View className="px-5 mt-5">
+            <Text>Subir Identificación</Text>
+            <View className="flex flex-row justify-around mt-3">
+              <View
+                style={styles.imagecard}
+                className="flex items-center justify-center"
+              >
+                {!profile.frontID ? (
+                  <>
+                    <TouchableOpacity onPress={() => pickImage("frontID")}>
+                      <Image
+                        source={photoImage}
+                        style={{ width: 40, height: 40 }}
+                      />
+                    </TouchableOpacity>
+                    <Text className="mt-2">Upload front ID</Text>
+                  </>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => pickImage("frontID")}
+                    style={{ width: "100%", height: "100%" }}
+                  >
+                    <Image
+                      source={{ uri: profile.frontID }}
+                      style={{ width: "100%", height: "100%", borderRadius: 6 }}
+                      resizeMode="cover"
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
+              <View
+                style={styles.imagecard}
+                className="flex items-center justify-center"
+              >
+                {!profile.backID ? (
+                  <>
+                    <TouchableOpacity onPress={() => pickImage("backID")}>
+                      <Image
+                        source={photoImage}
+                        style={{ width: 40, height: 40 }}
+                      />
+                    </TouchableOpacity>
+                    <Text className="mt-2">Upload Back ID</Text>
+                  </>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => pickImage("backID")}
+                    style={{ width: "100%", height: "100%" }}
+                  >
+                    <Image
+                      source={{ uri: profile.backID }}
+                      style={{ width: "100%", height: "100%", borderRadius: 6 }}
+                      resizeMode="cover"
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+            {errorMessages.image && (
+              <Text style={styles.error} className="text-center">
+                {errorMessages.image}
+              </Text>
+            )}
+          </View>
+          <View className="px-5 mt-5">
+            <TouchableOpacity
+              onPress={() => {
+                goChangePassword();
+              }}
+            >
+              <Text style={styles.changepassword} className="text-center">
+                Change Password
+              </Text>
             </TouchableOpacity>
-            <Text className="mt-2">Subir Foto de Frente</Text>
+            {errorMessages.changepassword && (
+              <Text style={styles.error} className="text-center">
+                {errorMessages.changepassword}
+              </Text>
+            )}
           </View>
-        </View>
-      </View>
-      <View className="px-5 mt-5">
-        <TouchableOpacity>
-          <Text style={styles.changepassword} className="text-center">
-            Cambiar contraseña
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.save} className="mt-5">
-        <TouchableOpacity>
-          <Text style={styles.saveText} className="p-4 text-center">
-            Guardar Cambios
-          </Text>
-        </TouchableOpacity>
-      </View>
+          <View style={styles.save} className="mt-5">
+            <TouchableOpacity
+              onPress={() => {
+                handleSubmit();
+              }}
+            >
+              <Text style={styles.saveText} className="p-4 text-center">
+                Save Changes
+              </Text>
+            </TouchableOpacity>
+            {errorMessages.general && (
+              <Text style={styles.error} className="text-center">
+                {errorMessages.general}
+              </Text>
+            )}
+          </View>
+        </>
+      )}
     </ScrollView>
   );
 };
@@ -80,6 +244,7 @@ const styles = StyleSheet.create({
   avatar: {
     width: 100,
     height: 100,
+    borderRadius: 50,
   },
   avatarbutton: {
     padding: 10,
@@ -89,41 +254,41 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Lexend Deca",
     fontWeight: 700,
-    borderWidth: 1, // border: '1px solid #0751c1' translates to borderWidth and borderColor
-    borderColor: "#0751c1", // Sets the border color
+    borderWidth: 1,
+    borderColor: "#0751c1",
   },
   imagecard: {
-    borderWidth: 1, // border: '1px solid #17233c' translates to borderWidth
-    borderColor: "#17233c", // Specify the border color
-    borderStyle: "solid", // React Native uses solid by default, but listed for clarity
-    borderRadius: 6, // Add border radius if you want rounded corners
-    backgroundColor: "rgba(0, 0, 0, 0)", // Background color if needed
-    padding: 10,
+    borderWidth: 1,
+    borderColor: "#17233c",
+    borderRadius: 6,
+    backgroundColor: "rgba(0, 0, 0, 0.05)",
+    padding: 0,
+    width: "47%",
+    aspectRatio: 1,
+    overflow: "hidden",
   },
   changepassword: {
-    borderRadius: 6, // borderRadius: '6px'
-    backgroundColor: "#072d4c", // backgroundColor: '#072d4c'
+    borderRadius: 6,
+    backgroundColor: "#072d4c",
     padding: 10,
-    color: "#ffffff", // color: '#ffffff'
-    fontSize: 16, // fontSize: '16px'
-    fontFamily: "Lexend Deca", // fontFamily: 'Lexend Deca'
+    color: "#ffffff",
+    fontSize: 16,
+    fontFamily: "Lexend Deca",
     fontWeight: "700",
   },
   save: {
-    backgroundColor: "#ffffff", // backgroundColor: '#ffffff'
-    borderRadius: 6, // Optional: Add border radius if needed
-    padding: 10, // Optional: Add padding for better appearance
+    backgroundColor: "#ffffff",
+    borderRadius: 6,
+    padding: 10,
 
-    // Shadow properties for iOS
-    shadowColor: "rgba(3, 3, 3, 0.1)", // Shadow color
+    shadowColor: "rgba(3, 3, 3, 0.1)",
     shadowOffset: {
-      width: 2, // Similar to '2px'
-      height: -2, // Similar to '-2px'
+      width: 2,
+      height: -2,
     },
-    shadowOpacity: 1, // Set standard opacity
-    shadowRadius: 10, // Set the blur radius similar to '10px'
+    shadowOpacity: 1,
+    shadowRadius: 10,
 
-    // Elevation for Android
     elevation: 5,
   },
   saveText: {
@@ -133,6 +298,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Lexend Deca",
     fontWeight: 700,
+  },
+  error: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 2,
   },
 });
 export default HostProfileMain;

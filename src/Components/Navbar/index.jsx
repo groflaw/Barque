@@ -1,5 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { Image, StyleSheet, TouchableOpacity, View, Text } from "react-native";
 
 import navBoat from "../../../assets/Icons/nav-boat.png";
@@ -10,6 +11,9 @@ import navReservas from "../../../assets/Icons/nav-reservas.png";
 
 const Navbar = () => {
   const navigation = useNavigation();
+
+  const mode = useSelector((state) => state.Global.mode);
+
   const [selectedIcon, setSelectedIcon] = useState(null);
 
   const handleIconPress = (icon) => {
@@ -18,7 +22,11 @@ const Navbar = () => {
         navigation.navigate("DashBoard");
         break;
       case "Home":
-        navigation.navigate("HostBoats");
+        if (mode) {
+          navigation.navigate("HostBoats");
+        } else {
+          navigation.navigate("HomeTabs");
+        }
         break;
       case "Messages":
         navigation.navigate("Chat");
@@ -35,15 +43,17 @@ const Navbar = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={[
-          styles.iconContainer,
-          selectedIcon === "DashBoard" && styles.selectedIcon,
-        ]}
-        onPress={() => handleIconPress("DashBoard")}
-      >
-        <Image source={navTime} style={styles.iconImage} />
-      </TouchableOpacity>
+      {mode && (
+        <TouchableOpacity
+          style={[
+            styles.iconContainer,
+            selectedIcon === "DashBoard" && styles.selectedIcon,
+          ]}
+          onPress={() => handleIconPress("DashBoard")}
+        >
+          <Image source={navTime} style={styles.iconImage} />
+        </TouchableOpacity>
+      )}
 
       <TouchableOpacity
         style={[

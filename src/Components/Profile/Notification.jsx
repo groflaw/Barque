@@ -1,7 +1,26 @@
 import { View, Text, Image, StyleSheet } from "react-native";
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import CustomSwitch from "../Basic/Switch";
 
+import { setNotifi } from "../../Actions/Auth/auth.acitons";
+
 const Notification = () => {
+  const dispatch = useDispatch();
+
+  const curuser = useSelector((state) => state.Slice.user);
+
+  const [notofi, setNotofi] = useState(curuser.notification);
+  const [errorMessages, setErrorMessages] = useState({});
+
+  const handleSwitch = async (field, status) => {
+    let result = await dispatch(setNotifi(curuser._id, field, status));
+    if (result.errors) {
+      setErrorMessages(result.errors);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.Title}>Notification</Text>
@@ -10,14 +29,22 @@ const Notification = () => {
         className="flex flex-row items-center justify-between mt-4 bg-slate-700"
       >
         <Text style={styles.key}>Nuevas ofertas</Text>
-        <CustomSwitch></CustomSwitch>
+        <CustomSwitch
+          id="newoffer"
+          flag={notofi.newoffer}
+          onSwitchChange={handleSwitch}
+        ></CustomSwitch>
       </View>
       <View
         style={styles.card}
         className="flex flex-row items-center justify-between mt-4 "
       >
         <Text style={styles.key}>Nuevas ofertas</Text>
-        <CustomSwitch></CustomSwitch>
+        <CustomSwitch
+          id="allnotifi"
+          flag={notofi.allnotifi}
+          onSwitchChange={handleSwitch}
+        ></CustomSwitch>
       </View>
     </View>
   );

@@ -63,8 +63,6 @@ const Boats = () => {
   };
   return (
     <View className="px-6 pb-10 mt-1">
-      <Text className="text-2xl font-bold">Popular Cars</Text>
-
       {boats.map((boat, i) => (
         <TouchableOpacity onPress={handleboatpress}>
           <BoatCard

@@ -6,8 +6,11 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import HostProfileMain from "../Components/Profile/HostProfileMain";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import HostProfileMain from "../Components/Profile/HostProfileMain";
+import ChangePasword from "../Components/Profile/ChangePassword";
+import Payment from "../Components/Profile/Payment";
 
 import backImage from "../../assets/Icons/hostheaderback.png";
 import markImage from "../../assets/Icons/dashboardmark.png";
@@ -39,6 +42,16 @@ const HostProfile = () => {
       <Stack.Screen
         name="HostProfileMain"
         component={HostProfileMain}
+        options={{ header: () => <HomeHeaderRight /> }}
+      />
+      <Stack.Screen
+        name="ChangePassword"
+        component={ChangePasword}
+        options={{ header: () => <HomeHeaderRight /> }}
+      />
+      <Stack.Screen
+        name="Payment"
+        component={Payment}
         options={{ header: () => <HomeHeaderRight /> }}
       />
     </Stack.Navigator>

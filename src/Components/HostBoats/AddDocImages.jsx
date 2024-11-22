@@ -6,8 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import { useDispatch, useSelector } from "react-redux";

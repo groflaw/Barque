@@ -6,10 +6,13 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
+import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
 import Convert from "../Components/Basic/Convert";
 import Navbar from "../Components/Navbar";
+
+import { setMode } from "../Store/Global";
 
 import headMark from "../../assets/Icons/dashboardmark.png";
 import hostAvatar from "../../assets/Icons/hostavatar.png";
@@ -23,9 +26,14 @@ import boataddImge from "../../assets/Icons/boatadd.png";
 
 const DashBoard = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const nextStep = (url) => {
     navigation.navigate(url);
+  };
+  const changeMode = async () => {
+    await dispatch(setMode(false));
+    navigation.navigate("Main");
   };
 
   return (
@@ -51,25 +59,25 @@ const DashBoard = () => {
           <Text className="mt-5" style={styles.statistics}>
             Tus estadisticas
           </Text>
-          <View className="flex flex-row items-baseline justify-around mt-4">
+          <View className="flex flex-row items-center justify-around mt-4">
             <View>
               <Text style={styles.responRate} className="text-center">
                 N/A
               </Text>
               <Text style={styles.key} className="mt-2">
-                Tasa de respuesta
+                Response Rate
               </Text>
             </View>
             <View>
               <Text className="p-2 text-white">0</Text>
               <Text style={styles.key} className="mt-1">
-                Tasa de respuesta
+                Booking completed
               </Text>
             </View>
             <View>
               <Text className="p-2 text-white">$1000</Text>
               <Text style={styles.key} className="mt-1">
-                Tasa de respuesta
+                Total profits
               </Text>
             </View>
           </View>
@@ -87,10 +95,15 @@ const DashBoard = () => {
             <Image source={reservarImage} className="ml-4"></Image>
           </View>
         </View>
-        <View className="flex flex-row items-center justify-start px-6">
-          <Image source={payhistoryImge}></Image>
-          <Text className="ml-6">Preferencias de Pago</Text>
-        </View>
+
+        <TouchableOpacity
+          onPress={() => navigation.navigate("HostProfile", { screen: "Payment" })}
+        >
+          <View className="flex flex-row items-center justify-start px-6">
+            <Image source={payhistoryImge}></Image>
+            <Text className="ml-6">Preferencias de Pago</Text>
+          </View>
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => nextStep("PaymentHistory")}>
           <View className="flex flex-row items-center justify-start px-6 mt-2">
             <Image source={paytypeImge}></Image>
@@ -109,7 +122,13 @@ const DashBoard = () => {
             <Text className="ml-6">Agregar Embarcación</Text>
           </View>
         </TouchableOpacity>
-        <Convert></Convert>
+        <TouchableOpacity
+          onPress={() => {
+            changeMode();
+          }}
+        >
+          <Convert></Convert>
+        </TouchableOpacity>
       </ScrollView>
       <Navbar></Navbar>
     </>

@@ -89,7 +89,7 @@ const BoatData = () => {
     user: curuser._id,
     model: "123",
     description: "123",
-    location: "123",
+    location1: "123",
     year: 1990,
     size: 10,
     boattype: 2,
@@ -156,13 +156,13 @@ const BoatData = () => {
               <View className="mt-2">
                 <Text style={styles.item}>Location </Text>
                 <CustomTextInput
-                  value={boatdata.location} // Ensure you're using the correct property
+                  value={boatdata.location1} // Ensure you're using the correct property
                   onChange={handleChange}
-                  name="location"
+                  name="location1"
                   sort={false}
                 ></CustomTextInput>
-                {errorMessages.location && (
-                  <Text style={styles.error}>{errorMessages.location}</Text>
+                {errorMessages.location1 && (
+                  <Text style={styles.error}>{errorMessages.location1}</Text>
                 )}
               </View>
               <View className="mt-2">
