@@ -28,18 +28,18 @@ const headerImage = StyleSheet.create({
     position: "absolute",
     bottom: 10,
     left: 10,
-    borderRadius: 22, // React Native uses number, not strings for values
+    borderRadius: 22, 
     backgroundColor: "#55565f",
-    color: "#ffffff", // Note: color is not used in React Native styles directly; use it with Text component
+    color: "#ffffff", 
     fontSize: 9,
-    fontFamily: "Lato", // Ensure you have this font available via linking or expo-font
-    fontWeight: "600", // React Native accepts string for fontWeight
+    fontFamily: "Lato", 
+    fontWeight: "600", 
     lineHeight: 13,
     paddingLeft: 10,
     paddingRight: 10,
     paddingTop: 5,
     paddingBottom: 5,
-    textAlign: "center", // optional: to center the text
+    textAlign: "center",
   },
   share: {
     position: "absolute",

@@ -2,51 +2,54 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 import awardImage from "../../../assets/Icons/Iconaward.png";
 import starImage from "../../../assets/Icons/Iconstar.png";
-import reviewImage from "../../../assets/Icons/Review.png";
+import reviewImage from "../../../assets/Profile/user.png";
 import { useEffect } from "react";
-const Host = () => {
+const Host = ({ name, review, resrate ,avatar}) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tu Anfitrión</Text>
+      <Text style={styles.title}>Your Host</Text>
       <View style={styles.content} className="mt-4">
-        <View className="flex flex-row justify-between">
+        <View className="flex flex-row justify-between items-center">
           <View>
-            <Text style={styles.name}>Sergio Gonzalez</Text>
-            <View className="flex flex-row items-center">
-              <View
-                className="flex flex-row items-center rounded-lg"
-                style={styles.award}
-              >
-                <Image source={awardImage}></Image>
-                <Text style={styles.awardText}>ANFITRIÓN TOP</Text>
-              </View>
+            <Text style={styles.name}>{name}</Text>
+            <View className="flex flex-row items-center mt-1">
+              {review > 4.8 && (
+                <View
+                  className="flex flex-row items-center rounded-lg"
+                  style={styles.award}
+                >
+                  <Image source={awardImage}></Image>
+                  <Text style={styles.awardText}>ANFITRIÓN TOP</Text>
+                </View>
+              )}
+
               <View
                 className="flex flex-row items-center rounded-lg"
                 style={styles.review}
               >
                 <Image source={starImage}></Image>
-                <Text style={styles.reviewText}>4.8/5</Text>
+                <Text style={styles.reviewText}>{review}/5</Text>
               </View>
             </View>
           </View>
-          <Image source={reviewImage}></Image>
+          <Image source={ avatar ? { uri: avatar } : reviewImage } style= {{width : 50, height :50}}></Image>
         </View>
         <TouchableOpacity className="mt-5">
           <View className="flex items-center" style={styles.messageButtpn}>
-            <Text style={styles.messageText}>ENVIAR MENSAJE</Text>
+            <Text style={styles.messageText}>SEND MESSAGE</Text>
           </View>
         </TouchableOpacity>
         <View className="flex flex-row justify-between mt-6">
-          <Text style={styles.key}>Tiempo promedio</Text>
-          <Text style={styles.value}>24 horas</Text>
+          <Text style={styles.key}>Average response time</Text>
+          <Text style={styles.value}> 24 hours</Text>
         </View>
         <View className="flex flex-row justify-between mt-6">
-          <Text style={styles.key}> Tasa de respuesta </Text>
-          <Text style={styles.rateValue}>94%</Text>
+          <Text style={styles.key}> Response rate </Text>
+          <Text style={styles.rateValue}>{resrate}%</Text>
         </View>
         <View className="flex items-center">
           <TouchableOpacity className="items-center mt-7">
-            <Text style={styles.toProfile}>Ver perfil</Text>
+            <Text style={styles.toProfile}>View Profile</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -62,26 +65,25 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   title: {
-    color: "#17233c", // Hex color format
-    fontSize: 20, // Numeric value, no 'px'
+    color: "#17233c",
+    fontSize: 20,
     fontFamily: "Lexend Deca",
-    fontWeight: "700", // String for font weight
-    lineHeight: 26, // Numeric value, no 'px'
+    fontWeight: "700", 
+    lineHeight: 26, 
   },
   content: {
     backgroundColor: "#fefffe",
-    borderRadius: 10, // No need for 'px'
-    borderWidth: 1, // Specifies the width of the border
-    borderColor: "#c0c0c0", // Color of the border
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#c0c0c0", 
     padding: 15,
   },
   name: {
-    color: "#102a5e", // Hex color format
-    fontSize: 18, // Numeric value, no 'px'
-    fontFamily: "Lexend Deca", // Ensure this font is included in your project
-    fontWeight: "700", // String representing font weight
-    lineHeight: 28, // Numeric value, no 'px'
-    paddingLeft: 10,
+    color: "#102a5e", 
+    fontSize: 18,
+    fontFamily: "Lexend Deca", 
+    fontWeight: "700", 
+    lineHeight: 28,
   },
   award: {
     paddingTop: 2,
@@ -94,10 +96,10 @@ const styles = StyleSheet.create({
   awardText: {
     maringLeft: 20,
     color: "#154353",
-    fontSize: 12, // No 'px' is needed in React Native
-    fontFamily: "Lato", // Ensure 'Lato' is properly linked if using custom fonts
-    fontWeight: "800", // Use string for font weight
-    lineHeight: 14, // No 'px' needed
+    fontSize: 12, 
+    fontFamily: "Lato",
+    fontWeight: "800",
+    lineHeight: 14, 
   },
   review: {
     paddingTop: 2,
@@ -107,37 +109,37 @@ const styles = StyleSheet.create({
     backgroundColor: "#072d4c",
   },
   reviewText: {
-    color: "#ffffff", // White color
-    fontSize: 12, // Font size (no 'px')
-    fontFamily: "Lexend Deca", // Ensure this font is properly linked
-    fontWeight: "500", // Font weight as a string
+    color: "#ffffff", 
+    fontSize: 12, 
+    fontFamily: "Lexend Deca", 
+    fontWeight: "500", 
     lineHeight: 14,
   },
   messageButtpn: {
     padding: 10,
-    borderWidth: 1, // Border width (no 'px')
-    borderColor: "#0751c1", // Border color
+    borderWidth: 1, 
+    borderColor: "#0751c1", 
     borderRadius: 11,
   },
   messageText: {
-    color: "#0751c1", // Text color
-    fontSize: 18, // Font size (no 'px')
-    fontFamily: "Lexend Deca", // Ensure this font is properly linked
-    fontWeight: "600", // Font weight as a string
+    color: "#0751c1",
+    fontSize: 18, 
+    fontFamily: "Lexend Deca",
+    fontWeight: "600", 
     lineHeight: 23,
   },
   key: {
-    color: "#17233c", // Text color
-    fontSize: 14, // Font size (no 'px')
-    fontFamily: "Lato", // Ensure this font is properly linked
-    fontWeight: "700", // Font weight as a string
-    lineHeight: 20, // Line height (no 'px')
+    color: "#17233c", 
+    fontSize: 14, 
+    fontFamily: "Lato", 
+    fontWeight: "700", 
+    lineHeight: 20, 
   },
   value: {
-    color: "#17233c", // Text color
-    fontSize: 14, // Font size (no 'px')
-    fontFamily: "Lato", // Ensure this font is properly linked
-    fontWeight: "700", // Font weight as a string
+    color: "#17233c", 
+    fontSize: 14, 
+    fontFamily: "Lato",
+    fontWeight: "700", 
     lineHeight: 19,
   },
   rateValue: {
@@ -147,19 +149,19 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     borderRadius: 4,
     backgroundColor: "#2a8500",
-    color: "#ffffff", // Text color
-    fontSize: 12, // Font size (no 'px')
-    fontFamily: "Lato", // Ensure this font is properly linked
-    fontWeight: "700", // Font weight as a string
-    lineHeight: 20, // Line height (no 'px')
-    textAlign: "center", // Center the text
+    color: "#ffffff", 
+    fontSize: 12, 
+    fontFamily: "Lato", 
+    fontWeight: "700", 
+    lineHeight: 20,
+    textAlign: "center",
   },
   toProfile: {
-    color: "#0751c1", // Text color
-    fontSize: 16, // Font size (no 'px')
-    fontFamily: "Lato", // Ensure this font is properly linked
-    lineHeight: 29, // Line height (no 'px')
-    textAlign: "center", // Center aligning the text
+    color: "#0751c1", 
+    fontSize: 16, 
+    fontFamily: "Lato", 
+    lineHeight: 29, 
+    textAlign: "center", 
   },
 });
 export default Host;

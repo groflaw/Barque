@@ -26,8 +26,8 @@ const Location = () => {
   const loading = useSelector((state) => state.Global.loading);
 
   const [location, setLocation] = useState(
-    curboat.location
-      ? curboat.location
+    curboat.location2
+      ? curboat.location2
       : {
           boatname: "",
           locationtype: null,

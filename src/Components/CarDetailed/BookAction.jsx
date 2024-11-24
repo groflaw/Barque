@@ -1,15 +1,27 @@
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import boatMarkImage from "../../../assets/Icons/boatMark.png";
-import { useEffect } from "react";
-const BookAction = () => {
+import { useEffect, useState } from "react";
+const BookAction = ({ plan, data }) => {
+  const [price, setPrice] = useState(null);
+  const [index, setIndex] = useState(null);
+
+  useEffect(() => {
+    data.map((item, index) => {
+      if (item._id == plan) {
+        setPrice(item.price);
+        setIndex(index+1);
+      }
+    });
+  }, [plan]);
+
   return (
     <View
       style={styles.containter}
       className="flex flex-row justify-between bg-white"
     >
       <View>
-        <Text style={styles.price}>$291</Text>
-        <Text style={styles.plan}>Plan1</Text>
+        <Text style={styles.price}>${price}</Text>
+        <Text style={styles.plan}>Plan{index}</Text>
       </View>
       <View className="flex flex-row items-center" style={styles.button}>
         <TouchableOpacity className="flex flex-row items-center">

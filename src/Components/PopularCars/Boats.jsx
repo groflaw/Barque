@@ -2,79 +2,46 @@ import { useState, useEffect } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import BoatCard from "./BoatCard";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
 
-import { client, handleGetImageUrl } from "../../_Instance/instance";
+import { getboatInfo } from "../../Actions/AddBoat/addboat";
+import { getUser } from "../../Actions/Auth/auth.acitons";
+import { setLoading } from "../../Store/Global";
+import { setCurhost } from "../../Store/Global";
 
-const Boats = () => {
+const Boats = ({data}) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const [boats, setBoats] = useState([])
 
-  // const [populars, setPopulars] = useState([]);
-
-  // const getALLCars = async () => {
-  //   try {
-  //     const res = await client.fetch('*[_type == "cars"]');
-  //     setPopulars(res);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getALLCars();
-  // }, []);
-  const boats = [
-    {
-      image: "",
-      name: "Luxury Yacht",
-      price: 500,
-      users: 10,
-      full: 60,
-      year: 2020,
-      review: 4.8,
-      price: 500,
-      anchor: "Casa Bote A, Lecheria",
-    },
-    {
-      image: "",
-      name: "Luxury Yacht",
-      price: 500,
-      users: 10,
-      full: 60,
-      year: 2020,
-      review: 4.8,
-      price: 500,
-      anchor: "Casa Bote A, Lecheria",
-    },
-    {
-      image: "",
-      name: "Luxury Yacht",
-      price: 500,
-      users: 10,
-      full: 60,
-      year: 2020,
-      review: 4.8,
-      price: 500,
-      anchor: "Casa Bote A, Lecheria",
-    },
-  ];
-
-  const handleboatpress = () => {
+  const handleboatpress = async (id, hostId) => {
+    let result = await dispatch(getboatInfo(id));
+    result = await dispatch(getUser(hostId));
+    await dispatch(setCurhost(result));
     navigation.navigate("CarDetails");
+    console.log("id:",id, "hostId:", hostId);
   };
+  
+  useEffect(()=>{
+    setBoats(data)
+  },[data])
+  
   return (
     <View className="px-6 pb-10 mt-1">
-      {boats.map((boat, i) => (
-        <TouchableOpacity onPress={handleboatpress}>
+      {boats.map((boat, index) => (
+        <TouchableOpacity
+          onPress={() => handleboatpress(boat._id, boat.user)}
+          key={index}
+        >
           <BoatCard
             image={boat.boatImage}
-            name={boat.name}
-            users={boat.users}
-            full={boat.full}
+            model={boat.model}
+            capacity={boat.capacity}
+            size={boat.size}
             year={boat.year}
             review={boat.review}
-            anchor={boat.anchor}
+            location1={boat.location1}
             price={boat.price}
-            key={i}
           />
         </TouchableOpacity>
       ))}

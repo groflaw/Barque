@@ -30,12 +30,14 @@ const Cancellation = () => {
     navigation.navigate("Accessories");
   };
   const handleChange = async (value) => {
-    await setCancellation(value);
+    setCancellation(value);
     const result = await dispatch(
-      submitCancellation(curboat._id, cancellation)
+      submitCancellation(curboat._id, value)
     );
     if (result.errors) {
       setErrorMessages(result.errors);
+    }else{
+      setErrorMessages({})
     }
   };
   return (
@@ -50,9 +52,9 @@ const Cancellation = () => {
             </Text>
             <View
               style={styles.card}
-              className="flex flex-row items-center justify-center mt-4"
+              className="flex flex-row items-center mt-4"
             >
-              <View className="flex items-center w-24 ">
+              <View className="flex items-center" style={{width : '30%'}}>
                 <Radio
                   selected={cancellation === 1}
                   onPress={() => handleChange(1)}
@@ -61,8 +63,8 @@ const Cancellation = () => {
                   FLEXIBLE
                 </Text>
               </View>
-              <View>
-                <Text style={styles.itemText} className="w-56 ml-2 ">
+              <View style={{width : '70%'}} >
+                <Text style={styles.itemText} className="ml-2 ">
                   Cancelaciones de reservas gratis en todo momento con
                   devolución del dinero.
                 </Text>
@@ -72,7 +74,7 @@ const Cancellation = () => {
               style={styles.card}
               className="flex flex-row items-center justify-center mt-4"
             >
-              <View className="flex items-center w-24 ">
+              <View className="flex items-center"  style={{width : '30%'}}>
                 <Radio
                   selected={cancellation === 2}
                   onPress={() => handleChange(2)}
@@ -81,12 +83,12 @@ const Cancellation = () => {
                   MODERADA
                 </Text>
               </View>
-              <View>
-                <Text style={styles.itemText} className="w-56 ml-2 ">
+              <View style={{width : '70%'}} >
+                <Text style={styles.itemText} className="ml-2 ">
                   Cancelaciones de reservas gratis antes de las 24 horas del día
                   que inicia el viaje.
                 </Text>
-                <Text style={styles.itemText} className="w-56 ml-2 ">
+                <Text style={styles.itemText} className="ml-2 ">
                   Cancelaciones el mismo día de la reserva tendrá un cargo del
                   50% del costo de un día de reserva.
                 </Text>
@@ -96,7 +98,7 @@ const Cancellation = () => {
               style={styles.card}
               className="flex flex-row items-center justify-center mt-4"
             >
-              <View className="flex items-center w-24 ">
+              <View className="flex items-center " style={{width : '30%'}}>
                 <Radio
                   selected={cancellation === 3}
                   onPress={() => handleChange(3)}
@@ -105,12 +107,12 @@ const Cancellation = () => {
                   ESTRICTA
                 </Text>
               </View>
-              <View>
-                <Text style={styles.itemText} className="w-56 ml-2 ">
+              <View style={{width : '70%'}}>
+                <Text style={styles.itemText} className=" ml-2 ">
                   Cancelaciones de reserva gratis antes de las 48 horas del día
                   que inicia el viaje.
                 </Text>
-                <Text style={styles.itemText} className="w-56 ml-2 ">
+                <Text style={styles.itemText} className="ml-2 ">
                   Cancelaciones dentro de las 48 horas previas de la reserva
                   tendrá un cargo del 50% del costo de un día de reserva.
                 </Text>
@@ -148,8 +150,8 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
     paddingBottom: 10,
-    paddingLeft: 25,
-    paddingRight: 25,
+    paddingLeft: 15,
+    paddingRight: 15,
   },
   title: {
     color: "#17233c",
@@ -170,7 +172,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 12,
     elevation: 5,
-    padding: 40,
+    padding : 10
   },
   item: {
     borderRadius: 12,

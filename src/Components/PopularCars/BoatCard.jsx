@@ -10,33 +10,37 @@ import eventImage from "../../../assets/Icons/Iconeventavailable.png";
 import anchorImage from "../../../assets/Icons/Iconanchor.png";
 
 const BoatCard = ({
-  image,
+  coverImage,
   price,
-  name,
-  users,
-  full,
+  model,
+  capacity,
+  size,
   year,
   review,
-  anchor,
+  location1,
 }) => {
   return (
     <View className="flex w-full p-3 mt-4 bg-white rounded-lg">
       <View className="flex items-center ">
-        <Image source={boatImage} className="w-full rounded-lg"></Image>
+        <Image source={
+                coverImage
+                  ? { uri: coverImage }
+                  : boatImage
+              } className="w-full rounded-lg"></Image>
         <View style={styles.price}>
           <Text style={styles.priceText}>${price}/day</Text>
         </View>
       </View>
-      <Text style={styles.name}>{name}</Text>
+      <Text style={styles.name}>{model}</Text>
       <View className="flex flex-row justify-between mt-1">
         <View className="flex flex-row">
           <View className="flex flex-row items-center" style={styles.item}>
             <Image source={peopleImage}></Image>
-            <Text style={styles.itemText}>{users}</Text>
+            <Text style={styles.itemText}>{capacity}</Text>
           </View>
           <View className="flex flex-row items-center" style={styles.item}>
             <Image source={fullImage}></Image>
-            <Text style={styles.itemText}>{full}</Text>
+            <Text style={styles.itemText}>{size}</Text>
           </View>
           <View className="flex flex-row items-center" style={styles.item}>
             <Image source={eventImage}></Image>
@@ -50,7 +54,7 @@ const BoatCard = ({
       </View>
       <View className="flex flex-row items-center mt-2">
         <Image source={anchorImage}></Image>
-        <Text style={styles.anchor}>{anchor}</Text>
+        <Text style={styles.anchor}>{location1}</Text>
       </View>
     </View>
   );

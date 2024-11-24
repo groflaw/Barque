@@ -1,13 +1,28 @@
-import { View, Text, StyleSheet } from "react-native";
-import { useEffect } from "react";
-const Description = () => {
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useEffect, useState } from "react";
+
+const Description = ({des}) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const handleReadMore = () => {
+    setIsExpanded(!isExpanded);
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.descriptionTitle}>Description</Text>
-      <Text style={styles.descriptionContent} className="mt-4">
-        WE HAVE 3 DOUBLE DECK TRITOONS , MESSAGE US INCASE THE TIME FRAME YOU
-        WANT IS BOOKED . !!!!! PLEASE MESSAGE BEFORE INSTANT B ...
+      <Text
+        style={styles.descriptionContent}
+        className="mt-4"
+        numberOfLines={isExpanded ? undefined : 3} 
+        ellipsizeMode="tail"
+      >
+        {des}
       </Text>
+      <TouchableOpacity onPress={handleReadMore}>
+        <Text style={styles.readmore} className="mt-2">
+        {isExpanded ? "Show less" : "Read more..."}
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -22,15 +37,20 @@ const styles = StyleSheet.create({
   descriptionTitle: {
     color: "#072d4c",
     fontSize: 20,
-    fontFamily: "Lexend Deca", // Ensure this font is loaded
+    fontFamily: "Lexend Deca", 
     fontWeight: "700",
     lineHeight: 26,
   },
   descriptionContent: {
     color: "#102a5e",
     fontSize: 15,
-    fontFamily: "Lexend Deca", // Ensure this font is loaded
+    fontFamily: "Lexend Deca", 
     lineHeight: 22,
+  },
+  readmore: {
+    color: "#0751c1",
+    fontSize: 15,
+    fontFamily: "Lexend Deca",
   },
 });
 export default Description;

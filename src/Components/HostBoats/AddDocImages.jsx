@@ -76,7 +76,7 @@ const AddDocImage = () => {
 
   return (
     <ScrollView>
-      <View style={styles.container} className="items-center justify-center">
+      <View style={styles.container}>
         <Text style={styles.title} className="mt-4">
           Agrega documentación
         </Text>
@@ -98,8 +98,9 @@ const AddDocImage = () => {
                 source={
                   image.navigation ? { uri: image.navigation } : photoImage
                 }
+                
                 style={{
-                  width: image.navigation ? 310 : 40,
+                  width: image.navigation ? 290 : 40,
                   height: image.navigation ? 160 : 40,
                 }}
               />
@@ -125,7 +126,7 @@ const AddDocImage = () => {
                     : photoImage
                 }
                 style={{
-                  width: image.authorization ? 310 : 40,
+                  width: image.authorization ? 290 : 40,
                   height: image.authorization ? 160 : 40,
                 }}
               />
@@ -140,7 +141,7 @@ const AddDocImage = () => {
           </View>
         </View>
 
-        <View className="w-11/12 mt-5">
+        <View className="mt-5">
           <TouchableOpacity onPress={nextStep}>
             <Text style={styles.continue} className="text-center">
               CONTINUAR
@@ -171,8 +172,6 @@ const styles = StyleSheet.create({
     fontFamily: "Lexend Deca",
   },
   card: {
-    width: 340,
-    height: 250,
     backgroundColor: "#ffffff",
     borderRadius: 8,
     borderWidth: 1,

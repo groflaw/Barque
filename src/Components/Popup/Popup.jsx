@@ -8,19 +8,64 @@ import {
   TextInput,
   Slider,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
-import { useState } from "react";
-import RangeSlider from "react-native-range-slider-expo";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import { getAllBoatTypes } from "../../Actions/BasicBoat/basicboat";
+
+import { filterBoats } from "../../Actions/UserBoat/userboat";
 
 import Option from "../Basic/Option";
 import Number from "../Basic/Number";
 
-export default function Popup({ visible, transparent, dismiss, margin }) {
+export default function Popup({ visible, transparent, dismiss, margin, setBoats }) {
+  const dispatch = useDispatch();
+
   const [value, setValue] = useState(60);
+  const [filter, setFilter] = useState({
+    size: 0,
+    boattype: 0,
+    capacity: 0,
+    price: 10,
+  });
+
+  const boatTypes = useSelector((state) => state.BasicBoat.boattypes);
 
   const onValueChange = (value) => {
-    setValue(value);
+    setFilter((prevData) => ({
+      ...prevData,
+      price: Math.round(value),
+    }));
   };
+
+  useEffect(() => {
+    const fectboattypes = async () => {
+      let result = await dispatch(getAllBoatTypes());
+    };
+    fectboattypes();
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFilter((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const search = async() => {
+    let result = await dispatch(filterBoats(filter));
+    setBoats(result);
+    dismiss();
+    setFilter({
+      size: 0,
+      boattype: 0,
+      capacity: 0,
+      price: 10,
+    });
+  };
+
   return (
     <Modal visible={visible} transparent={transparent} onRequestClose={dismiss}>
       <TouchableWithoutFeedback onPress={dismiss}>
@@ -39,29 +84,44 @@ export default function Popup({ visible, transparent, dismiss, margin }) {
           </View>
           <View className="flex mt-3 w-72">
             <Text style={styles.sizeTitle}>Size (feet)</Text>
-
-            <Number></Number>
+            <Number
+              value={filter.size}
+              onChange={handleChange}
+              name="size"
+            ></Number>
           </View>
           <View className="flex mt-3 w-72 ">
-            <Text style={styles.sizeTitle}>Type of Vessel</Text>
-            <Option width={"100%"}></Option>
+            <Text style={styles.sizeTitle} className="mb-2">
+              Type of Vessel
+            </Text>
+            <Option
+              width={"100%"}
+              options={boatTypes}
+              onChange={handleChange}
+              name="boattype"
+              placeholder="Select Type"
+            ></Option>
           </View>
           <View className="flex mt-3 w-72">
             <Text style={styles.sizeTitle}>Capacity (Number of people)</Text>
-            <Number></Number>
+            <Number
+              value={filter.capacity}
+              onChange={handleChange}
+              name="capacity"
+            ></Number>
           </View>
           <View className="flex mt-3 w-72">
             <View className="flex flex-row justify-between">
               <Text style={styles.sizeTitle}>Price Range</Text>
-              <Text style={styles.sizeTitle}>200 - 10.000 $</Text>
+              <Text style={styles.sizeTitle}>{filter.price * 10} - 1000 $</Text>
             </View>
 
             <View style={styles.SliderContainer} className="mt-2">
-              <View style={{ ...styles.slider, width: `${value}%` }} />
+              <View style={{ ...styles.slider, width: `${filter.price}%` }} />
               <Slider
                 minimumValue={1}
                 maximumValue={100}
-                value={value}
+                value={filter.price}
                 onValueChange={onValueChange}
                 style={styles.SliderInput}
                 minimumTrackTintColor="rgba(23, 35, 60, 1)" // Line color
@@ -71,7 +131,7 @@ export default function Popup({ visible, transparent, dismiss, margin }) {
             </View>
           </View>
           <View className="flex items-center mt-3 w-72 ">
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => search()}>
               <Text className="p-3 text-center text-white rounded-lg w-28 bg-slate-800">
                 Aplicar Filtros
               </Text>
@@ -106,14 +166,14 @@ const styles = StyleSheet.create({
   },
   popupTitleBox: {
     padding: 15,
-    shadowColor: "#030303", // Same as rgba(3,3,3,0.1)
+    shadowColor: "#030303",
     shadowOffset: {
-      width: 2, // Horizontal offset
-      height: -2, // Vertical offset
+      width: 2,
+      height: -2,
     },
-    shadowOpacity: 0.1, // Opacity of the shadow
-    shadowRadius: 10, // Blur effect
-    elevation: 5, // Recommended elevation for Android
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
   },
   popupTitle: {
     color: "#030303",

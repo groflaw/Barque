@@ -21,8 +21,7 @@ import {
   getboatInfo,
 } from "../../Actions/AddBoat/addboat";
 
-import { setLoading } from "../../Store/Global";
-
+import { setLoading,setCurboat } from "../../Store/Global";
 import boatcard from "../../../assets/Icons/boatcard.png";
 
 const Myboats = () => {
@@ -36,8 +35,10 @@ const Myboats = () => {
   const [myboats, setMyboats] = useState([]);
   const [errorMessages, setErrorMessages] = useState({});
 
-  const nextStep = () => {
+  const nextStep = async() => {
+    dispatch(setCurboat({}));
     navigation.navigate("Option");
+
   };
 
   const handleSwitch = async (id, status) => {

@@ -2,23 +2,24 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 
 import IconStarImage from "../../../assets/Icons/Iconstar.png";
 import { useEffect } from "react";
-const Summary = () => {
+
+const Summary = ({location,model,review,booking}) => {
   return (
     <View style={styles.container} className="flex">
       <Text className="mt-3" style={styles.position}>
-        LECHERIA, ANZ
+        {location}
       </Text>
       <Text style={styles.detail} className="mt-5">
-        29ft DOUBLE DECK TRITOON WITH UPPER DECK SUNBED AND WATERSLIDE
+        {model}
       </Text>
 
       <View
         style={styles.review}
-        className="flex flex-row items-center w-40 mt-2"
+        className="flex flex-row items-center mt-2 w-40 justify-center"
       >
         <Image source={IconStarImage}></Image>
-        <Text style={styles.mark}>4.8 / 5</Text>
-        <Text style={styles.count}>( 227 reservas )</Text>
+        <Text style={styles.mark}>{review} / 5</Text>
+        <Text style={styles.count}>({booking} bookings)</Text>
       </View>
     </View>
   );
@@ -45,9 +46,9 @@ const styles = StyleSheet.create({
   },
   review: {
     backgroundColor: "#072d4c",
-    borderRadius: 9, // No need for 'px'
-    borderWidth: 1, // Specifies the width of the border
-    borderColor: "#ffffff", // Color of the border
+    borderRadius: 9,
+    borderWidth: 1, 
+    borderColor: "#ffffff", 
     paddingLeft: 5,
     paddingRight: 5,
     paddingTop: 2,

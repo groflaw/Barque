@@ -5,7 +5,6 @@ import {
   Text,
   ScrollView,
   TextInput,
-  Button,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react";
@@ -13,17 +12,22 @@ import { useDispatch, useSelector } from "react-redux";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { addPlan, delPlan } from "../../Actions/AddBoat/addboat";
+
 import Option from "../Basic/Option";
+import LoadingIndicator from "../Basic/LoadingIndicator";
+
 const AddPlans = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const loading = useSelector((state) => state.Global.loading);
   const curboat = useSelector((state) => state.Global.curboat);
+  const loading = useSelector((state) => state.Global.loading);
 
-  const [mode, setMode] = useState("date");
+  const [mode, setMode] = useState(null);
   const [startshow, setStartShow] = useState(false);
-  const [endshow, setEndShow] = useState(false);
+  const [curdate, setCurdate] = useState(null);
+  const [curid, setCurId] = useState(null);
+  const [cursort, setCursort] = useState(null);
   const [errorMessages, setErrorMessages] = useState({});
   const [plans, setPlans] = useState(curboat.plans);
 
@@ -39,39 +43,31 @@ const AddPlans = () => {
       price: 0,
       start: new Date(),
       end: new Date(),
-      captain: 1,
+      captain: 0,
     };
     setPlans((prevPlans) => [...prevPlans, newPlan]);
   };
 
-  const onChangeStart = (event, selectedDate, itemId) => {
+  const onChangeStart = (event, selectedDate) => {
     if (selectedDate) {
       const currentDate = selectedDate;
-      setStartShow(false); // Assuming this is a boolean state to show/hide date picker
+      setStartShow(false);
       handleChange({
-        target: { name: "start", value: currentDate, _id: itemId },
+        target: { name: cursort, value: currentDate, _id: curid },
       });
+      setMode(null);
+      setCurdate(null);
+      setCurId(null);
+      setCursort(null);
     }
   };
-  const onChangeEnd = (event, selectedDate, itemId) => {
-    if (selectedDate) {
-      const currentDate = selectedDate;
-      setEndShow(false); // Assuming this is a boolean state to show/hide date picker
-      handleChange({
-        target: { name: "end", value: currentDate, _id: itemId },
-      });
-    }
-  };
-  const showMode = (currentMode, sort) => {
-    if (sort == "start") setStartShow(true);
-    else setEndShow(true);
-    setMode(currentMode);
-  };
-  const showDatepicker = (sort) => {
-    showMode("date", sort);
-  };
-  const showTimepicker = (sort) => {
-    showMode("time", sort);
+
+  const showDatepicker = (sort, mode, itemId, date) => {
+    setStartShow(true); // setshow datapicker
+    setMode(mode); // date or time
+    setCurId(itemId); // selected _id
+    setCurdate(date); // selected date
+    setCursort(sort); //start or end
   };
 
   const handleChange = (e) => {
@@ -91,6 +87,7 @@ const AddPlans = () => {
     if (result.errors) {
       setErrorMessages(result.errors);
     } else {
+      setErrorMessages({});
       setPlans(result.plans);
     }
   };
@@ -118,179 +115,196 @@ const AddPlans = () => {
     <>
       <ScrollView>
         <View style={styles.container}>
-          <Text style={styles.title}>Add your plan</Text>
-          <Text style={styles.des} className="mt-3 w-96">
-            Add your travel plan. You will be able to add up to 5 different plan
-            for your boat indicating price, schedule, if captain is included and
-            the description of the destinations and what is included in the
-            plan.
-          </Text>
-          <View className="flex justify-start">
-            <TouchableOpacity onPress={addNewTemp} className="w-24">
-              <Text style={styles.addTemp} className="mt-3 text-center ">
-                + Add
+          {loading ? (
+            <LoadingIndicator />
+          ) : (
+            <>
+              <Text style={styles.title}>Add your plan</Text>
+              <Text style={styles.des} className="mt-3">
+                Add your travel plan. You will be able to add up to 5 different
+                plan for your boat indicating price, schedule, if captain is
+                included and the description of the destinations and what is
+                included in the plan.
               </Text>
-            </TouchableOpacity>
-          </View>
-          {plans.map((item, index) => {
-            return (
-              <View style={styles.card} key={item._id} className="mt-4">
-                <View className="flex flex-row items-center justify-between">
-                  <Text style={styles.head}>Plan{index + 1}</Text>
-                  <View
-                    style={styles.price}
-                    className="flex flex-row items-center"
-                  >
-                    <Text style={styles.priceText} className="mr-1">
-                      $
-                    </Text>
+              <View className="flex justify-start">
+                <TouchableOpacity onPress={addNewTemp} className="w-24">
+                  <Text style={styles.addTemp} className="mt-3 text-center ">
+                    + Add
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              {plans.map((item, index) => {
+                return (
+                  <View style={styles.card} key={item._id} className="mt-4">
+                    <View className="flex flex-row items-center justify-between">
+                      <Text style={styles.head}>Plan{index + 1}</Text>
+                      <View
+                        style={styles.price}
+                        className="flex flex-row items-center"
+                      >
+                        <Text style={styles.priceText} className="mr-1">
+                          $
+                        </Text>
+                        <TextInput
+                          style={styles.priceText}
+                          value={item.price + ""}
+                          keyboardType="numeric"
+                          onChangeText={(text) =>
+                            handleChange({
+                              target: {
+                                name: "price",
+                                value: text,
+                                _id: item._id,
+                              },
+                            })
+                          }
+                        ></TextInput>
+                      </View>
+                    </View>
+                    {errorMessages.price && (
+                      <Text style={styles.error}>{errorMessages.price}</Text>
+                    )}
                     <TextInput
-                      style={styles.priceText}
-                      value={item.price + ""}
-                      keyboardType="numeric"
                       onChangeText={(text) =>
                         handleChange({
-                          target: { name: "price", value: text, _id: item._id },
+                          target: {
+                            name: "description",
+                            value: text,
+                            _id: item._id,
+                          },
                         })
                       }
-                    ></TextInput>
+                      className="mt-4"
+                      style={styles.textarea}
+                      multiline
+                      numberOfLines={4}
+                      placeholder="Describes the destinations of this plan and all that is included in it..."
+                      placeholderTextColor="#aaaaaa"
+                      value={item.description}
+                    />
+                    {errorMessages.description && (
+                      <Text style={styles.error}>
+                        {errorMessages.description}
+                      </Text>
+                    )}
+                    <View className="flex items-center mb-2 ">
+                      <View className="flex flex-row items-center justify-around mt-2 ">
+                        <TouchableOpacity
+                          onPress={() => {
+                            showDatepicker(
+                              "start",
+                              "date",
+                              item._id,
+                              item.start
+                            );
+                          }}
+                        >
+                          <Text style={styles.clock}>
+                            {new Date(item.start).toLocaleDateString()}
+                          </Text>
+                        </TouchableOpacity>
+                        <View style={{ width: 25 }}></View>
+                        <TouchableOpacity
+                          onPress={() => {
+                            showDatepicker(
+                              "start",
+                              "time",
+                              item._id,
+                              item.start
+                            );
+                          }}
+                        >
+                          <Text style={styles.clock}>
+                            {new Date(item.start).toLocaleTimeString()}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                      <View className="flex flex-row items-center justify-around mt-2">
+                        <TouchableOpacity
+                          onPress={() => {
+                            showDatepicker("end", "date", item._id, item.end);
+                          }}
+                        >
+                          <Text style={styles.clock}>
+                            {new Date(item.end).toLocaleDateString()}
+                          </Text>
+                        </TouchableOpacity>
+                        <View style={{ width: 25 }}></View>
+                        <TouchableOpacity
+                          onPress={() => {
+                            showDatepicker("end", "time", item._id, item.end);
+                          }}
+                        >
+                          <Text style={styles.clock}>
+                            {new Date(item.end).toLocaleTimeString()}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                      {errorMessages.start && (
+                        <Text style={styles.error}>{errorMessages.start}</Text>
+                      )}
+                    </View>
+                    <View className="flex flex-row items-center justify-between">
+                      <Option
+                        defaultValue={item.captain}
+                        options={Captions}
+                        placeholder="Does it include captain?"
+                        onChange={handleChange}
+                        name="captain"
+                        _id={item._id}
+                      ></Option>
+                    </View>
+                    {errorMessages.captain && (
+                      <Text style={styles.error}>{errorMessages.captain}</Text>
+                    )}
+                    <View className="flex flex-row items-center justify-around w-full mt-3">
+                      <TouchableOpacity
+                        onPress={() => handleSubmit(item._id)}
+                        className="w-32"
+                      >
+                        <Text
+                          style={styles.addTemp}
+                          className="w-full text-center"
+                        >
+                          SAVE
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => handleDelet(item._id)}
+                        className="w-32"
+                      >
+                        <Text
+                          style={styles.addTemp}
+                          className="w-full text-center"
+                        >
+                          DELETE
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                </View>
-                {errorMessages.price && (
-                  <Text style={styles.error}>{errorMessages.price}</Text>
-                )}
-                <TextInput
-                  onChangeText={(text) =>
-                    handleChange({
-                      target: {
-                        name: "description",
-                        value: text,
-                        _id: item._id,
-                      },
-                    })
+                );
+              })}
+              {startshow && (
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={new Date(curdate)}
+                  mode={mode}
+                  is24Hour={true}
+                  onChange={(event, selectedDate) =>
+                    onChangeStart(event, selectedDate)
                   }
-                  className="mt-4"
-                  style={styles.textarea}
-                  multiline
-                  numberOfLines={4}
-                  placeholder="Describes the destinations of this plan and all that is included in it..."
-                  placeholderTextColor="#aaaaaa"
-                  value={item.description}
                 />
-                {errorMessages.description && (
-                  <Text style={styles.error}>{errorMessages.description}</Text>
-                )}
-                <View className="flex items-center mb-5 ">
-                  <View className="flex flex-row items-center justify-around">
-                    <TouchableOpacity
-                      onPress={() => {
-                        showDatepicker("start");
-                      }}
-                    >
-                      <Text className="mt-2">
-                        {new Date(item.start).toLocaleDateString()}
-                      </Text>
-                    </TouchableOpacity>
-                    <View style={{ width: 5 }}></View>
-                    <TouchableOpacity
-                      onPress={() => {
-                        showTimepicker("start");
-                      }}
-                    >
-                      <Text className="mt-2">
-                        {new Date(item.start).toLocaleTimeString()}
-                      </Text>
-                    </TouchableOpacity>
-                    <View style={{ width: 15 }}></View>
-                    <TouchableOpacity
-                      onPress={() => {
-                        showDatepicker("end");
-                      }}
-                    >
-                      <Text className="mt-2">
-                        {new Date(item.end).toLocaleDateString()}
-                      </Text>
-                    </TouchableOpacity>
-                    <View style={{ width: 5 }}></View>
-                    <TouchableOpacity
-                      onPress={() => {
-                        showTimepicker("end");
-                      }}
-                    >
-                      <Text className="mt-2">
-                        {new Date(item.end).toLocaleTimeString()}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                  {errorMessages.start && (
-                    <Text style={styles.error}>{errorMessages.start}</Text>
-                  )}
-                  {startshow && (
-                    <DateTimePicker
-                      testID="dateTimePicker"
-                      value={new Date(item.start)}
-                      mode={mode}
-                      is24Hour={true}
-                      onChange={(event, selectedDate) =>
-                        onChangeStart(event, selectedDate, item._id)
-                      }
-                    />
-                  )}
-                  <View className="flex flex-row"></View>
-                  {endshow && (
-                    <DateTimePicker
-                      testID="dateTimePicker"
-                      value={new Date(item.end)}
-                      mode={mode}
-                      is24Hour={true}
-                      onChange={(event, selectedDate) =>
-                        onChangeEnd(event, selectedDate, item._id)
-                      }
-                    />
-                  )}
-                </View>
-                <View className="flex flex-row items-center justify-between">
-                  <Option
-                    defaultValue={item.captain}
-                    options={Captions}
-                    placeholder="Does it include captain?"
-                    onChange={handleChange}
-                    name="captain"
-                    _id={item._id}
-                  ></Option>
-                </View>
-                {errorMessages.captain && (
-                  <Text style={styles.error}>{errorMessages.captain}</Text>
-                )}
-                <View className="flex flex-row items-center justify-around w-full mt-3">
-                  <TouchableOpacity
-                    onPress={() => handleSubmit(item._id)}
-                    className="w-40"
-                  >
-                    <Text style={styles.addTemp} className="w-full text-center">
-                      SAVE
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => handleDelet(item._id)}
-                    className="w-40"
-                  >
-                    <Text style={styles.addTemp} className="w-full text-center">
-                      DELETE
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+              )}
+              <View className="mt-5">
+                <TouchableOpacity onPress={nextStep}>
+                  <Text style={styles.continue} className="text-center">
+                    CONTINUAR
+                  </Text>
+                </TouchableOpacity>
               </View>
-            );
-          })}
-
-          <View className="mt-5">
-            <TouchableOpacity onPress={nextStep}>
-              <Text style={styles.continue} className="text-center">
-                CONTINUAR
-              </Text>
-            </TouchableOpacity>
-          </View>
+            </>
+          )}
         </View>
       </ScrollView>
     </>
@@ -301,8 +315,8 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
     paddingBottom: 10,
-    paddingLeft: 25,
-    paddingRight: 25,
+    paddingLeft: 15,
+    paddingRight: 15,
   },
   title: {
     color: "#17233c",
@@ -332,64 +346,68 @@ const styles = StyleSheet.create({
     fontFamily: "Lexend Deca",
   },
   card: {
-    backgroundColor: "#ffffff", // Background color
-    borderRadius: 8, // Border radius
-    borderWidth: 1, // Border width
-    borderColor: "#efefef", // Border color
-    shadowColor: "#000", // Shadow color
+    backgroundColor: "#ffffff",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#efefef",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 4,
     },
-    shadowOpacity: 0.25, // Shadow opacity
-    shadowRadius: 12, // Shadow radius
-    elevation: 5, // Android shadow equivalent
-    padding: 16, // Padding inside the card (adjust as needed)
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+    elevation: 5,
+    padding: 16,
   },
   head: {
-    color: "#17233c", // Text color
-    fontSize: 16, // Font size as a number, no 'px'
-    fontFamily: "Lexend Deca", // Font family
-    fontWeight: "500", // Font weight
+    color: "#17233c",
+    fontSize: 16,
+    fontFamily: "Lexend Deca",
+    fontWeight: "500",
   },
   price: {
-    backgroundColor: "#fefffe", // Background color
-    borderRadius: 10, // Border radius as a number
-    borderWidth: 1, // Border width
-    borderColor: "#bec0e3", // Border color
-    padding: 5, // Optional: Add padding for better layout (adjust as needed)
+    backgroundColor: "#fefffe",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#bec0e3",
+    padding: 5,
   },
   priceText: {
-    color: "#0751c1", // Text color
-    fontSize: 14, // Font size as a number, no 'px'
-    fontFamily: "Lexend Deca", // Font family
-    fontWeight: "500", // Font weight
+    color: "#0751c1",
+    fontSize: 14,
+    fontFamily: "Lexend Deca",
+    fontWeight: "500",
   },
   textarea: {
-    height: 100, // Adjust height as needed
-    borderColor: "#bec0e3", // Border color
-    borderWidth: 1, // Border width
-    borderRadius: 10, // Rounded corners
-    backgroundColor: "#fefffe", // Background color
-    padding: 10, // Inner padding
-    color: "#000", // Text color
-    fontSize: 14, // Font size
-    fontFamily: "Lexend Deca", // Font family
-    fontWeight: "500", // Font weight
+    height: 100,
+    borderColor: "#bec0e3",
+    borderWidth: 1,
+    borderRadius: 10,
+    backgroundColor: "#fefffe",
+    padding: 10,
+    color: "#000",
+    fontSize: 14,
+    fontFamily: "Lexend Deca",
+    fontWeight: "500",
+  },
+  clock: {
+    fontSize: 14,
+    fontFamily: "DigitalClock",
   },
   continue: {
-    borderRadius: 6, // Border radius as a number
-    backgroundColor: "#17233c", // Background color
-    padding: 20, // Add some padding for better touch area
-    color: "#ffffff", // Text color
-    fontSize: 13, // Font size as a number
-    fontFamily: "Mulish", // Font family
-    fontWeight: "900", // Font weight
+    borderRadius: 6,
+    backgroundColor: "#17233c",
+    padding: 20,
+    color: "#ffffff",
+    fontSize: 13,
+    fontFamily: "Mulish",
+    fontWeight: "900",
   },
   error: {
-    color: "red", // Red color for the error message
-    fontSize: 12, // Small font size
-    marginTop: 2, // Space between the input and the error message
+    color: "red",
+    fontSize: 12,
+    marginTop: 2,
   },
 });
 export default AddPlans;

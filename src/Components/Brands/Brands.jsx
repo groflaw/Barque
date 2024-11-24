@@ -7,9 +7,12 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
+import { useDispatch } from "react-redux";
+
+import { searchBoats, getAllboats } from "../../Actions/UserBoat/userboat";
 
 import searchImage from "../../../assets/Icons/Iconsearch.png";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const IconComponent = () => (
   <Svg width={21} height={21} viewBox="0 0 24 24">
@@ -18,19 +21,44 @@ const IconComponent = () => (
   </Svg>
 );
 
-const Brands = ({ onpress }) => {
+const Brands = ({ onpress, setBoats }) => {
+  const dispatch = useDispatch();
+  const [keywords, setKeywords] = useState("");
+
+  const onChange = (e) => {
+    const { value } = e.target;
+    setKeywords(value);
+  };
+
+  const search = async () => {
+    let result = [];
+    if(keywords.trim() != ""){
+       result = await dispatch(searchBoats(keywords));
+    }else{
+       result = await dispatch(getAllboats());
+    }
+    setBoats(result);
+  };
+
   return (
-    <View className="flex px-6 mb-2" style={{ height: 110 }}>
-      <View
-        style={styles.search}
-        className="flex flex-row items-center flex-1 p-2 mt-5 space-x-2 bg-white rounded-lg"
-      >
-        <Image source={searchImage} style={styles.icon}></Image>
-        <TextInput
-          style={styles.text}
-          placeholder="Lecheria, Venezuela📍"
-          className="flex-1 text-black bg-white"
-        />
+    <View className="flex px-6 mb-2">
+      <View className="flex flex-row justify-between items-center pt-3">
+        <View
+          style={styles.search}
+          className="flex flex-row items-center flex-1 p-2  space-x-2 bg-white rounded-lg"
+        >
+          <Image source={searchImage} style={styles.icon}></Image>
+          <TextInput
+            style={styles.text}
+            placeholder="Lecheria, Venezuela📍"
+            className="flex-1 text-black bg-white"
+            onChangeText={(text) => onChange({ target: { value: text  }})}
+          />
+        </View>
+        <View style={{ width: 10 }}></View>
+        <TouchableOpacity style={styles.searchbtn} onPress={() => search()}>
+          <Text style={styles.btnText}> SEARCH </Text>
+        </TouchableOpacity>
       </View>
       <View className="flex flex-row items-center ">
         <TouchableOpacity style={styles.button} onPress={onpress}>
@@ -61,7 +89,6 @@ const styles = StyleSheet.create({
     color: "#000000",
     fontSize: 13,
     fontFamily: "Lexend Deca",
-    lineHeight: 25,
   },
   icon: {
     width: 16,
@@ -82,10 +109,13 @@ const styles = StyleSheet.create({
   btnText: {
     color: "#ffffff",
     fontSize: 14,
-    paddingLeft: 7,
     fontFamily: "Lexend Deca",
     fontWeight: "500",
-    lineHeight: 24,
+  },
+  searchbtn: {
+    borderRadius: 6,
+    backgroundColor: "#072d4c",
+    padding: 10,
   },
 });
 

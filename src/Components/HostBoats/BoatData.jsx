@@ -42,6 +42,7 @@ const BoatData = () => {
 
   const loading = useSelector((state) => state.Global.loading);
   const curuser = useSelector((state) => state.Slice.user);
+  const curboat = useSelector((state) => state.Global.curboat);
 
   const [errorMessages, setErrorMessages] = useState({});
 
@@ -87,18 +88,18 @@ const BoatData = () => {
 
   const [boatdata, setBoatData] = useState({
     user: curuser._id,
-    model: "123",
-    description: "123",
-    location1: "123",
-    year: 1990,
-    size: 10,
-    boattype: 2,
-    boatbrand: 2,
-    enginecount: 2,
-    bathroomcount: 2,
-    power: 2,
-    capacity: 2,
-    cabinscount: 2,
+    model: curboat.model || "",
+    description: curboat.description || "",
+    location1: curboat.location1 || "",
+    year: curboat.year || 2010,
+    size: curboat.size || 38,
+    boattype: curboat.boattype || 0,
+    boatbrand: curboat.boatbrand || 0,
+    enginecount: curboat.enginecount || 0,
+    bathroomcount: curboat.bathroomcount || 0,
+    power: curboat.power || 0,
+    capacity: curboat.capacity || 0,
+    cabinscount: curboat.cabinscount || 0,
   });
 
   const handleChange = (e) => {
@@ -106,14 +107,14 @@ const BoatData = () => {
 
     setBoatData((prevData) => ({
       ...prevData,
-      [name]: value, // Update the 'year' property
+      [name]: value, 
     }));
   };
 
   const handleSubmit = async () => {
     const result = await dispatch(submitBasic(boatdata));
     if (result.errors) {
-      setErrorMessages(result.errors); // Set error messages in state
+      setErrorMessages(result.errors); 
     } else {
       navigation.navigate("AddPlans");
     }
@@ -132,7 +133,7 @@ const BoatData = () => {
               <View className="mt-5">
                 <Text style={styles.item}>Model </Text>
                 <CustomTextInput
-                  value={boatdata.model} // Ensure you're using the correct property
+                  value={boatdata.model} 
                   onChange={handleChange}
                   name="model"
                   // sort={false}
@@ -196,6 +197,7 @@ const BoatData = () => {
                   onChange={handleChange}
                   name="boattype"
                   placeholder="Select Type"
+                  defaultValue = {boatdata.boattype}
                 ></Option>
                 {errorMessages.boattype && (
                   <Text style={styles.error}>{errorMessages.boattype}</Text>
@@ -210,6 +212,7 @@ const BoatData = () => {
                   onChange={handleChange}
                   name="boatbrand"
                   placeholder="Choose a brand"
+                  defaultValue = {boatdata.boatbrand}
                 ></Option>
                 {errorMessages.boatbrand && (
                   <Text style={styles.error}>{errorMessages.boatbrand}</Text>
@@ -224,6 +227,8 @@ const BoatData = () => {
                   onChange={handleChange}
                   name="enginecount"
                   placeholder="Select number of engines"
+                  defaultValue = {boatdata.enginecount}
+
                 ></Option>
                 {errorMessages.enginecount && (
                   <Text style={styles.error}>{errorMessages.enginecount}</Text>
@@ -238,6 +243,8 @@ const BoatData = () => {
                   onChange={handleChange}
                   name="bathroomcount"
                   placeholder="Select N* bathrooms"
+                  defaultValue = {boatdata.bathroomcount}
+
                 ></Option>
                 {errorMessages.bathroomcount && (
                   <Text style={styles.error}>
@@ -254,6 +261,8 @@ const BoatData = () => {
                   onChange={handleChange}
                   name="power"
                   placeholder="Select propulation of type"
+                  defaultValue = {boatdata.power}
+
                 ></Option>
                 {errorMessages.powers && (
                   <Text style={styles.error}>{errorMessages.powers}</Text>
@@ -268,6 +277,8 @@ const BoatData = () => {
                   onChange={handleChange}
                   name="capacity"
                   placeholder="Select capacity"
+                  defaultValue = {boatdata.capacity}
+
                 ></Option>
                 {errorMessages.capacity && (
                   <Text style={styles.error}>{errorMessages.capacity}</Text>
@@ -282,6 +293,8 @@ const BoatData = () => {
                   onChange={handleChange}
                   name="cabinscount"
                   placeholder="Select cabins"
+                  defaultValue = {boatdata.cabinscount}
+
                 ></Option>
                 {errorMessages.cabinscount && (
                   <Text style={styles.error}>{errorMessages.cabinscount}</Text>

@@ -52,13 +52,14 @@ const Accessories = () => {
     } else {
       setAccess((prevAccess) => prevAccess.filter((itemId) => itemId !== id));
     }
+   
+  };
+
+  const handleSubmit = async () => {
     const result = await dispatch(submitAccessories(curboat._id, access));
     if (result.errors) {
       setErrorMessages(result.errors);
     }
-  };
-
-  const handleSubmit = async () => {
     navigation.navigate("Allowed");
   };
   return (
@@ -76,7 +77,7 @@ const Accessories = () => {
             </Text>
             {accessories.map((item, index) => {
               return (
-                <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl">
+                <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl" key={index}>
                   <View className="flex flex-row items-center">
                     <Image
                       source={{ uri: item.icon }}

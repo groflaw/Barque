@@ -3,7 +3,8 @@ import IconStarImage from "../../../assets/Icons/Iconstar.png";
 
 import ReviewImage from "../../../assets/Icons/Review.png";
 import { useEffect } from "react";
-const ReviewCard = () => {
+
+const ReviewCard = ({index, item}) => {
   return (
     <View className="flex flex-row items-center justify-between pt-1 pb-1 pl-3 pr-3 ml-3 mr-3 bg-white w-72 rounded-xl">
       <View className="flex flex-row items-center">
@@ -14,27 +15,37 @@ const ReviewCard = () => {
             className="flex flex-row items-center w-20 mt-2 "
           >
             <Image source={IconStarImage}></Image>
-            <Text style={stylesCard.mark}>4.8 / 5</Text>
+            <Text style={stylesCard.mark}>{item.review}/ 5</Text>
           </View>
-          <Text style={stylesCard.name}>Leady</Text>
-          <Text style={stylesCard.date}>Sep 2024</Text>
+          <Text style={stylesCard.name}>{item.customer}</Text>
+          <Text style={stylesCard.date}>{new Date(item.date).toLocaleDateString()}</Text>
         </View>
       </View>
-      <Text>1/247</Text>
+      <Text>{index+1}/247</Text>
     </View>
   );
 };
-const Reviews = () => {
+const Reviews = ({ review, booking, data }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.Title}>Review</Text>
+      <View className="flex flex-row justify-between">
+        <Text style={styles.Title}>Review</Text>
+        <View
+          style={styles.review}
+          className="flex flex-row items-center mt-2 w-40 justify-center"
+        >
+          <Image source={IconStarImage}></Image>
+          <Text style={styles.mark}>{review} / 5</Text>
+          <Text style={styles.count}>({booking} bookings)</Text>
+        </View>
+      </View>
       <ScrollView
         className="!space-x-4 mt-5"
         horizontal
         showsHorizontalScrollIndicator={false}
       >
-        {[...Array(3)].map((_, index) => (
-          <ReviewCard key={index} />
+        {data.map((item, index) => (
+          <ReviewCard key={index} index = {index} item = {item}/>
         ))}
       </ScrollView>
     </View>
@@ -50,10 +61,32 @@ const styles = StyleSheet.create({
   },
   Title: {
     color: "#0a252f",
-    fontSize: 20, // Use a number directly, no 'px'
+    fontSize: 20, 
     fontFamily: "Lexend Deca",
-    fontWeight: "700", // React Native accepts fontWeight as a string
-    lineHeight: 26, // Use a number directly, no 'px'
+    fontWeight: "700", 
+    lineHeight: 26,
+  },
+  review: {
+    backgroundColor: "#072d4c",
+    borderRadius: 9,
+    borderWidth: 1, 
+    borderColor: "#ffffff", 
+    paddingLeft: 5,
+    paddingRight: 5,
+    paddingTop: 2,
+    paddingBottom: 2,
+  },
+  mark: {
+    color: "white",
+    paddingLeft: 5,
+  },
+  count: {
+    paddingLeft: 5,
+    color: "#8e9697",
+    fontSize: 12,
+    fontFamily: "Roboto", // Ensure this font is loaded
+    fontWeight: "700",
+    lineHeight: 18,
   },
 });
 

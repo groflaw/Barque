@@ -12,10 +12,10 @@ const NewScreen = () => {
     <>
       <View className="relative bg-slate-400">
         <Image source={seeImage} className="w-full"></Image>
-        <Text className="absolute top-28 left-20" style={styles.title}>
+        <Text className="absolute top-28 text-center" style={styles.title}>
           Cuentanos de tu embacarción
         </Text>
-        <Text className="absolute w-80 top-40 left-16" style={styles.des}>
+        <Text className="absolute  top-40 text-center" style={styles.des}>
           Con estos datos podremos encontrar mejores clientes para ti. Es un
           proceso sencillo y rápido que te hara conseguir más rentas
         </Text>
@@ -37,11 +37,13 @@ const styles = StyleSheet.create({
     fontSize: 20, // fontSize: '20px'
     fontFamily: "Lexend Deca", // fontFamily: 'Lexend Deca'
     fontWeight: "700",
+    width : '100%',
   },
   des: {
     color: "#ffffff", // color: '#ffffff'
     fontSize: 18, // fontSize: '18px'
     fontFamily: "Lexend Deca",
+    width : '100%',
   },
   bottom: {
     backgroundColor: "white",

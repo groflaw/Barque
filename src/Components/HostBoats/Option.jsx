@@ -7,6 +7,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
 import Navbar from "../Navbar";
 import boatdata from "../../../assets/Icons/boatdata.png";
@@ -21,8 +22,12 @@ import vesseldata from "../../../assets/Icons/vesseldata.png";
 const Option = () => {
   const navigation = useNavigation();
 
+  const curboat = useSelector((state) => state.Global.curboat);
+
   const nextStep = (url) => {
-    navigation.navigate(url);
+    if (url === "NewScreen" || curboat._id) {
+      navigation.navigate(url);
+    }
   };
   return (
     <>

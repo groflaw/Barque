@@ -34,13 +34,14 @@ const Allowed = () => {
     } else {
       setAll((prevAccess) => prevAccess.filter((itemId) => itemId !== id));
     }
+    
+  };
+
+  const handleSubmit = async () => {
     const result = await dispatch(submitAllowes(curboat._id, all));
     if (result.errors) {
       setErrorMessages(result.errors);
     }
-  };
-
-  const handleSubmit = async () => {
     navigation.navigate("Myboats");
   };
 

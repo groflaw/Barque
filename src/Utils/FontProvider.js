@@ -9,8 +9,6 @@ export const FontProvider = ({ children }) => {
   const loadFonts = async () => {
     await Font.loadAsync({
       "Lexend-deca": require("../../assets/fonts/LexendDeca-Regular.ttf"),
-
-      // Add more fonts here if needed
     });
     setFontsLoaded(true);
   };

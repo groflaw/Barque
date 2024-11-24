@@ -1,25 +1,61 @@
 import { View, StyleSheet, Text, Image } from "react-native";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
+import { getAllowes } from "../../Actions/BasicBoat/basicboat";
 
 import tickImage from "../../../assets/Icons/tick.png";
-import { useEffect } from "react";
-const Details = () => {
+
+const Details = ({ data }) => {
+  const dispatch = useDispatch();
+
+  const allowes = useSelector((state) => state.BasicBoat.allowes);
+
+  const [allowed, setAllowed] = useState([]);
+  const [unallowed, setUnallowed] = useState([]);
+
+  useEffect(() => {
+    const fetchAllowes = async () => {
+      let result = await dispatch(getAllowes());
+    };
+    fetchAllowes();
+  }, []);
+
+  useEffect(() => {
+    if (allowes.length > 0) {
+      const allowedItems = allowes.filter((item) => data.includes(item._id));
+      const unallowedItems = allowes.filter((item) => !data.includes(item._id));
+
+      setAllowed(allowedItems);
+      setUnallowed(unallowedItems);
+    }
+  }, [allowes, data]);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.Title}>Detalles</Text>
+      <Text style={styles.Title}>Details</Text>
       <Text style={styles.header} className="mt-3">
-        Permitido en la embarcación :
+        Allowed on the boat:
       </Text>
-      <View className="flex flex-row justify-between mt-3">
-        <Text> Alcohol </Text>
-        <Image source={tickImage}></Image>
-      </View>
+      {allowed.map((item, index) => {
+        return (
+          <View className="flex flex-row justify-between mt-3" key={index}>
+            <Text> {item.title} </Text>
+            <Image source={tickImage}></Image>
+          </View>
+        );
+      })}
       <Text style={styles.header} className="mt-3">
-        No Permitido en la embarcación:{" "}
+        Not allowed on the boat:
       </Text>
-      <View className="flex flex-row justify-between mt-5">
-        <Text> Fumar </Text>
-        <Image source={tickImage}></Image>
-      </View>
+      {unallowed.map((item, index) => {
+        return (
+          <View className="flex flex-row justify-between mt-5" key={index}>
+            <Text> {item.title} </Text>
+            <Image source={tickImage}></Image>
+          </View>
+        );
+      })}
     </View>
   );
 };

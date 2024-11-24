@@ -1,28 +1,47 @@
 import { ScrollView, StyleSheet, View, Text, Image } from "react-native";
 import captionImage from "../../../assets/Icons/captionImage.png";
 import peopleImage from "../../../assets/Icons/Iconpeopleoutline.png";
-import { useEffect } from "react";
-const Services = () => {
+import { useState, useEffect } from "react";
+const Services = ({resrate, cancellation, capacity, plans}) => {
+  const [captain, setCaptain] = useState(
+    plans?.type.some((plan) => plan.captain === 1)
+  );
+  const [cancelback, setCancelback] = useState([
+    { color: "#2a8500", text: "FLEXIBLE" },
+    { color: "#f4bf64", text: "MODERATE" },
+    { color: "#ff3b30", text: "STRICT" },
+  ]);
   return (
     <View
       className="flex flex-row flex-wrap justify-center mt-5"
       style={styles.container}
     >
-      <View className="items-center mt-5 mb-5 w-44 ">
-        <Text style={styles.rate}>94%</Text>
-        <Text style={styles.rateText}>Tasa de Respuesta</Text>
+      <View className="flex flex-row items-center justify-center">
+        <View className="items-center mt-5 mb-5 w-40 ">
+          <Text style={styles.rate}>{resrate}%</Text>
+          <Text style={styles.rateText}>Response Rate</Text>
+        </View>
+        <View className="items-center mt-5 mb-5 w-40">
+          <Text
+            style={[
+              styles.cancel,
+              { backgroundColor: cancelback[cancellation - 1].color },
+            ]}
+          >
+            {cancelback[cancellation - 1].text}
+          </Text>
+          <Text style={styles.cancelText}>Cancellation Policy</Text>
+        </View>
       </View>
-      <View className="items-center mt-5 mb-5 w-44">
-        <Text style={styles.cancel}>MODERADO</Text>
-        <Text style={styles.cancelText}>Póliza de Cancelación</Text>
-      </View>
-      <View className="items-center mt-5 mb-5 w-44">
-        <Image source={peopleImage}></Image>
-        <Text style={styles.rateText}>Hasta 12 personas</Text>
-      </View>
-      <View className="items-center mt-5 mb-5 w-44">
-        <Image source={captionImage}></Image>
-        <Text style={styles.cancelText}>Con Capitán</Text>
+      <View className="flex flex-row items-center justify-center">
+        <View className="items-center mt-5 mb-5 w-40">
+          <Image source={peopleImage}></Image>
+          <Text style={styles.rateText}>Up to {capacity} persons</Text>
+        </View>
+        <View className="items-center mt-5 mb-5 w-40">
+          <Image source={captionImage}></Image>
+          <Text style={styles.cancelText}>{captain ? "With Captain" : "WithOut Captain" }</Text>
+        </View>
       </View>
     </View>
   );
@@ -42,12 +61,12 @@ const styles = StyleSheet.create({
   rate: {
     borderRadius: 11, // Use numbers, no 'px'
     backgroundColor: "#2a8500",
-    paddingTop: 2,
-    paddingBottom: 2,
+    paddingTop: 1,
+    paddingBottom: 1,
     paddingLeft: 20,
     paddingRight: 20,
     color: "#ffffff",
-    fontSize: 15,
+    fontSize: 13,
     fontFamily: "Lexend Deca", // Ensure this font is loaded
     fontWeight: "700",
     textAlign: "center",
@@ -62,14 +81,13 @@ const styles = StyleSheet.create({
   },
   cancel: {
     borderRadius: 12,
-    backgroundColor: "#f4bf64",
-    paddingTop: 2, // Optional
-    paddingBottom: 2,
+    paddingTop: 1,
+    paddingBottom: 1,
     paddingLeft: 20,
     paddingRight: 20,
     alignItems: "center", // Center content horizontally
     color: "#ffffff",
-    fontSize: 15,
+    fontSize: 13,
     fontFamily: "Lexend Deca", // Ensure this font is loaded
     fontWeight: "700",
     textAlign: "center",
