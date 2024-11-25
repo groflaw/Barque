@@ -52,7 +52,6 @@ const Accessories = () => {
     } else {
       setAccess((prevAccess) => prevAccess.filter((itemId) => itemId !== id));
     }
-   
   };
 
   const handleSubmit = async () => {
@@ -63,12 +62,12 @@ const Accessories = () => {
     navigation.navigate("Allowed");
   };
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        {loading ? (
-          <LoadingIndicator />
-        ) : (
-          <>
+    <>
+      {loading ? (
+        <LoadingIndicator />
+      ) : (
+        <ScrollView>
+          <View style={styles.container}>
             <Text style={styles.title} className="mt-5">
               Accesorios disponibles
             </Text>
@@ -77,7 +76,10 @@ const Accessories = () => {
             </Text>
             {accessories.map((item, index) => {
               return (
-                <View className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl" key={index}>
+                <View
+                  className="flex flex-row items-center justify-between pl-2 pr-2 mt-3 bg-white rounded-xl"
+                  key={index}
+                >
                   <View className="flex flex-row items-center">
                     <Image
                       source={{ uri: item.icon }}
@@ -110,10 +112,10 @@ const Accessories = () => {
                 <Text style={styles.error}>{errorMessages.general}</Text>
               )}
             </View>
-          </>
-        )}
-      </View>
-    </ScrollView>
+          </View>
+        </ScrollView>
+      )}
+    </>
   );
 };
 const styles = StyleSheet.create({

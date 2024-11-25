@@ -113,200 +113,188 @@ const AddPlans = () => {
 
   return (
     <>
-      <ScrollView>
-        <View style={styles.container}>
-          {loading ? (
-            <LoadingIndicator />
-          ) : (
-            <>
-              <Text style={styles.title}>Add your plan</Text>
-              <Text style={styles.des} className="mt-3">
-                Add your travel plan. You will be able to add up to 5 different
-                plan for your boat indicating price, schedule, if captain is
-                included and the description of the destinations and what is
-                included in the plan.
-              </Text>
-              <View className="flex justify-start">
-                <TouchableOpacity onPress={addNewTemp} className="w-24">
-                  <Text style={styles.addTemp} className="mt-3 text-center ">
-                    + Add
-                  </Text>
-                </TouchableOpacity>
-              </View>
+      {loading ? (
+        <LoadingIndicator />
+      ) : (
+        <ScrollView>
+          <View style={styles.container}>
+            <Text style={styles.title}>Add your plan</Text>
+            <Text style={styles.des} className="mt-3">
+              Add your travel plan. You will be able to add up to 5 different
+              plan for your boat indicating price, schedule, if captain is
+              included and the description of the destinations and what is
+              included in the plan.
+            </Text>
+            <View className="flex justify-start">
+              <TouchableOpacity onPress={addNewTemp} className="w-24">
+                <Text style={styles.addTemp} className="mt-3 text-center ">
+                  + Add
+                </Text>
+              </TouchableOpacity>
+            </View>
 
-              {plans.map((item, index) => {
-                return (
-                  <View style={styles.card} key={item._id} className="mt-4">
-                    <View className="flex flex-row items-center justify-between">
-                      <Text style={styles.head}>Plan{index + 1}</Text>
-                      <View
-                        style={styles.price}
-                        className="flex flex-row items-center"
-                      >
-                        <Text style={styles.priceText} className="mr-1">
-                          $
-                        </Text>
-                        <TextInput
-                          style={styles.priceText}
-                          value={item.price + ""}
-                          keyboardType="numeric"
-                          onChangeText={(text) =>
-                            handleChange({
-                              target: {
-                                name: "price",
-                                value: text,
-                                _id: item._id,
-                              },
-                            })
-                          }
-                        ></TextInput>
-                      </View>
-                    </View>
-                    {errorMessages.price && (
-                      <Text style={styles.error}>{errorMessages.price}</Text>
-                    )}
-                    <TextInput
-                      onChangeText={(text) =>
-                        handleChange({
-                          target: {
-                            name: "description",
-                            value: text,
-                            _id: item._id,
-                          },
-                        })
-                      }
-                      className="mt-4"
-                      style={styles.textarea}
-                      multiline
-                      numberOfLines={4}
-                      placeholder="Describes the destinations of this plan and all that is included in it..."
-                      placeholderTextColor="#aaaaaa"
-                      value={item.description}
-                    />
-                    {errorMessages.description && (
-                      <Text style={styles.error}>
-                        {errorMessages.description}
+            {plans.map((item, index) => {
+              return (
+                <View style={styles.card} key={item._id} className="mt-4">
+                  <View className="flex flex-row items-center justify-between">
+                    <Text style={styles.head}>Plan{index + 1}</Text>
+                    <View
+                      style={styles.price}
+                      className="flex flex-row items-center"
+                    >
+                      <Text style={styles.priceText} className="mr-1">
+                        $
                       </Text>
-                    )}
-                    <View className="flex items-center mb-2 ">
-                      <View className="flex flex-row items-center justify-around mt-2 ">
-                        <TouchableOpacity
-                          onPress={() => {
-                            showDatepicker(
-                              "start",
-                              "date",
-                              item._id,
-                              item.start
-                            );
-                          }}
-                        >
-                          <Text style={styles.clock}>
-                            {new Date(item.start).toLocaleDateString()}
-                          </Text>
-                        </TouchableOpacity>
-                        <View style={{ width: 25 }}></View>
-                        <TouchableOpacity
-                          onPress={() => {
-                            showDatepicker(
-                              "start",
-                              "time",
-                              item._id,
-                              item.start
-                            );
-                          }}
-                        >
-                          <Text style={styles.clock}>
-                            {new Date(item.start).toLocaleTimeString()}
-                          </Text>
-                        </TouchableOpacity>
-                      </View>
-                      <View className="flex flex-row items-center justify-around mt-2">
-                        <TouchableOpacity
-                          onPress={() => {
-                            showDatepicker("end", "date", item._id, item.end);
-                          }}
-                        >
-                          <Text style={styles.clock}>
-                            {new Date(item.end).toLocaleDateString()}
-                          </Text>
-                        </TouchableOpacity>
-                        <View style={{ width: 25 }}></View>
-                        <TouchableOpacity
-                          onPress={() => {
-                            showDatepicker("end", "time", item._id, item.end);
-                          }}
-                        >
-                          <Text style={styles.clock}>
-                            {new Date(item.end).toLocaleTimeString()}
-                          </Text>
-                        </TouchableOpacity>
-                      </View>
-                      {errorMessages.start && (
-                        <Text style={styles.error}>{errorMessages.start}</Text>
-                      )}
-                    </View>
-                    <View className="flex flex-row items-center justify-between">
-                      <Option
-                        defaultValue={item.captain}
-                        options={Captions}
-                        placeholder="Does it include captain?"
-                        onChange={handleChange}
-                        name="captain"
-                        _id={item._id}
-                      ></Option>
-                    </View>
-                    {errorMessages.captain && (
-                      <Text style={styles.error}>{errorMessages.captain}</Text>
-                    )}
-                    <View className="flex flex-row items-center justify-around w-full mt-3">
-                      <TouchableOpacity
-                        onPress={() => handleSubmit(item._id)}
-                        className="w-32"
-                      >
-                        <Text
-                          style={styles.addTemp}
-                          className="w-full text-center"
-                        >
-                          SAVE
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => handleDelet(item._id)}
-                        className="w-32"
-                      >
-                        <Text
-                          style={styles.addTemp}
-                          className="w-full text-center"
-                        >
-                          DELETE
-                        </Text>
-                      </TouchableOpacity>
+                      <TextInput
+                        style={styles.priceText}
+                        value={item.price + ""}
+                        keyboardType="numeric"
+                        onChangeText={(text) =>
+                          handleChange({
+                            target: {
+                              name: "price",
+                              value: text,
+                              _id: item._id,
+                            },
+                          })
+                        }
+                      ></TextInput>
                     </View>
                   </View>
-                );
-              })}
-              {startshow && (
-                <DateTimePicker
-                  testID="dateTimePicker"
-                  value={new Date(curdate)}
-                  mode={mode}
-                  is24Hour={true}
-                  onChange={(event, selectedDate) =>
-                    onChangeStart(event, selectedDate)
-                  }
-                />
-              )}
-              <View className="mt-5">
-                <TouchableOpacity onPress={nextStep}>
-                  <Text style={styles.continue} className="text-center">
-                    CONTINUAR
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </>
-          )}
-        </View>
-      </ScrollView>
+                  {errorMessages.price && (
+                    <Text style={styles.error}>{errorMessages.price}</Text>
+                  )}
+                  <TextInput
+                    onChangeText={(text) =>
+                      handleChange({
+                        target: {
+                          name: "description",
+                          value: text,
+                          _id: item._id,
+                        },
+                      })
+                    }
+                    className="mt-4"
+                    style={styles.textarea}
+                    multiline
+                    numberOfLines={4}
+                    placeholder="Describes the destinations of this plan and all that is included in it..."
+                    placeholderTextColor="#aaaaaa"
+                    value={item.description}
+                  />
+                  {errorMessages.description && (
+                    <Text style={styles.error}>
+                      {errorMessages.description}
+                    </Text>
+                  )}
+                  <View className="flex items-center mb-2 ">
+                    <View className="flex flex-row items-center justify-around mt-2 ">
+                      <TouchableOpacity
+                        onPress={() => {
+                          showDatepicker("start", "date", item._id, item.start);
+                        }}
+                      >
+                        <Text style={styles.clock}>
+                          {new Date(item.start).toLocaleDateString()}
+                        </Text>
+                      </TouchableOpacity>
+                      <View style={{ width: 25 }}></View>
+                      <TouchableOpacity
+                        onPress={() => {
+                          showDatepicker("start", "time", item._id, item.start);
+                        }}
+                      >
+                        <Text style={styles.clock}>
+                          {new Date(item.start).toLocaleTimeString()}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View className="flex flex-row items-center justify-around mt-2">
+                      <TouchableOpacity
+                        onPress={() => {
+                          showDatepicker("end", "date", item._id, item.end);
+                        }}
+                      >
+                        <Text style={styles.clock}>
+                          {new Date(item.end).toLocaleDateString()}
+                        </Text>
+                      </TouchableOpacity>
+                      <View style={{ width: 25 }}></View>
+                      <TouchableOpacity
+                        onPress={() => {
+                          showDatepicker("end", "time", item._id, item.end);
+                        }}
+                      >
+                        <Text style={styles.clock}>
+                          {new Date(item.end).toLocaleTimeString()}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                    {errorMessages.start && (
+                      <Text style={styles.error}>{errorMessages.start}</Text>
+                    )}
+                  </View>
+                  <View className="flex flex-row items-center justify-between">
+                    <Option
+                      defaultValue={item.captain}
+                      options={Captions}
+                      placeholder="Does it include captain?"
+                      onChange={handleChange}
+                      name="captain"
+                      _id={item._id}
+                    ></Option>
+                  </View>
+                  {errorMessages.captain && (
+                    <Text style={styles.error}>{errorMessages.captain}</Text>
+                  )}
+                  <View className="flex flex-row items-center justify-around w-full mt-3">
+                    <TouchableOpacity
+                      onPress={() => handleSubmit(item._id)}
+                      className="w-32"
+                    >
+                      <Text
+                        style={styles.addTemp}
+                        className="w-full text-center"
+                      >
+                        SAVE
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => handleDelet(item._id)}
+                      className="w-32"
+                    >
+                      <Text
+                        style={styles.addTemp}
+                        className="w-full text-center"
+                      >
+                        DELETE
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              );
+            })}
+            {startshow && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={new Date(curdate)}
+                mode={mode}
+                is24Hour={true}
+                onChange={(event, selectedDate) =>
+                  onChangeStart(event, selectedDate)
+                }
+              />
+            )}
+            <View className="mt-5">
+              <TouchableOpacity onPress={nextStep}>
+                <Text style={styles.continue} className="text-center">
+                  CONTINUAR
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ScrollView>
+      )}
     </>
   );
 };

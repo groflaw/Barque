@@ -82,12 +82,12 @@ const AddBoatImages = () => {
   };
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        {loading ? (
-          <LoadingIndicator />
-        ) : (
-          <View className="items-center justify-center">
+    <>
+      {loading ? (
+        <LoadingIndicator />
+      ) : (
+        <ScrollView>
+          <View style={styles.container}>
             <Text style={styles.title} className="mt-5">
               Add pictures
             </Text>
@@ -197,9 +197,9 @@ const AddBoatImages = () => {
               </TouchableOpacity>
             </View>
           </View>
-        )}
-      </View>
-    </ScrollView>
+        </ScrollView>
+      )}
+    </>
   );
 };
 const styles = StyleSheet.create({
@@ -210,7 +210,6 @@ const styles = StyleSheet.create({
     paddingRight: 25,
   },
   card: {
-    width: 340,
     height: 250,
     backgroundColor: "#ffffff",
     borderRadius: 8,
@@ -226,25 +225,25 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   title: {
-    color: "#17233c", // Dark blue color
-    fontSize: 20, // Font size of 20
-    fontFamily: "Lexend Deca", // Custom font family
-    fontWeight: "700", // Bold weight
+    color: "#17233c",
+    fontSize: 20,
+    fontFamily: "Lexend Deca",
+    fontWeight: "700",
   },
   des: {
-    color: "#000000", // Black color
-    fontSize: 12, // Font size of 12
-    fontFamily: "Lexend Deca", // Custom font family
-    lineHeight: 16, // Line height of 16
+    color: "#000000",
+    fontSize: 12,
+    fontFamily: "Lexend Deca",
+    lineHeight: 16,
   },
   continue: {
-    borderRadius: 6, // Border radius as a number
-    backgroundColor: "#17233c", // Background color
-    padding: 20, // Add some padding for better touch area
-    color: "#ffffff", // Text color
-    fontSize: 13, // Font size as a number
-    fontFamily: "Mulish", // Font family
-    fontWeight: "900", // Font weight
+    borderRadius: 6,
+    backgroundColor: "#17233c",
+    padding: 20,
+    color: "#ffffff",
+    fontSize: 13,
+    fontFamily: "Mulish",
+    fontWeight: "900",
   },
 });
 export default AddBoatImages;

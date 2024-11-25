@@ -21,7 +21,7 @@ import {
   getboatInfo,
 } from "../../Actions/AddBoat/addboat";
 
-import { setLoading,setCurboat } from "../../Store/Global";
+import { setLoading, setCurboat } from "../../Store/Global";
 import boatcard from "../../../assets/Icons/boatcard.png";
 
 const Myboats = () => {
@@ -35,10 +35,9 @@ const Myboats = () => {
   const [myboats, setMyboats] = useState([]);
   const [errorMessages, setErrorMessages] = useState({});
 
-  const nextStep = async() => {
+  const nextStep = async () => {
     dispatch(setCurboat({}));
     navigation.navigate("Option");
-
   };
 
   const handleSwitch = async (id, status) => {
@@ -88,60 +87,63 @@ const Myboats = () => {
 
   return (
     <>
-      <ScrollView>
-        <View style={styles.container}>
-          {loading ? (
-            <LoadingIndicator />
-          ) : (
-            <>
-              <Text style={styles.Title}>Mis Embarcaciones</Text>
-              {myboats.map((item, index) => {
-                return (
+      {loading ? (
+          <LoadingIndicator />
+      ) : (
+        <ScrollView>
+          <View style={styles.container}>
+            <Text style={styles.Title}>Mis Embarcaciones</Text>
+            {myboats.map((item, index) => {
+              return (
+                <View
+                  style={styles.card}
+                  className="flex flex-row items-center justify-between mt-4"
+                >
                   <View
-                    style={styles.card}
-                    className="flex flex-row items-center justify-between mt-4"
+                    className="flex flex-row items-center"
+                    style={{ width: "80%" }}
                   >
-                    <View className="flex flex-row items-center" style={{width :'80%'}}>
-                      <Image style={styles.cardImage} source={boatcard}></Image>
-                      <View className="ml-3 text-wrap" >
-                        <Text style={styles.boatName}>
-                          {item.location2 ? item.location2.boatname : ""}
-                        </Text>
-                        <Text style={styles.boatDetail} className="text-wrap">
-                          Type: 
-                          {boatTypes
-                            .filter((boat) => boat._id === item.boattype)
-                            .map((boat) => boat.name)}
-                        </Text>
-                        <Text style={styles.boatDetail}>Location: {item.location1}</Text>
-                      </View>
-                    </View>
-                    <View style={{width : '20%'}}>
-                      <TouchableOpacity onPress={() => handleEdit(item._id)}>
-                        <Text style={styles.edit} className="mb-2 text-center">
-                          Editor
-                        </Text>
-                      </TouchableOpacity>
-                      <CustomSwitch
-                        id={item._id}
-                        flag={item.flag}
-                        onSwitchChange={handleSwitch}
-                      />
+                    <Image style={styles.cardImage} source={boatcard}></Image>
+                    <View className="ml-3 text-wrap">
+                      <Text style={styles.boatName}>
+                        {item.location2 ? item.location2.boatname : ""}
+                      </Text>
+                      <Text style={styles.boatDetail} className="text-wrap">
+                        Type:
+                        {boatTypes
+                          .filter((boat) => boat._id === item.boattype)
+                          .map((boat) => boat.name)}
+                      </Text>
+                      <Text style={styles.boatDetail}>
+                        Location: {item.location1}
+                      </Text>
                     </View>
                   </View>
-                );
-              })}
-              <View className="flex items-center mt-7 w-100">
-                <TouchableOpacity onPress={nextStep}>
-                  <Text style={styles.addBoat} className="text-center w-72">
-                    + Agregar embarcación
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </>
-          )}
-        </View>
-      </ScrollView>
+                  <View style={{ width: "20%" }}>
+                    <TouchableOpacity onPress={() => handleEdit(item._id)}>
+                      <Text style={styles.edit} className="mb-2 text-center">
+                        Editor
+                      </Text>
+                    </TouchableOpacity>
+                    <CustomSwitch
+                      id={item._id}
+                      flag={item.flag}
+                      onSwitchChange={handleSwitch}
+                    />
+                  </View>
+                </View>
+              );
+            })}
+            <View className="flex items-center mt-7 w-100">
+              <TouchableOpacity onPress={nextStep}>
+                <Text style={styles.addBoat} className="text-center w-72">
+                  + Agregar embarcación
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ScrollView>
+      )}
       <Navbar></Navbar>
     </>
   );
@@ -191,10 +193,9 @@ const styles = StyleSheet.create({
     color: "#17233c",
     fontSize: 14,
     fontFamily: "Lexend Deca",
-    lineHeight: 20, 
-    flexWrap: 'wrap',
-    maxWidth: '90%',
-    
+    lineHeight: 20,
+    flexWrap: "wrap",
+    maxWidth: "90%",
   },
   edit: {
     borderRadius: 6,

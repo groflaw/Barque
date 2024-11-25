@@ -83,3 +83,22 @@ export const filterBoats = (filter) => async (dispatch) => {
     await dispatch(setLoading(false));
   }
 };
+
+export const gethostBoats = (hostId) => async(dispatch)=>{
+  await dispatch(setLoading(true));
+  let errors = {};
+  try{
+    const response = await axios.get(`${Backend_API}/boats/getHostboats/${hostId}`);
+    if (response.data.flag == true) {
+      return response.data.data;
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
+    }
+  }catch (error) {
+    errors.general = "There was an error fetching the boats";
+    return { errors };
+  } finally {
+    await dispatch(setLoading(false));
+  }
+}

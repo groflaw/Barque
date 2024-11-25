@@ -70,12 +70,12 @@ const Location = () => {
   }, []);
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        {loading ? (
-          <LoadingIndicator />
-        ) : (
-          <>
+    <>
+      {loading ? (
+        <LoadingIndicator />
+      ) : (
+        <ScrollView>
+          <View style={styles.container}>
             <Text style={styles.title} className="mt-5">
               Location of the boat
             </Text>
@@ -146,10 +146,10 @@ const Location = () => {
                 </Text>
               )}
             </View>
-          </>
-        )}
-      </View>
-    </ScrollView>
+          </View>
+        </ScrollView>
+      )}
+    </>
   );
 };
 

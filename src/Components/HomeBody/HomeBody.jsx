@@ -10,7 +10,6 @@ import Popup from "../Popup/Popup";
 import Navbar from "../Navbar";
 import LoadingIndicator from "../Basic/LoadingIndicator";
 
-
 const HomeBody = () => {
   const dispatch = useDispatch();
 
@@ -37,17 +36,24 @@ const HomeBody = () => {
 
   return (
     <>
-      <Brands onpress={openPopup} setBoats = {setBoats}/>
-      <Popup
-        visible={visible}
-        transparent={true}
-        dismiss={closePopup}
-        margin={"5%"}
-        setBoats = {setBoats}
-      ></Popup>
-      <ScrollView>
-        <Boats data={boats}/>
-      </ScrollView>
+      {loading ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          <Brands onpress={openPopup} setBoats={setBoats} />
+          <Popup
+            visible={visible}
+            transparent={true}
+            dismiss={closePopup}
+            margin={"5%"}
+            setBoats={setBoats}
+          ></Popup>
+          <ScrollView>
+            <Boats data={boats} />
+          </ScrollView>
+        </>
+      )}
+
       <Navbar></Navbar>
     </>
   );

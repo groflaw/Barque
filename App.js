@@ -18,11 +18,13 @@ import HostProfile from "./src/Screens/HostProfile";
 import PaymentHistory from "./src/Screens/PaymentHistory";
 import HostBoats from "./src/Screens/HostBoats";
 import Reservas from "./src/Screens/Reservas";
+import GuestProfile from "./src/Screens/GuestProfile";
 
 import { I18nextProvider, useTranslation } from "react-i18next";
 import { LogBox } from "react-native";
 import { store } from "./src/Store/Store";
 import i18n from "./i18n";
+
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -69,6 +71,13 @@ export default function App() {
               <Stack.Screen
                 name="CarDetails"
                 component={CarDetailed}
+                options={{
+                  headerShown: false,
+                }}
+              />
+               <Stack.Screen
+                name="GuestProfile"
+                component={GuestProfile}
                 options={{
                   headerShown: false,
                 }}

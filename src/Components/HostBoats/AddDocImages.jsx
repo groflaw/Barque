@@ -12,7 +12,7 @@ import * as ImagePicker from "expo-image-picker";
 import { useDispatch, useSelector } from "react-redux";
 
 import { uploadDocImage } from "../../Actions/AddBoat/addboat";
-
+import LoadingIndicator from "../Basic/LoadingIndicator";
 import photoImage from "../../../assets/Icons/photo.png";
 
 const AddDocImage = () => {
@@ -20,6 +20,7 @@ const AddDocImage = () => {
   const navigation = useNavigation();
 
   const curboat = useSelector((state) => state.Global.curboat);
+  const loading = useSelector((state) => state.Global.loading);
 
   const [image, setImage] = useState(
     curboat.docImage
@@ -75,81 +76,93 @@ const AddDocImage = () => {
   };
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <Text style={styles.title} className="mt-4">
-          Agrega documentación
-        </Text>
-        <Text style={styles.des} className="mt-5">
-          Necesitamos verificar por la seguridad tuya y de los clientes que eres
-          el propietario o el autorizado de la embarcacion.
-        </Text>
-        <Text style={styles.des} className="mt-5">
-          Por favor, añade imágenes de los documentos de tu embarcación.
-          Asegurate de que las imagenes tengan buena calidad y sean legibles.
-        </Text>
+    <>
+      {loading ? (
+        <LoadingIndicator />
+      ) : (
+        <ScrollView>
+          <View style={styles.container}>
+            <Text style={styles.title} className="mt-4">
+              Agrega documentación
+            </Text>
+            <Text style={styles.des} className="mt-5">
+              Necesitamos verificar por la seguridad tuya y de los clientes que
+              eres el propietario o el autorizado de la embarcacion.
+            </Text>
+            <Text style={styles.des} className="mt-5">
+              Por favor, añade imágenes de los documentos de tu embarcación.
+              Asegurate de que las imagenes tengan buena calidad y sean
+              legibles.
+            </Text>
 
-        <View style={styles.card} className="items-center justify-center mt-5">
-          <View className="flex items-center mt-6">
-            <TouchableOpacity
-              onPress={() => pickImageWithResults("navigation")}
+            <View
+              style={styles.card}
+              className="items-center justify-center mt-5"
             >
-              <Image
-                source={
-                  image.navigation ? { uri: image.navigation } : photoImage
-                }
-                
-                style={{
-                  width: image.navigation ? 290 : 40,
-                  height: image.navigation ? 160 : 40,
-                }}
-              />
-            </TouchableOpacity>
-            <Text className="mt-3" style={styles.des}>
-              Upload
-            </Text>
-            <Text className="mb-2" style={styles.des}>
-              Navigation License
-            </Text>
-          </View>
-        </View>
+              <View className="flex items-center mt-6">
+                <TouchableOpacity
+                  onPress={() => pickImageWithResults("navigation")}
+                >
+                  <Image
+                    source={
+                      image.navigation ? { uri: image.navigation } : photoImage
+                    }
+                    style={{
+                      width: image.navigation ? 290 : 40,
+                      height: image.navigation ? 160 : 40,
+                    }}
+                  />
+                </TouchableOpacity>
+                <Text className="mt-3" style={styles.des}>
+                  Upload
+                </Text>
+                <Text className="mb-2" style={styles.des}>
+                  Navigation License
+                </Text>
+              </View>
+            </View>
 
-        <View style={styles.card} className="items-center justify-center mt-5">
-          <View className="flex items-center mt-6">
-            <TouchableOpacity
-              onPress={() => pickImageWithResults("authorization")}
+            <View
+              style={styles.card}
+              className="items-center justify-center mt-5"
             >
-              <Image
-                source={
-                  image.authorization
-                    ? { uri: image.authorization }
-                    : photoImage
-                }
-                style={{
-                  width: image.authorization ? 290 : 40,
-                  height: image.authorization ? 160 : 40,
-                }}
-              />
-            </TouchableOpacity>
-            <Text className="mt-2" style={styles.des}>
-              Upload
-            </Text>
-            <Text style={styles.des}>Authorization</Text>
-            <Text className="mb-2" style={styles.des}>
-              (Only if the names on the ID do not match)
-            </Text>
-          </View>
-        </View>
+              <View className="flex items-center mt-6">
+                <TouchableOpacity
+                  onPress={() => pickImageWithResults("authorization")}
+                >
+                  <Image
+                    source={
+                      image.authorization
+                        ? { uri: image.authorization }
+                        : photoImage
+                    }
+                    style={{
+                      width: image.authorization ? 290 : 40,
+                      height: image.authorization ? 160 : 40,
+                    }}
+                  />
+                </TouchableOpacity>
+                <Text className="mt-2" style={styles.des}>
+                  Upload
+                </Text>
+                <Text style={styles.des}>Authorization</Text>
+                <Text className="mb-2" style={styles.des}>
+                  (Only if the names on the ID do not match)
+                </Text>
+              </View>
+            </View>
 
-        <View className="mt-5">
-          <TouchableOpacity onPress={nextStep}>
-            <Text style={styles.continue} className="text-center">
-              CONTINUAR
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </ScrollView>
+            <View className="mt-5">
+              <TouchableOpacity onPress={nextStep}>
+                <Text style={styles.continue} className="text-center">
+                  CONTINUAR
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ScrollView>
+      )}
+    </>
   );
 };
 

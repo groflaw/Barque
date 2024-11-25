@@ -1,10 +1,17 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import awardImage from "../../../assets/Icons/Iconaward.png";
 import starImage from "../../../assets/Icons/Iconstar.png";
 import reviewImage from "../../../assets/Profile/user.png";
 import { useEffect } from "react";
 const Host = ({ name, review, resrate ,avatar}) => {
+  const navigation = useNavigation();
+
+
+  const goGuest = () =>{
+    navigation.navigate("GuestProfile");
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Your Host</Text>
@@ -48,7 +55,7 @@ const Host = ({ name, review, resrate ,avatar}) => {
           <Text style={styles.rateValue}>{resrate}%</Text>
         </View>
         <View className="flex items-center">
-          <TouchableOpacity className="items-center mt-7">
+          <TouchableOpacity className="items-center mt-7" onPress={()=>{goGuest()}}>
             <Text style={styles.toProfile}>View Profile</Text>
           </TouchableOpacity>
         </View>

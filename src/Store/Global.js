@@ -4,9 +4,9 @@ const Global = createSlice({
   name: "global",
   initialState: {
     loading: false,
-    curboat: {},
-    curhost : {},
-    mode: false,
+    curboat: {}, // host select or add boat.
+    curhost : {}, // user select the boat.
+    mode: false, // user or host.
   },
   reducers: {
     setLoading: (state, action) => {

@@ -21,7 +21,7 @@ const CarDetailed = () => {
   const dispatch = useDispatch();
 
   const curboat = useSelector((state) => state.Global.curboat);
-  const curhost = useSelector((state) =>state.Global.curhost)
+  const curhost = useSelector((state) =>state.Global.curhost);
   const loading = useSelector((state) => state.Global.loading);
 
   const [plan, setPlan] = useState();

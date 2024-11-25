@@ -31,118 +31,118 @@ const Cancellation = () => {
   };
   const handleChange = async (value) => {
     setCancellation(value);
-    const result = await dispatch(
-      submitCancellation(curboat._id, value)
-    );
+    const result = await dispatch(submitCancellation(curboat._id, value));
     if (result.errors) {
       setErrorMessages(result.errors);
-    }else{
-      setErrorMessages({})
+    } else {
+      setErrorMessages({});
     }
   };
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        {loading ? (
-          <LoadingIndicator />
-        ) : (
-          <>
-            <Text style={styles.title} className="mt-5 ">
-              Elige tu política de cancelación{" "}
-            </Text>
-            <View
-              style={styles.card}
-              className="flex flex-row items-center mt-4"
-            >
-              <View className="flex items-center" style={{width : '30%'}}>
-                <Radio
-                  selected={cancellation === 1}
-                  onPress={() => handleChange(1)}
-                ></Radio>
-                <Text style={[styles.item, { backgroundColor: "#2a8500" }]}>
-                  FLEXIBLE
-                </Text>
-              </View>
-              <View style={{width : '70%'}} >
-                <Text style={styles.itemText} className="ml-2 ">
-                  Cancelaciones de reservas gratis en todo momento con
-                  devolución del dinero.
-                </Text>
-              </View>
-            </View>
-            <View
-              style={styles.card}
-              className="flex flex-row items-center justify-center mt-4"
-            >
-              <View className="flex items-center"  style={{width : '30%'}}>
-                <Radio
-                  selected={cancellation === 2}
-                  onPress={() => handleChange(2)}
-                ></Radio>
-                <Text style={[styles.item, { backgroundColor: "#f4bf64" }]}>
-                  MODERADA
-                </Text>
-              </View>
-              <View style={{width : '70%'}} >
-                <Text style={styles.itemText} className="ml-2 ">
-                  Cancelaciones de reservas gratis antes de las 24 horas del día
-                  que inicia el viaje.
-                </Text>
-                <Text style={styles.itemText} className="ml-2 ">
-                  Cancelaciones el mismo día de la reserva tendrá un cargo del
-                  50% del costo de un día de reserva.
-                </Text>
-              </View>
-            </View>
-            <View
-              style={styles.card}
-              className="flex flex-row items-center justify-center mt-4"
-            >
-              <View className="flex items-center " style={{width : '30%'}}>
-                <Radio
-                  selected={cancellation === 3}
-                  onPress={() => handleChange(3)}
-                ></Radio>
-                <Text style={[styles.item, { backgroundColor: "#ff3b30" }]}>
-                  ESTRICTA
-                </Text>
-              </View>
-              <View style={{width : '70%'}}>
-                <Text style={styles.itemText} className=" ml-2 ">
-                  Cancelaciones de reserva gratis antes de las 48 horas del día
-                  que inicia el viaje.
-                </Text>
-                <Text style={styles.itemText} className="ml-2 ">
-                  Cancelaciones dentro de las 48 horas previas de la reserva
-                  tendrá un cargo del 50% del costo de un día de reserva.
-                </Text>
-              </View>
-            </View>
-            <View className="mt-5">
-              <TouchableOpacity
-                onPress={() => {
-                  handleSubmit();
-                }}
+    <>
+      {loading ? (
+        <LoadingIndicator />
+      ) : (
+        <ScrollView>
+          <View style={styles.container}>
+            <>
+              <Text style={styles.title} className="mt-5 ">
+                Elige tu política de cancelación{" "}
+              </Text>
+              <View
+                style={styles.card}
+                className="flex flex-row items-center mt-4"
               >
-                <Text style={styles.continue} className="text-center">
-                  CONTINUAR
-                </Text>
-              </TouchableOpacity>
-              {errorMessages.general && (
-                <Text style={styles.error} className="text-center">
-                  {errorMessages.general}
-                </Text>
-              )}
-              {errorMessages.cancellation && (
-                <Text style={styles.error} className="text-center">
-                  {errorMessages.cancellation}
-                </Text>
-              )}
-            </View>
-          </>
-        )}
-      </View>
-    </ScrollView>
+                <View className="flex items-center" style={{ width: "30%" }}>
+                  <Radio
+                    selected={cancellation === 1}
+                    onPress={() => handleChange(1)}
+                  ></Radio>
+                  <Text style={[styles.item, { backgroundColor: "#2a8500" }]}>
+                    FLEXIBLE
+                  </Text>
+                </View>
+                <View style={{ width: "70%" }}>
+                  <Text style={styles.itemText} className="ml-2 ">
+                    Cancelaciones de reservas gratis en todo momento con
+                    devolución del dinero.
+                  </Text>
+                </View>
+              </View>
+              <View
+                style={styles.card}
+                className="flex flex-row items-center justify-center mt-4"
+              >
+                <View className="flex items-center" style={{ width: "30%" }}>
+                  <Radio
+                    selected={cancellation === 2}
+                    onPress={() => handleChange(2)}
+                  ></Radio>
+                  <Text style={[styles.item, { backgroundColor: "#f4bf64" }]}>
+                    MODERADA
+                  </Text>
+                </View>
+                <View style={{ width: "70%" }}>
+                  <Text style={styles.itemText} className="ml-2 ">
+                    Cancelaciones de reservas gratis antes de las 24 horas del
+                    día que inicia el viaje.
+                  </Text>
+                  <Text style={styles.itemText} className="ml-2 ">
+                    Cancelaciones el mismo día de la reserva tendrá un cargo del
+                    50% del costo de un día de reserva.
+                  </Text>
+                </View>
+              </View>
+              <View
+                style={styles.card}
+                className="flex flex-row items-center justify-center mt-4"
+              >
+                <View className="flex items-center " style={{ width: "30%" }}>
+                  <Radio
+                    selected={cancellation === 3}
+                    onPress={() => handleChange(3)}
+                  ></Radio>
+                  <Text style={[styles.item, { backgroundColor: "#ff3b30" }]}>
+                    ESTRICTA
+                  </Text>
+                </View>
+                <View style={{ width: "70%" }}>
+                  <Text style={styles.itemText} className=" ml-2 ">
+                    Cancelaciones de reserva gratis antes de las 48 horas del
+                    día que inicia el viaje.
+                  </Text>
+                  <Text style={styles.itemText} className="ml-2 ">
+                    Cancelaciones dentro de las 48 horas previas de la reserva
+                    tendrá un cargo del 50% del costo de un día de reserva.
+                  </Text>
+                </View>
+              </View>
+              <View className="mt-5">
+                <TouchableOpacity
+                  onPress={() => {
+                    handleSubmit();
+                  }}
+                >
+                  <Text style={styles.continue} className="text-center">
+                    CONTINUAR
+                  </Text>
+                </TouchableOpacity>
+                {errorMessages.general && (
+                  <Text style={styles.error} className="text-center">
+                    {errorMessages.general}
+                  </Text>
+                )}
+                {errorMessages.cancellation && (
+                  <Text style={styles.error} className="text-center">
+                    {errorMessages.cancellation}
+                  </Text>
+                )}
+              </View>
+            </>
+          </View>
+        </ScrollView>
+      )}
+    </>
   );
 };
 
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 12,
     elevation: 5,
-    padding : 10
+    padding: 10,
   },
   item: {
     borderRadius: 12,

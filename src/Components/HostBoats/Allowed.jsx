@@ -34,7 +34,6 @@ const Allowed = () => {
     } else {
       setAll((prevAccess) => prevAccess.filter((itemId) => itemId !== id));
     }
-    
   };
 
   const handleSubmit = async () => {
@@ -60,13 +59,14 @@ const Allowed = () => {
     };
     fetchBoatTypes();
   }, [dispatch]);
+  
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        {loading ? (
-          <LoadingIndicator />
-        ) : (
-          <>
+    <>
+      {loading ? (
+        <LoadingIndicator />
+      ) : (
+        <ScrollView>
+          <View style={styles.container}>
             <Text style={styles.title} className="mb-5">
               What is allowed on the boat?
             </Text>
@@ -101,10 +101,10 @@ const Allowed = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-          </>
-        )}
-      </View>
-    </ScrollView>
+          </View>
+        </ScrollView>
+      )}
+    </>
   );
 };
 const styles = StyleSheet.create({
