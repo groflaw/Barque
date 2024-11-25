@@ -81,11 +81,11 @@ const Third = () => {
 
   return (
     <>
-      <ScrollView>
-        <View style={styles.container}>
-          {loading ? (
-            <LoadingIndicator />
-          ) : (
+      {loading ? (
+        <LoadingIndicator />
+      ) : (
+        <ScrollView>
+          <View style={styles.container}>
             <View style={styles.container}>
               <Text style={styles.Title}> Crear una Cuenta </Text>
               <CustomTextInput
@@ -193,9 +193,9 @@ const Third = () => {
                 <Text style={styles.error}>{errorMessages.general}</Text>
               )}
             </View>
-          )}
-        </View>
-      </ScrollView>
+          </View>
+        </ScrollView>
+      )}
     </>
   );
 };

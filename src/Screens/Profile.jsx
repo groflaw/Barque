@@ -45,9 +45,9 @@ const Profile = () => {
   };
   return (
     <>
-      <Stack.Navigator initialRouteName="Main">
+      <Stack.Navigator initialRouteName="MainProfile">
         <Stack.Screen
-          name="Main"
+          name="MainProfile"
           component={Main}
           options={{ headerShown: false }}
         />

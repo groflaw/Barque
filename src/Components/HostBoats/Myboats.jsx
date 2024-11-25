@@ -195,7 +195,6 @@ const styles = StyleSheet.create({
     fontFamily: "Lexend Deca",
     lineHeight: 20,
     flexWrap: "wrap",
-    maxWidth: "90%",
   },
   edit: {
     borderRadius: 6,

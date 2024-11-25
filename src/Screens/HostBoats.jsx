@@ -29,7 +29,7 @@ const HostBoats = () => {
 
   const HomeHeaderRight = () => {
     const gotoMain = () => {
-      navigation.navigate("HostBoats");
+      navigation.goBack();
     };
     return (
       <View

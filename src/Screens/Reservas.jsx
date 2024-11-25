@@ -11,7 +11,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 
 import List from "../Components/Reservars/List";
-import Profile from "../Components/Reservars/Profile";
 
 import backImage from "../../assets/Icons/headerback.png";
 import hostmarkImage from "../../assets/Icons/headermark.png";
@@ -47,11 +46,7 @@ const Reservas = () => {
         component={List}
         options={{ header: () => <HomeHeaderRight /> }}
       />
-      <Stack.Screen
-        name="Profile"
-        component={Profile}
-        options={{ header: () => <HomeHeaderRight /> }}
-      />
+   
     </Stack.Navigator>
   );
 };
