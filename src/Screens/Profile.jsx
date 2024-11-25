@@ -5,6 +5,7 @@ import {
   StatusBar,
   TouchableOpacity,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Main from "../Components/Profile/Main";
@@ -21,6 +22,7 @@ import markImage from "../../assets/Icons/headermark.png";
 
 const Profile = () => {
   const Stack = createNativeStackNavigator(); //Navigator Screen
+  const navigation = useNavigation();
 
   const HomeHeaderRight = () => {
     return (
@@ -33,7 +35,7 @@ const Profile = () => {
         }}
       >
         <View className="relative flex flex-row items-center justify-center space-x-3">
-          <TouchableOpacity style={styles.headerback}>
+          <TouchableOpacity style={styles.headerback} onPress={()=>{ navigation.navigate("Main");}}>
             <Image source={backImage}></Image>
           </TouchableOpacity>
           <Image source={markImage}></Image>

@@ -12,6 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
 import { gethostBoats } from "../../Actions/UserBoat/userboat";
+import LoadingIndicator from "../Basic/LoadingIndicator";
 
 import shipRoundImage from "../../../assets/Icons/shipround.png";
 import TucacasImg from "../../../assets/Background/Destinos.png";
@@ -25,6 +26,8 @@ const Guest = () => {
   const dispatch = useDispatch();
   const curhost = useSelector((state) => state.Global.curhost);
   const mode = useSelector((state) => state.Global.mode);
+  const loading = useSelector((state) => state.Global.loading);
+
   const [boats, setBoats] = useState([]);
 
   useEffect(() => {
@@ -36,119 +39,133 @@ const Guest = () => {
   }, []);
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <View style={styles.card} className="mt-3">
-          <View className="flex flex-row justify-center">
-            <Image
-              source={curhost.avatar ? { uri: curhost.avatar } : reviewImage}
-              style={{ width: 150, height: 150 }}
-              className="rounded-full"
-            ></Image>
-          </View>
-          {!mode && (
-            <View className="flex flex-row items-center justify-center mt-2">
-              <Image source={shipRoundImage} />
-              <Text className="ml-1">Con Capitan</Text>
+    <>
+      {loading ? (
+        <LoadingIndicator />
+      ) : (
+        <ScrollView>
+          <View style={styles.container}>
+            <View style={styles.card} className="mt-3">
+              <View className="flex flex-row justify-center">
+                <Image
+                  source={
+                    curhost.avatar ? { uri: curhost.avatar } : reviewImage
+                  }
+                  style={{ width: 150, height: 150 }}
+                  className="rounded-full"
+                ></Image>
+              </View>
+              {!mode && (
+                <View className="flex flex-row items-center justify-center mt-2">
+                  <Image source={shipRoundImage} />
+                  <Text className="ml-1">Con Capitan</Text>
+                </View>
+              )}
+              <View className="flex flex-row justify-center mt-2">
+                <Text style={styles.name}>
+                  {curhost.firstName + " " + curhost.lastName}
+                </Text>
+              </View>
+              <Text className="mt-2" style={styles.des}>
+                I'm the best captain out there, I have years of experience and I
+                know all the beaches around.
+              </Text>
+              <Text className="mt-3" style={styles.property}>
+                Review: {curhost.review}/5
+              </Text>
+              <Text className="mt-3" style={styles.property}>
+                Locations: Caracas, Venezuela
+              </Text>
+              <Text className="mt-3" style={styles.property}>
+                Trips made: {curhost.booking}
+              </Text>
+              <View className="flex flex-row justify-center">
+                <TouchableOpacity style={styles.searchbtn} className="mt-3">
+                  <Text style={styles.btnText}> Send Message </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          )}
-          <View className="flex flex-row justify-center mt-2">
-            <Text style={styles.name}>
-              {curhost.firstName + " " + curhost.lastName}
+            <Text style={styles.title} className="mt-5">
+              {mode ? `Activate Booking` : curhost.firstName + "'s Boats"}
             </Text>
-          </View>
-          <Text className="mt-2" style={styles.des}>
-            I'm the best captain out there, I have years of experience and I
-            know all the beaches around.
-          </Text>
-          <Text className="mt-3" style={styles.property}>
-            Review: {curhost.review}/5
-          </Text>
-          <Text className="mt-3" style={styles.property}>
-            Locations: Caracas, Venezuela
-          </Text>
-          <Text className="mt-3" style={styles.property}>
-            Trips made: {curhost.booking}
-          </Text>
-          <View className="flex flex-row justify-center">
-            <TouchableOpacity style={styles.searchbtn} className="mt-3">
-              <Text style={styles.btnText}> Send Message </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <Text style={styles.title} className="mt-5">
-          {mode ? `Activate Booking` : curhost.firstName + "'s Boats"}
-        </Text>
-        {!mode &&
-          boats.map((item, index) => {
-            return (
-              <View style={styles.card} className="mt-3" key={index}>
-                <View className="flex flex-row justify-between">
+            {!mode &&
+              boats.map((item, index) => {
+                return (
+                  <View style={styles.card} className="mt-3" key={index}>
+                    <View className="flex flex-row justify-between">
+                      <View>
+                        <Image
+                          source={
+                            item.coverImage
+                              ? { uri: item.coverImage }
+                              : TucacasImg
+                          }
+                          style={{ width: 60, height: 60, borderRadius: 5 }}
+                        ></Image>
+                      </View>
+                      <View className=" flex justify-around">
+                        <Text style={styles.boatmodel}>{item.model}</Text>
+                        <View className="flex flex-row">
+                          <View
+                            className="flex flex-row items-center"
+                            style={styles.item}
+                          >
+                            <Image source={peopleImage}></Image>
+                            <Text style={styles.itemText}>{item.capacity}</Text>
+                          </View>
+                          <View
+                            className="flex flex-row items-center"
+                            style={styles.item}
+                          >
+                            <Image source={fullImage}></Image>
+                            <Text style={styles.itemText}>{item.size}</Text>
+                          </View>
+                          <View
+                            className="flex flex-row items-center"
+                            style={styles.item}
+                          >
+                            <Image source={eventImage}></Image>
+                            <Text style={styles.itemText}>{item.year}</Text>
+                          </View>
+                        </View>
+                        <Text style={styles.anchor}>{item.location1}</Text>
+                      </View>
+                      <View className="mt-2">
+                        <View
+                          className="flex flex-row items-center"
+                          style={styles.review}
+                        >
+                          <Image source={starImage}></Image>
+                          <Text style={styles.reviewText}>
+                            {item.review} / 5
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+                );
+              })}
+            {mode && (
+              <View style={styles.card} className="mt-3">
+                <View className="flex flex-row">
                   <View>
-                    <Image
-                      source={
-                        item.coverImage ? { uri: item.coverImage } : TucacasImg
-                      }
-                      style={{ width: 60, height: 60, borderRadius : 5 }}
-                    ></Image>
+                    <Image source={TucacasImg}></Image>
                   </View>
-                  <View className=" flex justify-around">
-                    <Text style={styles.boatmodel}>{item.model}</Text>
-                    <View className="flex flex-row">
-                      <View
-                        className="flex flex-row items-center"
-                        style={styles.item}
-                      >
-                        <Image source={peopleImage}></Image>
-                        <Text style={styles.itemText}>{item.capacity}</Text>
-                      </View>
-                      <View
-                        className="flex flex-row items-center"
-                        style={styles.item}
-                      >
-                        <Image source={fullImage}></Image>
-                        <Text style={styles.itemText}>{item.size}</Text>
-                      </View>
-                      <View
-                        className="flex flex-row items-center"
-                        style={styles.item}
-                      >
-                        <Image source={eventImage}></Image>
-                        <Text style={styles.itemText}>{item.year}</Text>
-                      </View>
-                    </View>
-                    <Text style={styles.anchor}>{item.location1}</Text>
-                  </View>
-                  <View className="mt-2">
-                    <View
-                      className="flex flex-row items-center"
-                      style={styles.review}
-                    >
-                      <Image source={starImage}></Image>
-                      <Text style={styles.reviewText}>{item.review} / 5</Text>
-                    </View>
+                  <View className="flex justify-center ml-3">
+                    <Text style={styles.boatmodel}>
+                      Luxury on the caribbean
+                    </Text>
+                    <Text style={styles.bookingdate} className="mt-3">
+                      Date: 21/10/2023
+                    </Text>
                   </View>
                 </View>
               </View>
-            );
-          })}
-        {mode && (
-          <View style={styles.card} className="mt-3">
-            <View className="flex flex-row">
-              <View>
-                <Image source={TucacasImg}></Image>
-              </View>
-              <View className="flex justify-center ml-3">
-                <Text style={styles.boatmodel}>Luxury on the caribbean</Text>
-                <Text style={styles.bookingdate} className="mt-3">
-                  Date: 21/10/2023
-                </Text>
-              </View>
-            </View>
+            )}
           </View>
-        )}
-      </View>
-    </ScrollView>
+        </ScrollView>
+      )}
+    </>
   );
 };
 

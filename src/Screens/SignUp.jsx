@@ -25,11 +25,6 @@ const SignUp = () => {
 
   const curuser = useSelector((state) => state.Slice.user);
 
-  useEffect(() => {
-    if (curuser._id != undefined) {
-      navigation.navigate("Profile");
-    }
-  }, []);
   const HomeHeaderRight = () => {
     return (
       <View
@@ -41,7 +36,7 @@ const SignUp = () => {
         }}
       >
         <View className="relative flex flex-row items-center justify-center space-x-3">
-          <TouchableOpacity style={styles.headerback}>
+          <TouchableOpacity style={styles.headerback} onPress={()=>{ navigation.navigate("Main");}}>
             <Image source={backImage}></Image>
           </TouchableOpacity>
           <Image source={markImage}></Image>

@@ -8,6 +8,8 @@ import {
   TextInput,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import PhoneInput from "react-native-international-phone-number";
+
 import { useState } from "react";
 
 import Option from "../Basic/Option";
@@ -20,9 +22,15 @@ const Third = () => {
     navigation.navigate("Second");
   };
   const [isChecked, setIsChecked] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState(null);
+  const [inputValue, setInputValue] = useState("");
+  const handleInputValue = (phoneNumber) => {
+    setInputValue(phoneNumber);
+  };
 
-  const toggleSwitch = () => setIsChecked((previousState) => !previousState);
-
+  const handleSelectedCountry = (country) => {
+    setSelectedCountry(country);
+  };
   return (
     <>
       <ScrollView>
@@ -35,12 +43,13 @@ const Third = () => {
           <Text className="mt-10" style={styles.OptionTitle}>
             Número de teléfono
           </Text>
-          <View className="flex flex-row items-center justify-between mt-5">
-            <Option width={"22%"}></Option>
-            <TextInput
-              placeholder="Número de teléfono"
-              className="pt-1 pb-2 pl-2 pr-2 bg-white w-72"
-            ></TextInput>
+          <View className="flex flex-row items-center justify-between mt-5 mb-3">
+            <PhoneInput
+              value={inputValue}
+              onChangePhoneNumber={handleInputValue}
+              selectedCountry={selectedCountry}
+              onChangeSelectedCountry={handleSelectedCountry}
+            />
           </View>
 
           <View

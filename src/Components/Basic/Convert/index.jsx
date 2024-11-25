@@ -7,17 +7,22 @@ import convertBoatImage from "../../../../assets/Icons/convertBoat.png";
 import asyncImage from "../../../../assets/Icons/async.png";
 
 import { addUser } from "../../../Store/Slice";
-import { setMode } from "../../../Store/Global";
+import { setMode,setCurboat,setCurhost } from "../../../Store/Global";
 
 const Convert = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+ 
+  const mode = useSelector((state) => state.Global.mode);
 
   const handlelogout = () => {
     dispatch(addUser({}));
+    dispatch(setCurboat({}));
+    dispatch(setCurhost({}));
     dispatch(setMode(false));
     navigation.navigate("Main");
   };
+  
   return (
     <>
       <View style={styles.container}>
@@ -28,11 +33,10 @@ const Convert = () => {
               <Image source={asyncImage}></Image>
             </View>
           </View>
-          <View className="flex" style={{width:'72%'}}>
-            <Text style={styles.head}>Eres dueño de un barco?</Text>
+          <View className="flex justify-around" style={{width:'72%'}}>
+            <Text style={styles.head}>{mode ? "Back to Customer Mode" : "Are you a boat owner?"}</Text>
             <Text style={styles.des}>
-              Pulsa este boton para cambiar a modo anfitrion y gestionar las
-              reservas de tu embarcacion.
+              {mode ? "Click this button to switch to Customer mode to rent a boat." : "Click this button to switch to Host Mode and manage your boat reservations."}
             </Text>
           </View>
         </View>
@@ -44,7 +48,7 @@ const Convert = () => {
           }}
         >
           <Text className="flex text-center" style={styles.button}>
-            Cerrar sesión
+            Log out
           </Text>
         </TouchableOpacity>
       </View>
@@ -76,7 +80,7 @@ const styles = StyleSheet.create({
     color: "#17233c",
     fontSize: 15,
     fontFamily: "Lexend Deca",
-    fontWeight: "500",
+    fontWeight: 700,
     lineHeight: 22,
   },
   des: {

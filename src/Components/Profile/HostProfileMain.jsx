@@ -71,7 +71,7 @@ const HostProfileMain = () => {
   const handleSubmit = async () => {
     const result = await dispatch(AddCoHost(curuser._id, profile));
     if (result.errors) {
-      setErrorMessages(result.errors); 
+      setErrorMessages(result.errors);
     }
   };
 
@@ -89,11 +89,11 @@ const HostProfileMain = () => {
     fetchCoHost();
   }, []);
   return (
-    <ScrollView>
+    <>
       {loading ? (
         <LoadingIndicator />
       ) : (
-        <>
+        <ScrollView>
           <View className="flex flex-row items-center pl-5 pr-5 mt-10 w-100">
             <Image
               source={
@@ -234,9 +234,9 @@ const HostProfileMain = () => {
               </Text>
             )}
           </View>
-        </>
+        </ScrollView>
       )}
-    </ScrollView>
+    </>
   );
 };
 

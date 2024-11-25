@@ -8,6 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import backImage from "../../assets/Icons/headerback.png";
@@ -18,6 +19,7 @@ import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
 
 const HomeScreen = () => {
+  const navigation = useNavigation();
   const Stack = createNativeStackNavigator(); //Navigator Screen
 
   const { user } = useSelector((state) => state.Slice);
@@ -33,7 +35,7 @@ const HomeScreen = () => {
         }}
       >
         <View className="relative flex flex-row items-center justify-center space-x-3">
-          <TouchableOpacity style={styles.headerback}>
+          <TouchableOpacity style={styles.headerback} onPress={()=>navigation.navigate("Main")}>
             <Image source={backImage}></Image>
           </TouchableOpacity>
           <Image source={markImage}></Image>

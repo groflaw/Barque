@@ -13,7 +13,7 @@ const Navbar = () => {
   const navigation = useNavigation();
 
   const mode = useSelector((state) => state.Global.mode);
-
+  const curuser = useSelector((state) => state.Slice.user);
   const [selectedIcon, setSelectedIcon] = useState(null);
 
   const handleIconPress = (icon) => {
@@ -29,13 +29,29 @@ const Navbar = () => {
         }
         break;
       case "Messages":
-        navigation.navigate("Chat");
+        if (curuser?._id) {
+          navigation.navigate("Chat");
+        } else {
+          navigation.navigate("SignUp");
+        }
         break;
       case "Reservas":
-        navigation.navigate("Reservas");
+        if (curuser?._id) {
+          navigation.navigate("Reservas");
+        } else {
+          navigation.navigate("SignUp");
+        }
         break;
       case "Profile":
-        navigation.navigate("SignUp");
+        if(mode){
+          navigation.navigate("DashBoard");
+        }else{
+          if (curuser?._id) {
+            navigation.navigate("Profile");
+          } else {
+            navigation.navigate("SignUp");
+          }
+        }
         break;
     }
     setSelectedIcon(icon);

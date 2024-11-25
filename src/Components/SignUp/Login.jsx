@@ -25,6 +25,7 @@ const Login = () => {
     password: "",
   });
   const [errorMessages, setErrorMessages] = useState({});
+  const [remember, setRemeber] = useState(false);
 
   const nextStep = (url) => {
     navigation.navigate(url);
@@ -49,12 +50,15 @@ const Login = () => {
     }
   };
 
+  const handleRemember = (id, status) => {
+    setRemeber(status);
+  };
   return (
     <>
-      <ScrollView>
-        {loading ? (
-          <LoadingIndicator />
-        ) : (
+      {loading ? (
+        <LoadingIndicator />
+      ) : (
+        <ScrollView>
           <View style={styles.container}>
             <>
               <View className="flex items-center justify-center">
@@ -93,7 +97,11 @@ const Login = () => {
                 )}
               </View>
               <View className="flex flex-row items-center mt-3">
-                <CustomSwitch></CustomSwitch>
+                <CustomSwitch
+                  id={0}
+                  flag={remember}
+                  onSwitchChange={handleRemember}
+                ></CustomSwitch>
                 <Text style={styles.head} className="ml-4">
                   Remember Me
                 </Text>
@@ -121,8 +129,8 @@ const Login = () => {
               </View>
             </>
           </View>
-        )}
-      </ScrollView>
+        </ScrollView>
+      )}
       <Navbar></Navbar>
     </>
   );

@@ -6,7 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
 import Convert from "../Components/Basic/Convert";
@@ -27,6 +27,7 @@ import boataddImge from "../../assets/Icons/boatadd.png";
 const DashBoard = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const curuser = useSelector((state) => state.Slice.user);
 
   const nextStep = (url) => {
     navigation.navigate(url);
@@ -49,15 +50,19 @@ const DashBoard = () => {
           <View className="flex flex-row items-center justify-start mt-3">
             <Image source={hostAvatar}></Image>
             <View className="flex ml-4">
-              <Text style={styles.Name}>Julian</Text>
+              <Text style={styles.Name}>
+                {curuser.firstName + " " + curuser.lastName}
+              </Text>
               <View className="flex flex-row items-center">
                 <Image source={startImage}></Image>
-                <Text style={styles.review}>SIN RESEÑAS</Text>
+                <Text style={styles.review}>
+                  {curuser.review ? "NO REVIEWS" : curuser.review}
+                </Text>
               </View>
             </View>
           </View>
           <Text className="mt-5" style={styles.statistics}>
-            Tus estadisticas
+            Your Stats
           </Text>
           <View className="flex flex-row items-center justify-around mt-4">
             <View>
@@ -75,7 +80,7 @@ const DashBoard = () => {
               </Text>
             </View>
             <View>
-              <Text className="p-2 text-white">$1000</Text>
+              <Text className="p-2 text-white">$0</Text>
               <Text style={styles.key} className="mt-1">
                 Total profits
               </Text>
@@ -86,18 +91,24 @@ const DashBoard = () => {
           style={styles.action}
           className="flex flex-row justify-between mt-4"
         >
-          <View style={styles.card} className="flex flex-row items-center">
-            <Text style={styles.item}>Mensajes</Text>
-            <Image source={messageImage} className="ml-4"></Image>
-          </View>
-          <View style={styles.card} className="flex flex-row items-center">
-            <Text style={styles.item}>Reservas</Text>
-            <Image source={reservarImage} className="ml-4"></Image>
-          </View>
+          <TouchableOpacity onPress={()=>nextStep("Chat")}>
+            <View style={styles.card} className="flex flex-row items-center">
+              <Text style={styles.item}>Messages</Text>
+              <Image source={messageImage} className="ml-4"></Image>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={()=>nextStep("Reservas")}>
+            <View style={styles.card} className="flex flex-row items-center">
+              <Text style={styles.item}>Reserves</Text>
+              <Image source={reservarImage} className="ml-4"></Image>
+            </View>
+          </TouchableOpacity>
         </View>
 
         <TouchableOpacity
-          onPress={() => navigation.navigate("HostProfile", { screen: "Payment" })}
+          onPress={() =>
+            navigation.navigate("HostProfile", { screen: "Payment" })
+          }
         >
           <View className="flex flex-row items-center justify-start px-6">
             <Image source={payhistoryImge}></Image>
