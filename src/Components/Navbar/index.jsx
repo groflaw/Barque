@@ -63,7 +63,7 @@ const Navbar = () => {
         <TouchableOpacity
           style={[
             styles.iconContainer,
-            selectedIcon === "DashBoard" && styles.selectedIcon,
+            // selectedIcon === "DashBoard" && styles.selectedIcon,
           ]}
           onPress={() => handleIconPress("DashBoard")}
         >
@@ -74,7 +74,7 @@ const Navbar = () => {
       <TouchableOpacity
         style={[
           styles.iconContainer,
-          selectedIcon === "Home" && styles.selectedIcon,
+          // selectedIcon === "Home" && styles.selectedIcon,
         ]}
         onPress={() => handleIconPress("Home")}
       >
@@ -84,7 +84,7 @@ const Navbar = () => {
       <TouchableOpacity
         style={[
           styles.iconContainer,
-          selectedIcon === "Messages" && styles.selectedIcon,
+          // selectedIcon === "Messages" && styles.selectedIcon,
         ]}
         onPress={() => handleIconPress("Messages")}
       >
@@ -94,7 +94,7 @@ const Navbar = () => {
       <TouchableOpacity
         style={[
           styles.iconContainer,
-          selectedIcon === "Reservas" && styles.selectedIcon,
+          // selectedIcon === "Reservas" && styles.selectedIcon,
         ]}
         onPress={() => handleIconPress("Reservas")}
       >
@@ -104,7 +104,7 @@ const Navbar = () => {
       <TouchableOpacity
         style={[
           styles.iconContainer,
-          selectedIcon === "Profile" && styles.selectedIcon,
+          // selectedIcon === "Profile" && styles.selectedIcon,
         ]}
         onPress={() => handleIconPress("Profile")}
       >
