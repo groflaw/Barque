@@ -6,7 +6,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 import Myboats from "../Components/HostBoats/Myboats";
 import Option from "../Components/HostBoats/Option";
@@ -26,10 +26,11 @@ import markImage from "../../assets/Icons/dashboardmark.png";
 const HostBoats = () => {
   const Stack = createNativeStackNavigator(); //Navigator Screen
   const navigation = useNavigation();
+  const route = useRoute();
 
   const HomeHeaderRight = () => {
     const gotoMain = () => {
-      navigation.goBack();
+      navigation.navigate("Myboats");
     };
     return (
       <View
@@ -57,7 +58,7 @@ const HostBoats = () => {
   };
 
   return (
-    <Stack.Navigator initialRouteName="HomeScreenBody">
+    <Stack.Navigator initialRouteName="Myboats">
       <Stack.Screen
         name="Myboats"
         component={Myboats}
