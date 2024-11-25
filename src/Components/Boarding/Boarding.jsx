@@ -54,7 +54,6 @@ const Boarding = () => {
       >
         <View className="z-50 px-6 space-y-5">
           <Image
-            style={{ height: 266, width: 274 }}
             source={SplashImg}
             preserveAspectRatio="xMidYMid slice"
           />

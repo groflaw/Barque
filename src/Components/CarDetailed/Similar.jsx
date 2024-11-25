@@ -17,6 +17,7 @@ const DesCard = ({ deslogo, descontent, price }) => {
       <Image
         className="mx-auto w-full rounded-xl h-85 object-fit"
         source={deslogo}
+        style={{width : 80 , height : 80}}
       />
       <Text className="mt-1" style={styles.model}>
         {descontent}
