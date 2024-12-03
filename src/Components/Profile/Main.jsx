@@ -66,7 +66,7 @@ const Main = () => {
   };
   const changeMode = async () => {
     await dispatch(setMode(true));
-    navigation.navigate("Main");
+    navigation.navigate("Main", { key: Math.random() });
   };
   return (
     <ScrollView>

@@ -66,11 +66,13 @@ const CarDetailed = () => {
       setErrorMessage(
         "You are a cohost on this boat. You cannot reserve the boat."
       );
+      handleShowToast();
       return;
     }
     let result = await dispatch(reservation(userId, curhost._id, boatId, plan));
     if (result.errors) {
       setErrorMessage(result.errors.general);
+      handleShowToast();
     } else {
       await dispatch(setCurboat({}));
       await dispatch(setCurhost({}));
