@@ -11,28 +11,32 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyBUHaXnKMYi8ipKF-UgCHWH1TSdVCse8p0"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBUHaXnKMYi8ipKF-UgCHWH1TSdVCse8p0"
+        }
+      },
       "package": "com.foreve0914.CarRent"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-localization"
-    ],
+    "plugins": ["expo-localization"],
     "extra": {
       "eas": {
-        "projectId": "d4e41ea6-8e87-4d74-916e-e17d8b18eea7"
+        "projectId": "34babaa5-df81-4385-b95d-2c7b16967875"
       }
     },
     "owner": "foreve0914",

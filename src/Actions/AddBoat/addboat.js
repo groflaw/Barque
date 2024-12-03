@@ -60,7 +60,7 @@ export const setBoatFlag = (id, flag) => async (dispatch) => {
   return {};
 };
 
-export const submitBasic = (basicdata) => async (dispatch) => {
+export const submitBasic = (basicdata,boatId) => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};
 
@@ -117,17 +117,30 @@ export const submitBasic = (basicdata) => async (dispatch) => {
     if (Object.keys(errors).length > 0) {
       return { errors };
     }
-
-    const response = await axios.post(
-      `${Backend_API}/boats/addboat`,
-      basicdata,
-      {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    let response = {};
+    if(boatId == null){
+      response = await axios.post(
+        `${Backend_API}/boats/addboat`,
+        basicdata,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }else{
+      response = await axios.put(
+        `${Backend_API}/boats/updateboat/${boatId}`,
+        basicdata,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }
     if (response.data.flag == true) {
       dispatch(setCurboat(response.data.data));
     } else {

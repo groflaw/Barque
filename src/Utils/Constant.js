@@ -1,1 +1,9 @@
 export const Backend_API = "https://baraqua-server.vercel.app/api";
+
+export const BookingStatus = [
+  { title: "TobeConfirmed", color: "#0751c1" },
+  { title: "Cancelled", color: "#ff3b30" },
+  { title: "Due", color: "#f4bf64" },
+  { title: "Confirmed", color: "#2a8500" },
+];
+export const apiKey = "AIzaSyBUHaXnKMYi8ipKF-UgCHWH1TSdVCse8p0"; 

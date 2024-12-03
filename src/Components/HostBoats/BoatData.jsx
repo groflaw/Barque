@@ -5,10 +5,10 @@ import {
   StyleSheet,
   Text,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import * as Location from "expo-location";
+import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import { useNavigation } from "@react-navigation/native";
 import {
   getAllBoatTypes,
   getAllBoatBrands,
@@ -26,6 +26,7 @@ import Navbar from "../Navbar";
 import CustomTextInput from "../Basic/Input";
 import Option from "../Basic/Option";
 import Number from "../Basic/Number";
+import GoogleAddress from "../Basic/GoogleAddress";
 import LoadingIndicator from "../Basic/LoadingIndicator";
 
 const BoatData = () => {
@@ -45,6 +46,8 @@ const BoatData = () => {
   const curboat = useSelector((state) => state.Global.curboat);
 
   const [errorMessages, setErrorMessages] = useState({});
+  const [location, setLocation] = useState(null);
+  const [locationPermission, setLocationPermission] = useState(false);
 
   useEffect(() => {
     const fetchBoatTypes = async () => {
@@ -78,13 +81,21 @@ const BoatData = () => {
         if (result.errors) {
           setErrorMessages(result.errors);
         }
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status === "granted") {
+          setLocationPermission(true);
+          const userLocation = await Location.getCurrentPositionAsync({});
+          setLocation(userLocation.coords);
+        } else {
+          console.log("Location permission denied");
+        }
         await dispatch(setLoading(false));
       } catch (error) {
         console.error("Error fetching boat types:", error);
       }
     };
     fetchBoatTypes();
-  }, [dispatch]);
+  }, []);
 
   const [boatdata, setBoatData] = useState({
     user: curuser._id,
@@ -112,7 +123,7 @@ const BoatData = () => {
   };
 
   const handleSubmit = async () => {
-    const result = await dispatch(submitBasic(boatdata));
+    const result = await dispatch(submitBasic(boatdata, curboat?._id));
     if (result.errors) {
       setErrorMessages(result.errors);
     } else {
@@ -121,7 +132,7 @@ const BoatData = () => {
   };
   return (
     <>
-      {loading ? (
+      {loading && locationPermission && location ? (
         <LoadingIndicator />
       ) : (
         <ScrollView>
@@ -155,12 +166,13 @@ const BoatData = () => {
             </View>
             <View className="mt-2">
               <Text style={styles.item}>Location </Text>
-              <CustomTextInput
+              <GoogleAddress value={boatdata.location1} name="location1" onChange={handleChange} type={true}></GoogleAddress>
+              {/* <CustomTextInput
                 value={boatdata.location1} // Ensure you're using the correct property
                 onChange={handleChange}
                 name="location1"
                 sort={false}
-              ></CustomTextInput>
+              ></CustomTextInput> */}
               {errorMessages.location1 && (
                 <Text style={styles.error}>{errorMessages.location1}</Text>
               )}
@@ -221,13 +233,19 @@ const BoatData = () => {
               <Text style={styles.item} className="mb-2">
                 Engines
               </Text>
-              <Option
+              <Number
+                value={boatdata.enginecount}
+                onChange={handleChange}
+                name="enginecount"
+                max={enginecount.length}
+              ></Number>
+              {/* <Option
                 options={enginecount}
                 onChange={handleChange}
                 name="enginecount"
                 placeholder="Select number of engines"
                 defaultValue={boatdata.enginecount}
-              ></Option>
+              ></Option> */}
               {errorMessages.enginecount && (
                 <Text style={styles.error}>{errorMessages.enginecount}</Text>
               )}
@@ -236,13 +254,19 @@ const BoatData = () => {
               <Text style={styles.item} className="mb-2">
                 Bathrooms
               </Text>
-              <Option
+              <Number
+                value={boatdata.bathroomcount}
+                onChange={handleChange}
+                name="bathroomcount"
+                max={bathroomcount.length}
+              ></Number>
+              {/* <Option
                 options={bathroomcount}
                 onChange={handleChange}
                 name="bathroomcount"
                 placeholder="Select N* bathrooms"
                 defaultValue={boatdata.bathroomcount}
-              ></Option>
+              ></Option> */}
               {errorMessages.bathroomcount && (
                 <Text style={styles.error}>{errorMessages.bathroomcount}</Text>
               )}
@@ -266,13 +290,19 @@ const BoatData = () => {
               <Text style={styles.item} className="mb-2">
                 Capacity
               </Text>
-              <Option
+              <Number
+                value={boatdata.capacity}
+                onChange={handleChange}
+                name="capacity"
+                max={capacity.length}
+              ></Number>
+              {/* <Option
                 options={capacity}
                 onChange={handleChange}
                 name="capacity"
                 placeholder="Select capacity"
                 defaultValue={boatdata.capacity}
-              ></Option>
+              ></Option> */}
               {errorMessages.capacity && (
                 <Text style={styles.error}>{errorMessages.capacity}</Text>
               )}
@@ -281,13 +311,19 @@ const BoatData = () => {
               <Text style={styles.item} className="mb-2">
                 Cabins / Staterooms
               </Text>
-              <Option
+              <Number
+                value={boatdata.cabinscount}
+                onChange={handleChange}
+                name="cabinscount"
+                max={cabinscount.length}
+              ></Number>
+              {/* <Option
                 options={cabinscount}
                 onChange={handleChange}
                 name="cabinscount"
                 placeholder="Select cabins"
                 defaultValue={boatdata.cabinscount}
-              ></Option>
+              ></Option> */}
               {errorMessages.cabinscount && (
                 <Text style={styles.error}>{errorMessages.cabinscount}</Text>
               )}

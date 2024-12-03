@@ -8,11 +8,11 @@ import {
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
 import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
 
 import { searchBoats, getAllboats } from "../../Actions/UserBoat/userboat";
 
 import searchImage from "../../../assets/Icons/Iconsearch.png";
-import { useEffect, useState } from "react";
 
 const IconComponent = () => (
   <Svg width={21} height={21} viewBox="0 0 24 24">
@@ -21,9 +21,11 @@ const IconComponent = () => (
   </Svg>
 );
 
-const Brands = ({ onpress, setBoats }) => {
+const Brands = ({ onpress, setBoats,userId }) => {
+
   const dispatch = useDispatch();
   const [keywords, setKeywords] = useState("");
+
 
   const onChange = (e) => {
     const { value } = e.target;
@@ -33,9 +35,9 @@ const Brands = ({ onpress, setBoats }) => {
   const search = async () => {
     let result = [];
     if(keywords.trim() != ""){
-       result = await dispatch(searchBoats(keywords));
+       result = await dispatch(searchBoats(keywords, userId));
     }else{
-       result = await dispatch(getAllboats());
+       result = await dispatch(getAllboats(userId));
     }
     setBoats(result);
   };

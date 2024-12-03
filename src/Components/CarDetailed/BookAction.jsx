@@ -1,33 +1,35 @@
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import boatMarkImage from "../../../assets/Icons/boatMark.png";
 import { useEffect, useState } from "react";
-const BookAction = ({ plan, data }) => {
+const BookAction = ({ plan, plans,handleSubmit }) => {
   const [price, setPrice] = useState(null);
   const [index, setIndex] = useState(null);
 
   useEffect(() => {
-    data.map((item, index) => {
+    plans.map((item, index) => {
       if (item._id == plan) {
         setPrice(item.price);
-        setIndex(index+1);
+        setIndex(index + 1);
       }
     });
   }, [plan]);
 
   return (
-    <View
-      style={styles.containter}
-      className="flex flex-row justify-between bg-white"
-    >
-      <View>
-        <Text style={styles.price}>${price}</Text>
-        <Text style={styles.plan}>Plan{index}</Text>
-      </View>
-      <View className="flex flex-row items-center" style={styles.button}>
-        <TouchableOpacity className="flex flex-row items-center">
-          <Image source={boatMarkImage}></Image>
-          <Text style={styles.buttonText}> RESERVA AHORA </Text>
-        </TouchableOpacity>
+    <View className="bg-white">
+      <View
+        style={styles.containter}
+        className="flex flex-row justify-between "
+      >
+        <View>
+          <Text style={styles.price}>${price}</Text>
+          <Text style={styles.plan}>Plan{index}</Text>
+        </View>
+        <View className="flex flex-row items-center" style={styles.button}>
+          <TouchableOpacity className="flex flex-row items-center" onPress={handleSubmit}> 
+            <Image source={boatMarkImage}></Image>
+            <Text style={styles.buttonText}> RESERVA AHORA </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

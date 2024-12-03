@@ -23,6 +23,7 @@ import GuestProfile from "./src/Screens/GuestProfile";
 import { I18nextProvider, useTranslation } from "react-i18next";
 import { LogBox } from "react-native";
 import { store } from "./src/Store/Store";
+import 'react-native-get-random-values';
 import i18n from "./i18n";
 
 

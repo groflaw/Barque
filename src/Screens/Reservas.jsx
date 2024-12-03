@@ -11,6 +11,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 
 import List from "../Components/Reservars/List";
+import Detail from "../Components/Reservars/Detail";
 
 import backImage from "../../assets/Icons/headerback.png";
 import hostmarkImage from "../../assets/Icons/headermark.png";
@@ -31,7 +32,7 @@ const Reservas = () => {
         }}
       >
         <View className="relative flex flex-row items-center justify-center space-x-3">
-          <TouchableOpacity style={styles.headerback} onPress={()=>navigation.navigate("Main")}>
+          <TouchableOpacity style={styles.headerback} onPress={()=>navigation.navigate("Reservas")}>
             <Image source={backImage}></Image>
           </TouchableOpacity>
           <Image source={hostmarkImage}></Image>
@@ -46,7 +47,11 @@ const Reservas = () => {
         component={List}
         options={{ header: () => <HomeHeaderRight /> }}
       />
-   
+      <Stack.Screen
+        name="Detail"
+        component={Detail}
+        options={{ header: () => <HomeHeaderRight /> }}
+      />
     </Stack.Navigator>
   );
 };

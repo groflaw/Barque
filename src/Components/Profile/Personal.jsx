@@ -206,34 +206,34 @@ const styles = StyleSheet.create({
   },
   Title: {
     paddingTop: 20,
-    color: "#030303", // Dark color (almost black)
-    fontSize: 20, // Font size (in points)
-    fontFamily: "Lexend Deca", // Custom font family
+    color: "#030303", 
+    fontSize: 20, 
+    fontFamily: "Lexend Deca",
     fontWeight: "700",
   },
   key: {
-    color: "#17233c", // Dark blue color
-    fontSize: 14, // Font size (14 points)
-    fontFamily: "Lexend Deca", // Custom font family
+    color: "#17233c",
+    fontSize: 14, 
+    fontFamily: "Lexend Deca", 
     lineHeight: 20,
-    fontWeight: "650", // Bold font weight
+    fontWeight: "700", 
   },
   value: {
-    color: "#17233c", // Dark blue color
-    fontSize: 15, // Font size (in points)
-    fontFamily: "Lexend Deca", // Custom font family
-    fontWeight: "700", // Bold font weight
+    color: "#17233c", 
+    fontSize: 15,
+    fontFamily: "Lexend Deca",
+    fontWeight: "700",
     lineHeight: 20,
   },
   button: {
-    backgroundColor: "#0a4195", // Background color
-    borderRadius: 8, // Border radius (in points)
-    padding: 15, // Optional: add some padding
+    backgroundColor: "#0a4195", 
+    borderRadius: 8, 
+    padding: 15,
     margin: 10,
-    color: "#ffffff", // White color
-    fontSize: 14, // Font size (14 points)
-    fontFamily: "Lexend Deca", // Custom font family
-    fontWeight: "500", // Medium font weight
+    color: "#ffffff", 
+    fontSize: 14, 
+    fontFamily: "Lexend Deca", 
+    fontWeight: "500",
     lineHeight: 16,
   },
   error: {

@@ -14,6 +14,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { addPlan, delPlan } from "../../Actions/AddBoat/addboat";
 
 import Option from "../Basic/Option";
+import CheckBox from "../Basic/CheckBox";
 import LoadingIndicator from "../Basic/LoadingIndicator";
 
 const AddPlans = () => {
@@ -230,6 +231,7 @@ const AddPlans = () => {
                         </Text>
                       </TouchableOpacity>
                     </View>
+                    
                     {errorMessages.start && (
                       <Text style={styles.error}>{errorMessages.start}</Text>
                     )}

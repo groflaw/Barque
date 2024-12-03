@@ -33,15 +33,15 @@ const NewScreen = () => {
 
 const styles = StyleSheet.create({
   title: {
-    color: "#ffffff", // color: '#ffffff'
-    fontSize: 20, // fontSize: '20px'
-    fontFamily: "Lexend Deca", // fontFamily: 'Lexend Deca'
+    color: "#ffffff", 
+    fontSize: 20, 
+    fontFamily: "Lexend Deca", 
     fontWeight: "700",
     width : '100%',
   },
   des: {
-    color: "#ffffff", // color: '#ffffff'
-    fontSize: 18, // fontSize: '18px'
+    color: "#ffffff", 
+    fontSize: 18, 
     fontFamily: "Lexend Deca",
     width : '100%',
   },
@@ -53,10 +53,10 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 6,
     backgroundColor: "#2a8500",
-    color: "#ffffff", // Note: Color is not directly used in React Native styles. You apply text color via Text component style.
+    color: "#ffffff", 
     fontSize: 13,
     fontFamily: "Mulish",
-    fontWeight: "900", // In React Native, fontWeight can be a number or string
+    fontWeight: "900", 
   },
 });
 export default NewScreen;

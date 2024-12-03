@@ -19,7 +19,6 @@ const Boats = ({data}) => {
     result = await dispatch(getUser(hostId));
     await dispatch(setCurhost(result));
     navigation.navigate("CarDetails");
-    console.log("id:",id, "hostId:", hostId);
   };
   
   useEffect(()=>{

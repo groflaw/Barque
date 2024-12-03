@@ -14,13 +14,15 @@ const HomeBody = () => {
   const dispatch = useDispatch();
 
   const loading = useSelector((state) => state.Global.loading);
+  let curuser = useSelector((state) => state.Slice.user);
 
   const [visible, setVisible] = useState(false);
   const [boats, setBoats] = useState([]);
 
   useEffect(() => {
     const fetchboats = async () => {
-      let result = await dispatch(getAllboats());
+      if (curuser?._id == undefined) curuser = {_id : 0};
+      let result = await dispatch(getAllboats(curuser._id));
       setBoats(result);
     };
     fetchboats();
@@ -40,7 +42,7 @@ const HomeBody = () => {
         <LoadingIndicator />
       ) : (
         <>
-          <Brands onpress={openPopup} setBoats={setBoats} />
+          <Brands onpress={openPopup} setBoats={setBoats} userId = {curuser._id}/>
           <Popup
             visible={visible}
             transparent={true}

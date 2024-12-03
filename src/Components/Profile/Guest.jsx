@@ -5,22 +5,21 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  TextInput,
 } from "react-native";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
-import { gethostBoats } from "../../Actions/UserBoat/userboat";
+import { gethostBoats, getuserBookings } from "../../Actions/UserBoat/userboat";
 import LoadingIndicator from "../Basic/LoadingIndicator";
 
 import shipRoundImage from "../../../assets/Icons/shipround.png";
-import TucacasImg from "../../../assets/Background/Destinos.png";
 import starImage from "../../../assets/Icons/Iconstar.png";
 import peopleImage from "../../../assets/Icons/Iconpeopleoutline.png";
 import fullImage from "../../../assets/Icons/Iconopeninfull.png";
 import eventImage from "../../../assets/Icons/Iconeventavailable.png";
 import reviewImage from "../../../assets/Profile/user.png";
+import TucacasImg from "../../../assets/Profile/boat.png";
 
 const Guest = () => {
   const dispatch = useDispatch();
@@ -29,11 +28,18 @@ const Guest = () => {
   const loading = useSelector((state) => state.Global.loading);
 
   const [boats, setBoats] = useState([]);
+  const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
     const fetchboats = async () => {
-      let response = await dispatch(gethostBoats(curhost._id));
-      setBoats(response);
+      let response = [];
+      if (!mode) {
+        response = await dispatch(gethostBoats(curhost._id));
+        setBoats(response);
+      } else {
+        response = await dispatch(getuserBookings(curhost._id));
+        setBookings(response);
+      }
     };
     fetchboats();
   }, []);
@@ -145,23 +151,33 @@ const Guest = () => {
                   </View>
                 );
               })}
-            {mode && (
-              <View style={styles.card} className="mt-3">
-                <View className="flex flex-row">
-                  <View>
-                    <Image source={TucacasImg}></Image>
+            {mode &&
+              bookings.map((item, index) => {
+                return (
+                  <View style={styles.card} className="mt-3" key={index}>
+                    <View className="flex flex-row">
+                      <View>
+                        <Image
+                          source={
+                            item.boatId.boatImage.cover
+                              ? { uri: item.boatId.boatImage.cover }
+                              : TucacasImg
+                          }
+                          style={{ width: 60, height: 60,borderRadius: 5 }}
+                        ></Image>
+                      </View>
+                      <View className="flex justify-center ml-3">
+                        <Text style={styles.boatmodel}>
+                          {item.boatId.model}
+                        </Text>
+                        <Text style={styles.bookingdate} className="mt-3">
+                          Date: {new Date(item.date).toLocaleDateString()}
+                        </Text>
+                      </View>
+                    </View>
                   </View>
-                  <View className="flex justify-center ml-3">
-                    <Text style={styles.boatmodel}>
-                      Luxury on the caribbean
-                    </Text>
-                    <Text style={styles.bookingdate} className="mt-3">
-                      Date: 21/10/2023
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            )}
+                );
+              })}
           </View>
         </ScrollView>
       )}

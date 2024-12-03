@@ -30,6 +30,7 @@ export default function Popup({ visible, transparent, dismiss, margin, setBoats 
   });
 
   const boatTypes = useSelector((state) => state.BasicBoat.boattypes);
+  let curuser = useSelector((state) => state.Slice.user);
 
   const onValueChange = (value) => {
     setFilter((prevData) => ({
@@ -55,7 +56,8 @@ export default function Popup({ visible, transparent, dismiss, margin, setBoats 
   };
 
   const search = async() => {
-    let result = await dispatch(filterBoats(filter));
+    if (curuser?._id == undefined) curuser = {_id : 0};
+    let result = await dispatch(filterBoats(filter,curuser._id));
     setBoats(result);
     dismiss();
     setFilter({

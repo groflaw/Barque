@@ -6,6 +6,7 @@ const Global = createSlice({
     loading: false,
     curboat: {}, // host select or add boat.
     curhost : {}, // user select the boat.
+    curbooking : {},
     mode: false, // user or host.
   },
   reducers: {
@@ -21,8 +22,11 @@ const Global = createSlice({
     setMode: (state, action) => {
       state.mode = action.payload;
     },
+    setBooking : (state, action) =>{
+      state.curbooking = action.payload;
+    }
   },
 });
 
-export const { setLoading, setCurboat, setCurhost,setMode } = Global.actions;
+export const { setLoading, setCurboat, setCurhost,setMode, setBooking } = Global.actions;
 export default Global.reducer;

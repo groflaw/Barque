@@ -5,13 +5,15 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import * as LocationModule from "expo-location";
 import { useState, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 
 import { setLoading } from "../../Store/Global";
 import { getLocationType } from "../../Actions/BasicBoat/basicboat";
 import { submitLocation } from "../../Actions/AddBoat/addboat";
+import GoogleAddress from "../Basic/GoogleAddress";
 
 import CustomTextInput from "../Basic/Input";
 import Option from "../Basic/Option";
@@ -35,6 +37,8 @@ const Location = () => {
           address: "",
         }
   );
+  const [locationEnv, setLocationEnv] = useState(null);
+  const [locationPermission, setLocationPermission] = useState(false);
   const [errorMessages, setErrorMessages] = useState({});
 
   const handleChange = (e) => {
@@ -42,7 +46,7 @@ const Location = () => {
 
     setLocation((prevData) => ({
       ...prevData,
-      [name]: value, // Update the 'year' property
+      [name]: value,
     }));
   };
   const handleSubmit = async () => {
@@ -50,6 +54,7 @@ const Location = () => {
     if (result.errors) {
       setErrorMessages(result.errors);
     } else {
+      setErrorMessages({})
       navigation.navigate("AddBoatImages");
     }
   };
@@ -61,6 +66,14 @@ const Location = () => {
         if (result.errors) {
           setErrorMessages(result.errors);
         }
+        let { status } = await LocationModule.requestForegroundPermissionsAsync();
+        if (status === "granted") {
+          setLocationPermission(true);
+          const userLocation = await LocationModule.getCurrentPositionAsync({});
+          setLocationEnv(userLocation.coords);
+        } else {
+          console.log("Location permission denied");
+        }
         await dispatch(setLoading(false));
       } catch (error) {
         console.error("Error fetching boat types:", error);
@@ -71,7 +84,7 @@ const Location = () => {
 
   return (
     <>
-      {loading ? (
+      {loading && locationPermission && location ? (
         <LoadingIndicator />
       ) : (
         <ScrollView>
@@ -121,11 +134,12 @@ const Location = () => {
             </View>
             <View>
               <Text>Address </Text>
-              <CustomTextInput
+              {/* <CustomTextInput
                 value={location.address}
                 onChange={handleChange}
                 name="address"
-              ></CustomTextInput>
+              ></CustomTextInput> */}
+              <GoogleAddress value={location.address} name="address" onChange={handleChange}></GoogleAddress>
               {errorMessages.address && (
                 <Text style={styles.error}>{errorMessages.address}</Text>
               )}

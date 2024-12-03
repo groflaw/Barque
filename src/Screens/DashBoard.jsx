@@ -15,7 +15,7 @@ import Navbar from "../Components/Navbar";
 import { setMode } from "../Store/Global";
 
 import headMark from "../../assets/Icons/dashboardmark.png";
-import hostAvatar from "../../assets/Icons/hostavatar.png";
+import hostAvatar from "../../assets/Profile/user.png";
 import startImage from "../../assets/Icons/Iconstar.png";
 import messageImage from "../../assets/Icons/nav-chat.png";
 import reservarImage from "../../assets/Icons/nav-reservas.png";
@@ -48,13 +48,13 @@ const DashBoard = () => {
             Dashboard
           </Text>
           <View className="flex flex-row items-center justify-start mt-3">
-            <Image source={hostAvatar}></Image>
+            <Image  style={{width : 75, height : 75}}source={curuser.avatar ? { uri: curuser.avatar } : hostAvatar}></Image>
             <View className="flex ml-4">
               <Text style={styles.Name}>
                 {curuser.firstName + " " + curuser.lastName}
               </Text>
               <View className="flex flex-row items-center">
-                <Image source={startImage}></Image>
+                <Image source={startImage} style={{width : 20, height : 20}}></Image>
                 <Text style={styles.review}>
                   {curuser.review ? "NO REVIEWS" : curuser.review}
                 </Text>
@@ -137,6 +137,7 @@ const DashBoard = () => {
           onPress={() => {
             changeMode();
           }}
+          style={{paddingBottom : 10}}
         >
           <Convert></Convert>
         </TouchableOpacity>
@@ -172,7 +173,7 @@ const styles = StyleSheet.create({
   },
   review: {
     color: "#ffffff",
-    fontSize: 9,
+    fontSize: 12,
     fontFamily: "Lexend Deca",
     fontWeight: "700",
     lineHeight: 14,
