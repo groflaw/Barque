@@ -31,7 +31,6 @@ const MainBody = () => {
         } else {
           result = await dispatch(getUserNews(curuser._id));
         }
-        console.log(result);
         if (result.errors) {
           setToastType("warning");
           setErrorMessage(result.errors.general);

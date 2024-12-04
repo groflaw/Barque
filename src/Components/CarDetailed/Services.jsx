@@ -2,15 +2,12 @@ import { ScrollView, StyleSheet, View, Text, Image } from "react-native";
 import captionImage from "../../../assets/Icons/captionImage.png";
 import peopleImage from "../../../assets/Icons/Iconpeopleoutline.png";
 import { useState, useEffect } from "react";
+
+import { cancelback } from "../../Utils/Constant";
 const Services = ({resrate, cancellation, capacity, plans}) => {
   const [captain, setCaptain] = useState(
     plans?.type.some((plan) => plan.captain === 1)
   );
-  const [cancelback, setCancelback] = useState([
-    { color: "#2a8500", text: "FLEXIBLE" },
-    { color: "#f4bf64", text: "MODERATE" },
-    { color: "#ff3b30", text: "STRICT" },
-  ]);
   return (
     <View
       className="flex flex-row flex-wrap justify-center mt-5"

@@ -19,8 +19,8 @@ import Details from "./Details";
 import Similar from "./Similar";
 import BookAction from "./BookAction";
 import ToastMessage from "../Basic/ToastMessage/ToastMessage";
-
 import LoadingIndicator from "../Basic/LoadingIndicator";
+
 
 const CarDetailed = () => {
   const dispatch = useDispatch();

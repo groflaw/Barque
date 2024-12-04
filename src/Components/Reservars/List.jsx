@@ -81,11 +81,22 @@ const List = () => {
                       Date: {new Date(item.date).toLocaleDateString()}
                     </Text>
                     <View className="flex flex-row gap-2">
-                      <Text
-                        style={[styles.type, { backgroundColor: BookingStatus[item.status].color }]}
+                      <View
+                        style={[
+                          styles.type,
+                          { backgroundColor: BookingStatus[item.status].color },
+                        ]}
                       >
-                        {BookingStatus[item.status].title}
-                      </Text>
+                        <Text className="text-white">
+                          {BookingStatus[item.status].title}
+                        </Text>
+                        {mode && item.status == 0 && (
+                          <Text style={styles.badge}>!</Text>
+                        )}
+                        {!mode && item.status == 2 && (
+                          <Text style={styles.badge}>!</Text>
+                        )}
+                      </View>
                       <TouchableOpacity
                         onPress={() => {
                           nextStep(item);
@@ -195,6 +206,17 @@ const styles = StyleSheet.create({
     elevation: 5,
     padding: 16,
   },
+  badge: {
+    position: "absolute",
+    top: -5,
+    right: 1,
+    backgroundColor: "#ff3b30",
+    borderRadius: 50,
+    paddingLeft: 5,
+    paddingRight: 5,
+    fontSize: 10,
+    color: "white",
+  },
   date: {
     color: "#17233C",
     fontSize: 15,
@@ -207,7 +229,7 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     paddingLeft: 10,
     paddingRight: 10,
-    color: "#FFFFFF",
+    color: "white",
     fontSize: 14,
     fontFamily: "Lexend Deca",
     fontWeight: 800,

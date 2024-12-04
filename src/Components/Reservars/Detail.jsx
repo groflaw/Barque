@@ -10,9 +10,10 @@ import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
-import { BookingStatus, apiKey } from "../../Utils/Constant";
+import { BookingStatus, apiKey, cancelback } from "../../Utils/Constant";
 import { setCurhost, setLoading } from "../../Store/Global";
 import { getAllBoatTypes } from "../../Actions/BasicBoat/basicboat";
+import { setBookStatus } from "../../Actions/UserBoat/userboat";
 
 import Navbar from "../Navbar";
 import LoadingIndicator from "../Basic/LoadingIndicator";
@@ -90,6 +91,17 @@ const Detail = () => {
     fetchBoatTypes();
   }, []);
 
+  const SubmitStatus = async (value) => {
+    let result = await dispatch(setBookStatus(curbooking._id, value));
+    if (result.errors) {
+      setErrorMessage(result.errors.general);
+      handleShowToast();
+    } else {
+      if (value == 2) navigation.navigate("Confirm");
+      if (value == 1) navigation.navigate("Main");
+    }
+  };
+
   return (
     <>
       {loading ? (
@@ -98,7 +110,68 @@ const Detail = () => {
         <ScrollView>
           <View style={styles.container}>
             <View style={styles.card} className="mt-3">
+              <View className="flex flex-row items-center justify-between">
+                <Text style={styles.title}>Booking Status</Text>
+                <View className="flex flex-row gap-2">
+                  <View
+                    style={[
+                      styles.type,
+                      {
+                        backgroundColor: BookingStatus[curbooking.status].color,
+                      },
+                    ]}
+                  >
+                    <Text className="text-white">
+                      {BookingStatus[curbooking.status].title}
+                    </Text>
+                    {mode && curbooking.status == 0 && (
+                      <Text style={styles.badge}>!</Text>
+                    )}
+                    {!mode && curbooking.status == 2 && (
+                      <Text style={styles.badge}>!</Text>
+                    )}
+                  </View>
+                </View>
+              </View>
+              <View className=" flex flex-row mt-2">
+                <Text style={styles.name}>Price: </Text>
+                <Text style={styles.value}> ${plan.price}</Text>
+              </View>
+              <View className=" flex flex-row mt-2">
+                <Text style={styles.name}>Status: </Text>
+                <Text style={styles.value}>
+                  {BookingStatus[curbooking.status].title}
+                </Text>
+              </View>
+              {((mode && curbooking.status == 0) ||
+                (!mode && curbooking.status == 2)) && (
+                <View className="flex flex-row justify-around mt-4">
+                  <TouchableOpacity
+                    onPress={() => {
+                      SubmitStatus(2);
+                    }}
+                    style={[styles.btn, { backgroundColor: "#2a8500" }]}
+                  >
+                    <Text style={styles.btntext}>{mode ? "Confirm" :"Pay Now!"}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      if(mode){
+                        SubmitStatus(1);
+                      }else{
+                        
+                      }
+                    }}
+                    style={[styles.btn, { backgroundColor: "#ff3b30" }]}
+                  >
+                    <Text style={styles.btntext}>Cancel Booking</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+            <View style={styles.card} className="mt-3">
               <Text style={styles.title}>Boat Information</Text>
+
               <View className=" flex flex-row mt-2">
                 <Text style={styles.name}>Name: </Text>
                 <Text style={styles.value}>{curbooking.boatId.model}</Text>
@@ -115,7 +188,9 @@ const Detail = () => {
               </View>
               <View className=" flex flex-row mt-1">
                 <Text style={styles.name}>Capacity: </Text>
-                <Text style={styles.value}>{curbooking.boatId.capacity}</Text>
+                <Text style={styles.value}>
+                  {curbooking.boatId.capacity} people
+                </Text>
               </View>
             </View>
             <View style={styles.card} className="mt-3">
@@ -132,7 +207,9 @@ const Detail = () => {
                 </TouchableOpacity>
               </View>
               <View className=" flex flex-row mt-2">
-                <Text style={styles.name}>Captain: </Text>
+                <Text style={styles.name}>
+                  {mode ? "Customer" : "Captain"}:
+                </Text>
                 <Text style={styles.value}>
                   {mode
                     ? curbooking.userId.firstName +
@@ -144,30 +221,23 @@ const Detail = () => {
                 </Text>
               </View>
               <View className=" flex flex-row mt-1">
-                <Text style={styles.name}>Experience: </Text>
+                <Text style={styles.name}>{mode ? "Bio" : "Captain"}: </Text>
                 <Text style={styles.value}> Sea Explorer</Text>
               </View>
-              <View className=" flex flex-row mt-1">
-                <Text style={styles.name}>Phone Number: </Text>
-                <Text style={styles.value}>
-                  {mode
-                    ? curbooking.userId.phoneNumber
-                    : curbooking.hostId.phoneNumber}
-                </Text>
-              </View>
+              {curbooking.status == 3 && (
+                <View className=" flex flex-row mt-1">
+                  <Text style={styles.name}>Phone Number: </Text>
+                  <Text style={styles.value}>
+                    {mode
+                      ? curbooking.userId.phoneNumber
+                      : curbooking.hostId.phoneNumber}
+                  </Text>
+                </View>
+              )}
             </View>
             <View style={styles.card} className="mt-3">
-              <View className="flex flex-row items-center justify-between">
-                <Text style={styles.title}>Reservation Details</Text>
-                <Text
-                  style={[
-                    styles.status,
-                    { backgroundColor: BookingStatus[curbooking.status].color },
-                  ]}
-                >
-                  {BookingStatus[curbooking.status].title}
-                </Text>
-              </View>
+              <Text style={styles.title}>Reservation Details</Text>
+
               <View className=" flex flex-row mt-2">
                 <Text style={styles.name}>Date:</Text>
                 <Text style={styles.value}>
@@ -186,10 +256,20 @@ const Detail = () => {
                 <Text style={styles.name}>Plan:</Text>
                 <Text style={styles.value}> {curbooking.planId}</Text>
               </View>
-              <View className=" flex flex-row mt-2">
-                <Text style={styles.name}>Price: </Text>
-                <Text style={styles.value}> ${plan.price}</Text>
-              </View>
+              {!mode && (
+                <>
+                  <View className=" flex flex-row mt-1">
+                    <Text style={styles.name}>Payment Method:</Text>
+                    <Text style={styles.value}> {curbooking.paymethod}</Text>
+                  </View>
+                  <View className=" flex flex-row mt-1">
+                    <Text style={styles.name}>Cancellation Policy:</Text>
+                    <Text style={styles.value}>
+                      {cancelback[curbooking.boatId.cancellation - 1].text}
+                    </Text>
+                  </View>
+                </>
+              )}
             </View>
             <View style={styles.card} className="mt-3">
               <Text style={styles.title}>Sailing Location</Text>
@@ -273,7 +353,7 @@ const styles = StyleSheet.create({
     color: "#17233c",
     fontSize: 15,
     fontFamily: "Roboto",
-    maxWidth : '83%',
+    maxWidth: "83%",
   },
   profile: {
     borderRadius: 15,
@@ -286,15 +366,17 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     paddingBottom: 5,
   },
-  status: {
-    borderRadius: 15,
-    color: "#ffffff",
-    fontFamily: "Lexend Deca",
-    fontWeight: 600,
+  type: {
+    borderRadius: 8,
     paddingTop: 5,
+    paddingBottom: 5,
     paddingLeft: 10,
     paddingRight: 10,
-    paddingBottom: 5,
+    color: "white",
+    fontSize: 14,
+    fontFamily: "Lexend Deca",
+    fontWeight: 800,
+    textAlign: "center",
   },
   approve: {
     borderRadius: 6,
@@ -308,6 +390,31 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: "100%",
     height: 250,
+  },
+  btn: {
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderRadius: 6,
+    width: "40%",
+  },
+  btntext: {
+    textAlign: "center",
+    color: "#ffffff",
+    fontSize: 14,
+    fontFamily: "Lexend Deca",
+  },
+  badge: {
+    position: "absolute",
+    top: -5,
+    right: 1,
+    backgroundColor: "#ff3b30",
+    borderRadius: 50,
+    paddingLeft: 5,
+    paddingRight: 5,
+    fontSize: 10,
+    color: "white",
   },
 });
 export default Detail;

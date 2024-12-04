@@ -36,28 +36,28 @@ const styles = StyleSheet.create({
   },
   Title: {
     color: "#030303",
-    fontSize: 20, // Use a number without 'px'
-    fontFamily: "Lexend Deca", // Ensure this font is loaded in your project
-    fontWeight: "700", // Use string '700' for bold
-    lineHeight: 28, // Use a number for lineHeight
+    fontSize: 20, 
+    fontFamily: "Lexend Deca",
+    fontWeight: "700", 
+    lineHeight: 28, 
   },
   addButton: {
-    borderWidth: 0, // Equivalent to border: '0'
-    borderRadius: 6, // Radius for rounded corners
-    backgroundColor: "#2a8500", // Background color
-    paddingVertical: 10, // Add some vertical padding (adjust as needed)
-    paddingHorizontal: 15, // Add some horizontal padding (adjust as needed)
-    alignItems: "center", // Center align the text
-    color: "#ffffff", // Text color
-    fontSize: 14, // Font size as a number
-    fontFamily: "Lexend Deca", // Make sure to load this font
+    borderWidth: 0, 
+    borderRadius: 6, 
+    backgroundColor: "#2a8500",
+    paddingVertical: 10, 
+    paddingHorizontal: 15, 
+    alignItems: "center", 
+    color: "#ffffff",
+    fontSize: 14,
+    fontFamily: "Lexend Deca", 
   },
   card: {
-    backgroundColor: "#ffffff", // Background color
-    borderRadius: 8, // Border radius
-    borderWidth: 1, // Border width
-    borderColor: "#efefef", // Border color
-    shadowColor: "#000", // Shadow color
+    backgroundColor: "#ffffff", 
+    borderRadius: 8, 
+    borderWidth: 1,
+    borderColor: "#efefef",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 4,

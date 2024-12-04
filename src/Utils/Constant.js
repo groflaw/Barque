@@ -7,3 +7,9 @@ export const BookingStatus = [
   { title: "Confirmed", color: "#2a8500" },
 ];
 export const apiKey = "AIzaSyBUHaXnKMYi8ipKF-UgCHWH1TSdVCse8p0"; 
+
+export const cancelback = [
+  { color: "#2a8500", text: "FLEXIBLE" },
+  { color: "#f4bf64", text: "MODERATE" },
+  { color: "#ff3b30", text: "STRICT" },
+];

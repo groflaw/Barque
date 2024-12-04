@@ -12,10 +12,10 @@ import { useNavigation } from "@react-navigation/native";
 
 import List from "../Components/Reservars/List";
 import Detail from "../Components/Reservars/Detail";
+import Confirm from "../Components/Reservars/Confirm";
 
 import backImage from "../../assets/Icons/headerback.png";
 import hostmarkImage from "../../assets/Icons/headermark.png";
-import usermarkImage from "../../assets/Icons/dashboardmark.png";
 
 const Reservas = () => {
   const Stack = createNativeStackNavigator(); //Navigator Screen
@@ -51,6 +51,11 @@ const Reservas = () => {
         name="Detail"
         component={Detail}
         options={{ header: () => <HomeHeaderRight /> }}
+      />
+      <Stack.Screen
+        name="Confirm"
+        component={Confirm}
+        options={{header:()=><HomeHeaderRight/>}}
       />
     </Stack.Navigator>
   );
