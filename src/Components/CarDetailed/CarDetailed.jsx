@@ -21,7 +21,6 @@ import BookAction from "./BookAction";
 import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 import LoadingIndicator from "../Basic/LoadingIndicator";
 
-
 const CarDetailed = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -41,7 +40,7 @@ const CarDetailed = () => {
   useEffect(() => {
     setBoatId(curboat?._id);
     setUserId(curuser?._id);
-  });
+  }, [curboat, curuser]);
 
   const handleShowToast = () => {
     if (toastRef.current) {
@@ -70,12 +69,12 @@ const CarDetailed = () => {
       return;
     }
     let result = await dispatch(reservation(userId, curhost._id, boatId, plan));
-    if (result.errors) {
+    if (result && result.errors) {
       setErrorMessage(result.errors.general);
       handleShowToast();
     } else {
-      await dispatch(setCurboat({}));
-      await dispatch(setCurhost({}));
+      // await dispatch(setCurboat({}));
+      // await dispatch(setCurhost({}));
       navigation.navigate("Reservas");
     }
   };
@@ -85,54 +84,60 @@ const CarDetailed = () => {
       {loading ? (
         <LoadingIndicator />
       ) : (
-        <ScrollView>
-          <HeaderImage></HeaderImage>
-          <Summary
-            location={curboat.location1}
-            model={curboat.model}
-            review={curhost.review || 0}
-            booking={curhost.booking || 0}
-          ></Summary>
-          <Services
-            resrate={curhost.resrate || 100}
-            cancellation={curboat.cancellation}
-            capacity={curboat.capacity}
-          ></Services>
-          <Description des={curboat.description}></Description>
-          <Accessories data={curboat.accessories}></Accessories>
-          <Specs
-            year={curboat.year}
-            feets={curboat.size}
-            brand={curboat.boatbrand}
-            type={curboat.boattype}
-            model={curboat.model}
-            capacity={curboat.capacity}
-          ></Specs>
-          <Plans data={curboat.plans} setPlan={setPlan}></Plans>
-          <Reviews
-            review={curhost.review || 0}
-            booking={curhost.booking || 0}
-            data={curboat.reviews}
-          ></Reviews>
-          <Host
-            name={curhost.firstName + " " + curhost.lastName}
-            review={curhost.review || 0}
-            resrate={curhost.resrate || 100}
-            avatar={curhost.avatar}
-          ></Host>
-          <Details data={curboat.allowes}></Details>
-          <Similar location1={curboat.location1} boatId={curboat._id}></Similar>
-          <BookAction
-            plan={plan}
-            plans={curboat.plans}
-            handleSubmit={handleSubmit}
-          ></BookAction>
+        <>
+          <ScrollView>
+            <HeaderImage></HeaderImage>
+            <Summary
+              location={curboat.location1}
+              model={curboat.model}
+              review={curhost.review || 0}
+              booking={curhost.booking || 0}
+            ></Summary>
+            <Services
+              resrate={curhost.resrate || 100}
+              cancellation={curboat.cancellation}
+              capacity={curboat.capacity}
+            ></Services>
+            <Description des={curboat.description}></Description>
+            <Accessories data={curboat.accessories}></Accessories>
+            <Specs
+              year={curboat.year}
+              feets={curboat.size}
+              brand={curboat.boatbrand}
+              type={curboat.boattype}
+              model={curboat.model}
+              capacity={curboat.capacity}
+            ></Specs>
+            <Plans data={curboat.plans} setPlan={setPlan}></Plans>
+            <Reviews
+              review={curhost.review || 0}
+              booking={curhost.booking || 0}
+              data={curboat.reviews}
+            ></Reviews>
+            <Host
+              name={curhost.firstName + " " + curhost.lastName}
+              review={curhost.review || 0}
+              resrate={curhost.resrate || 100}
+              avatar={curhost.avatar}
+            ></Host>
+            <Details data={curboat.allowes}></Details>
+            <Similar
+              location1={curboat.location1}
+              boatId={curboat._id}
+            ></Similar>
+          </ScrollView>
+
           <ToastMessage
             type={toastType}
             description={errormessage}
             ref={toastRef}
           />
-        </ScrollView>
+          <BookAction
+            plan={plan}
+            plans={curboat.plans}
+            handleSubmit={handleSubmit}
+          ></BookAction>
+        </>
       )}
     </>
   );

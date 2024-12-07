@@ -61,6 +61,10 @@ const Myboats = () => {
   };
 
   useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchMyBoats();
+    });
+
     const fetchMyBoats = async () => {
       try {
         await dispatch(setLoading(true));
@@ -81,9 +85,9 @@ const Myboats = () => {
     if (curuser._id == undefined) {
       navigation.navigate("SignUp");
     } else {
-      fetchMyBoats();
+      return unsubscribe;
     }
-  }, []);
+  }, [navigation]);
 
   return (
     <>

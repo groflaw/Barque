@@ -9,37 +9,36 @@ import {
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 
-import markImage from "../../../assets/Icons/boatallow.png";
-
-const Confirm = () => {
+const CashPayment = () => {
   const navigation = useNavigation();
 
   const nextStep = () => {
-    navigation.navigate("Main");
+    navigation.navigate("SelectPayment");
   };
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <View className="flex flex-row items-center">
-          <Text style={styles.title}>Booking Confirmed</Text>
-          <Image source={markImage} className="ml-3"></Image>
-        </View>
-        <Text style={styles.des} className="mt-3">
-          The user has xx hours to pay for the booking. Please keep an eye on
-          the status of the booking over the next few hours.
+        <Text style={styles.title}>Cash Payments</Text>
+        <Text style={styles.des} className="mt-2">
+          In order to confirm your booking you will need to pay 10% of the
+          amount with an online method
         </Text>
-        <View style={styles.btn} className="mt-3">
+        <View style={styles.hr} />
+        <Text style={styles.des} className="mt-2">
+          The remaining amount should be paid in cash directly to your host!
+        </Text>
+      </View>
+      <View style={styles.btn} className="mt-3">
           <TouchableOpacity
             onPress={() => {
               nextStep();
             }}
           >
             <Text style={styles.btntext} className="text-center text-white">
-              Go Home
+              Select your Online Payment
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
     </View>
   );
 };
@@ -67,15 +66,15 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "#030303",
-    fontSize: 18,
+    fontSize: 20,
     fontFamily: "Roboto",
     fontWeight: 900,
   },
   des: {
     color: "#17233c",
-    fontSize: 16,
+    fontSize: 15,
     fontFamily: "Lexend Deca",
-    lineHeight: 25,
+    lineHeight: 22,
   },
   btn: {
     paddingTop: 10,
@@ -89,5 +88,10 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     lineHeight: 20,
   },
+  hr: {
+    marginTop: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#000",
+  },
 });
-export default Confirm;
+export default CashPayment;

@@ -9,25 +9,30 @@ import {
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 
-import markImage from "../../../assets/Icons/boatallow.png";
-
-const Confirm = () => {
+const PaymentDetail = () => {
   const navigation = useNavigation();
 
   const nextStep = () => {
-    navigation.navigate("Main");
+    navigation.navigate("SelectPayment");
   };
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <View className="flex flex-row items-center">
-          <Text style={styles.title}>Booking Confirmed</Text>
-          <Image source={markImage} className="ml-3"></Image>
+        <Text style={styles.title}>Payment Details</Text>
+        <View className="flex flex-row justify-between mt-3">
+          <Text style={styles.item}>Plane Price</Text>
+          <Text style={styles.item}>$450</Text>
         </View>
-        <Text style={styles.des} className="mt-3">
-          The user has xx hours to pay for the booking. Please keep an eye on
-          the status of the booking over the next few hours.
-        </Text>
+        <View className="flex flex-row justify-between mt-3">
+          <Text style={styles.item}>Service Fee</Text>
+          <Text style={styles.item}>$45</Text>
+        </View>
+        <View style={styles.hr} />
+        <View className="flex flex-row justify-between mt-3">
+          <Text style={styles.total}>Total Amount</Text>
+          <Text style={styles.total}>$500</Text>
+        </View>
+      </View>
         <View style={styles.btn} className="mt-3">
           <TouchableOpacity
             onPress={() => {
@@ -35,11 +40,10 @@ const Confirm = () => {
             }}
           >
             <Text style={styles.btntext} className="text-center text-white">
-              Go Home
+              Proceed with Payment
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
     </View>
   );
 };
@@ -71,11 +75,11 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto",
     fontWeight: 900,
   },
-  des: {
+  item: {
     color: "#17233c",
-    fontSize: 16,
+    fontSize: 15,
     fontFamily: "Lexend Deca",
-    lineHeight: 25,
+    lineHeight: 20,
   },
   btn: {
     paddingTop: 10,
@@ -89,5 +93,17 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     lineHeight: 20,
   },
+  hr: {
+    marginTop: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#000",
+  },
+  total: {
+    color: "#17233c",
+    fontSize: 16,
+    fontFamily: "Lexend Deca",
+    fontWeight: 700,
+    lineHeight: 24,
+  },
 });
-export default Confirm;
+export default PaymentDetail;

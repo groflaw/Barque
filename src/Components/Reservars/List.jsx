@@ -80,14 +80,15 @@ const List = () => {
                     <Text style={styles.date}>
                       Date: {new Date(item.date).toLocaleDateString()}
                     </Text>
-                    <View className="flex flex-row gap-2">
+                    <View className="flex flex-row justify-around" style={{width : '56%'}}>
                       <View
                         style={[
                           styles.type,
                           { backgroundColor: BookingStatus[item.status].color },
+                          {width : '60%'}
                         ]}
                       >
-                        <Text className="text-white">
+                        <Text className="text-white text-center">
                           {BookingStatus[item.status].title}
                         </Text>
                         {mode && item.status == 0 && (
@@ -101,6 +102,7 @@ const List = () => {
                         onPress={() => {
                           nextStep(item);
                         }}
+                        style={{width : '25%'}}
                       >
                         <Text
                           style={[styles.type, { backgroundColor: "#102a5e" }]}
@@ -180,7 +182,7 @@ const List = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 10,
+    paddingTop: 20,
     paddingBottom: 10,
     paddingLeft: 25,
     paddingRight: 25,
@@ -227,8 +229,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingTop: 5,
     paddingBottom: 5,
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingLeft: 1,
+    paddingRight: 1,
     color: "white",
     fontSize: 14,
     fontFamily: "Lexend Deca",

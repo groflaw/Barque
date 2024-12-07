@@ -9,36 +9,45 @@ import {
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 
-import markImage from "../../../assets/Icons/boatallow.png";
+import CustomTextInput from "../Basic/Input";
+import paypal from "../../../assets/Icons/paypal.png";
 
-const Confirm = () => {
+const PaypalPayment = () => {
   const navigation = useNavigation();
 
   const nextStep = () => {
-    navigation.navigate("Main");
+    navigation.navigate("PaymentConfirm");
   };
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <View className="flex flex-row items-center">
-          <Text style={styles.title}>Booking Confirmed</Text>
-          <Image source={markImage} className="ml-3"></Image>
+        <View className="flex flex-row gap-4">
+          <Text style={styles.title}>Paypal Pay</Text>
+          <Image source={paypal}></Image>
         </View>
         <Text style={styles.des} className="mt-3">
-          The user has xx hours to pay for the booking. Please keep an eye on
-          the status of the booking over the next few hours.
+          Please proceed to make your payment using your PayPal app or website.
+          Once the payment is completed, enter your PayPal email address below
+          to confirm the transaction.
         </Text>
-        <View style={styles.btn} className="mt-3">
-          <TouchableOpacity
-            onPress={() => {
-              nextStep();
-            }}
-          >
-            <Text style={styles.btntext} className="text-center text-white">
-              Go Home
-            </Text>
-          </TouchableOpacity>
-        </View>
+      </View>
+      <Text style={styles.title} className="mt-4">
+        Amount: $500
+      </Text>
+      <Text style={[styles.des, { fontWeight: 700 }]} className="mt-4">
+        PayPal Email Address
+      </Text>
+      <CustomTextInput></CustomTextInput>
+      <View style={styles.btn} className="mt-3">
+        <TouchableOpacity
+          onPress={() => {
+            nextStep();
+          }}
+        >
+          <Text style={styles.btntext} className="text-center text-white">
+            Submit Confirmation Number
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -67,15 +76,15 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "#030303",
-    fontSize: 18,
+    fontSize: 20,
     fontFamily: "Roboto",
     fontWeight: 900,
   },
   des: {
     color: "#17233c",
-    fontSize: 16,
+    fontSize: 15,
     fontFamily: "Lexend Deca",
-    lineHeight: 25,
+    lineHeight: 22,
   },
   btn: {
     paddingTop: 10,
@@ -89,5 +98,10 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     lineHeight: 20,
   },
+  hr: {
+    marginTop: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#000",
+  },
 });
-export default Confirm;
+export default PaypalPayment;

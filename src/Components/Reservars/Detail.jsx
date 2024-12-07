@@ -92,13 +92,17 @@ const Detail = () => {
   }, []);
 
   const SubmitStatus = async (value) => {
-    let result = await dispatch(setBookStatus(curbooking._id, value));
-    if (result.errors) {
-      setErrorMessage(result.errors.general);
-      handleShowToast();
-    } else {
-      if (value == 2) navigation.navigate("Confirm");
-      if (value == 1) navigation.navigate("Main");
+    if(mode){
+      let result = await dispatch(setBookStatus(curbooking._id, value));
+      if (result.errors) {
+        setErrorMessage(result.errors.general);
+        handleShowToast();
+      } else {
+        if (value == 2) navigation.navigate("Confirm");
+        if (value == 1) navigation.navigate("Main");
+      }
+    }else{
+      navigation.navigate("PaymentDetail");
     }
   };
 
@@ -112,7 +116,7 @@ const Detail = () => {
             <View style={styles.card} className="mt-3">
               <View className="flex flex-row items-center justify-between">
                 <Text style={styles.title}>Booking Status</Text>
-                <View className="flex flex-row gap-2">
+                <View className="flex flex-row gap-2" style={{width : '50%'}}>
                   <View
                     style={[
                       styles.type,
@@ -121,7 +125,7 @@ const Detail = () => {
                       },
                     ]}
                   >
-                    <Text className="text-white">
+                    <Text className="text-white text-center">
                       {BookingStatus[curbooking.status].title}
                     </Text>
                     {mode && curbooking.status == 0 && (
@@ -317,7 +321,7 @@ const Detail = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 10,
+    paddingTop: 20,
     paddingBottom: 10,
     paddingLeft: 25,
     paddingRight: 25,
@@ -377,6 +381,7 @@ const styles = StyleSheet.create({
     fontFamily: "Lexend Deca",
     fontWeight: 800,
     textAlign: "center",
+    width:'100%'
   },
   approve: {
     borderRadius: 6,

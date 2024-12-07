@@ -24,6 +24,7 @@ export default function BookPopup({
   };
   return (
     <Modal visible={visible} transparent={transparent} onRequestClose={dismiss}>
+      
       <View
         style={{
           ...styles.modalContent,

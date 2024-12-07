@@ -31,6 +31,24 @@ export const getMyboats = (userid) => async (dispatch) => {
   }
   return {};
 };
+export const delMyboat = (boatId) => async(dispatch)=>{
+  await dispatch(setLoading(true));
+  let errors = {};
+  try{
+    const response = await axios.delete(`${Backend_API}/boats/delboat/${boatId}`);
+    if(response.data.flag == true){
+      return response.data.data
+    }else{
+      errors[response.data.sort] =response.data.error;
+      return {errors}
+    }
+  }catch (error) {
+    errors.general = "There was an error delete boat";
+    return { errors };
+  } finally {
+    await dispatch(setLoading(false));
+  }
+}
 export const setBoatFlag = (id, flag) => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};

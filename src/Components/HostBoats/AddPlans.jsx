@@ -5,6 +5,7 @@ import {
   Text,
   ScrollView,
   TextInput,
+  Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react";
@@ -14,8 +15,10 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { addPlan, delPlan } from "../../Actions/AddBoat/addboat";
 
 import Option from "../Basic/Option";
-import CheckBox from "../Basic/CheckBox";
 import LoadingIndicator from "../Basic/LoadingIndicator";
+
+import schedule from "../../../assets/Icons/schedule.png";
+import calendar from "../../../assets/Icons/calendar.png";
 
 const AddPlans = () => {
   const navigation = useNavigation();
@@ -31,6 +34,7 @@ const AddPlans = () => {
   const [cursort, setCursort] = useState(null);
   const [errorMessages, setErrorMessages] = useState({});
   const [plans, setPlans] = useState(curboat.plans);
+  const [cusplan, setCusplan] = useState(false);
 
   const nextStep = () => {
     navigation.navigate("AddDocImage");
@@ -119,7 +123,9 @@ const AddPlans = () => {
       ) : (
         <ScrollView>
           <View style={styles.container}>
-            <Text style={styles.title}>Add your plan</Text>
+            <Text style={styles.title} className="mt-3">
+              Add your plans
+            </Text>
             <Text style={styles.des} className="mt-3">
               Add your travel plan. You will be able to add up to 5 different
               plan for your boat indicating price, schedule, if captain is
@@ -189,53 +195,113 @@ const AddPlans = () => {
                     </Text>
                   )}
                   <View className="flex items-center mb-2 ">
-                    <View className="flex flex-row items-center justify-around mt-2 ">
+                    {!cusplan && (
+                      <View className="flex flex-row justify-around mt-2 items-center  w-full">
+                        <Text style = {styles.clockdes}>Duratoin:</Text>
+                        <TouchableOpacity
+                          onPress={() => {
+                            showDatepicker(
+                              "start",
+                              "time",
+                              item._id,
+                              item.start
+                            );
+                          }}
+                        >
+                          <Text style={styles.clock}>
+                            {new Date(item.start).toTimeString().slice(0, 5)}
+                          </Text>
+                        </TouchableOpacity>
+                        <Text style={styles.clockdes}>to</Text>
+                        <TouchableOpacity
+                          onPress={() => {
+                            showDatepicker("end", "time", item._id, item.end);
+                          }}
+                        >
+                          <Text style={styles.clock}>
+                            {new Date(item.end).toTimeString().slice(0, 5)}
+                          </Text>
+                        </TouchableOpacity>
+                        <Image source={schedule}></Image>
+                      </View>
+                    )}
+
+                    <View className="w-full flex flex-row">
                       <TouchableOpacity
-                        onPress={() => {
-                          showDatepicker("start", "date", item._id, item.start);
-                        }}
+                        onPress={() => setCusplan(!cusplan)}
+                        className="mt-2"
+                        style={{ width: "38%" }}
                       >
-                        <Text style={styles.clock}>
-                          {new Date(item.start).toLocaleDateString()}
-                        </Text>
-                      </TouchableOpacity>
-                      <View style={{ width: 25 }}></View>
-                      <TouchableOpacity
-                        onPress={() => {
-                          showDatepicker("start", "time", item._id, item.start);
-                        }}
-                      >
-                        <Text style={styles.clock}>
-                          {new Date(item.start).toLocaleTimeString()}
+                        <Text
+                          style={[styles.continue, { paddingVertical: 10 }]}
+                          className="text-center"
+                        >
+                          {!cusplan ? "+ Custom Plan" : "Custom Plan"}
                         </Text>
                       </TouchableOpacity>
                     </View>
-                    <View className="flex flex-row items-center justify-around mt-2">
-                      <TouchableOpacity
-                        onPress={() => {
-                          showDatepicker("end", "date", item._id, item.end);
-                        }}
-                      >
-                        <Text style={styles.clock}>
-                          {new Date(item.end).toLocaleDateString()}
-                        </Text>
-                      </TouchableOpacity>
-                      <View style={{ width: 25 }}></View>
-                      <TouchableOpacity
-                        onPress={() => {
-                          showDatepicker("end", "time", item._id, item.end);
-                        }}
-                      >
-                        <Text style={styles.clock}>
-                          {new Date(item.end).toLocaleTimeString()}
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                    
+                    {cusplan && (
+                      <>
+                        <View className="flex flex-row items-center justify-around mt-2" style={{width : '70%'}}>
+                          <TouchableOpacity
+                            onPress={() => {
+                              showDatepicker(
+                                "start",
+                                "time",
+                                item._id,
+                                item.start
+                              );
+                            }}
+                          >
+                            <Text style={styles.clock}>
+                              {new Date(item.start).toTimeString().slice(0, 5)}
+                            </Text>
+                          </TouchableOpacity>
+
+                          <TouchableOpacity
+                            onPress={() => {
+                              showDatepicker(
+                                "start",
+                                "date",
+                                item._id,
+                                item.start
+                              );
+                            }}
+                          >
+                            <Text style={styles.clock}>
+                              {new Date(item.start).toLocaleDateString()}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+
+                        <View className="flex flex-row items-center justify-around w-full mt-2" style={{width : '70%'}}>
+                          <TouchableOpacity
+                            onPress={() => {
+                              showDatepicker("end", "time", item._id, item.end);
+                            }}
+                          >
+                            <Text style={styles.clock}>
+                              {new Date(item.end).toTimeString().slice(0, 5)}
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => {
+                              showDatepicker("end", "date", item._id, item.end);
+                            }}
+                          >
+                            <Text style={styles.clock}>
+                              {new Date(item.end).toLocaleDateString()}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      </>
+                    )}
+
                     {errorMessages.start && (
                       <Text style={styles.error}>{errorMessages.start}</Text>
                     )}
                   </View>
+
                   <View className="flex flex-row items-center justify-between">
                     <Option
                       defaultValue={item.captain}
@@ -266,7 +332,7 @@ const AddPlans = () => {
                       className="w-32"
                     >
                       <Text
-                        style={styles.addTemp}
+                        style={[styles.addTemp,{backgroundColor : '#ff3b30'}]}
                         className="w-full text-center"
                       >
                         DELETE
@@ -316,7 +382,7 @@ const styles = StyleSheet.create({
   },
   des: {
     color: "#000000",
-    fontSize: 12,
+    fontSize: 14,
     fontFamily: "Lexend Deca",
   },
   addTemp: {
@@ -325,6 +391,7 @@ const styles = StyleSheet.create({
     padding: 10,
     color: "#ffffff",
     fontSize: 14,
+    fontWeight : 700,
     fontFamily: "Lexend Deca",
   },
   savePlan: {
@@ -382,8 +449,12 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   clock: {
-    fontSize: 14,
-    fontFamily: "DigitalClock",
+    paddingHorizontal: 15,
+    paddingVertical: 9,
+    borderWidth: 1,
+    borderColor: "#505050",
+    borderRadius: 8,
+    backgroundColor: "#ffffff",
   },
   continue: {
     borderRadius: 6,
@@ -399,5 +470,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 2,
   },
+  clockdes : {
+    color: '#17233c',
+    fontSize: 15,
+    fontFamily: 'Lexend Deca',
+    fontWeight: 700,
+  }
 });
 export default AddPlans;

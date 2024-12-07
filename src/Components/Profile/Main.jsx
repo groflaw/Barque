@@ -26,6 +26,8 @@ const Main = () => {
   const navigation = useNavigation();
 
   const curuser = useSelector((state) => state.Slice.user);
+  const mode = useSelector((state) => state.Global.mode);
+
   const [user, setUser] = useState(curuser);
   const dispatch = useDispatch();
   const nextStep = (url) => {
@@ -110,15 +112,17 @@ const Main = () => {
             <Image source={rightArrowImage}></Image>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => nextStep("Payment")}>
-          <View className="flex flex-row items-center justify-between mt-6 mb-6">
-            <View className="flex flex-row items-center">
-              <Image source={credietImage}></Image>
-              <Text style={styles.key}>Metodos de Pago</Text>
+        {mode && (
+          <TouchableOpacity onPress={() => nextStep("Payment")}>
+            <View className="flex flex-row items-center justify-between mt-6 mb-6">
+              <View className="flex flex-row items-center">
+                <Image source={credietImage}></Image>
+                <Text style={styles.key}>Metodos de Pago</Text>
+              </View>
+              <Image source={rightArrowImage}></Image>
             </View>
-            <Image source={rightArrowImage}></Image>
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity onPress={() => nextStep("Notification")}>
           <View className="flex flex-row items-center justify-between mt-6 mb-6">
             <View className="flex flex-row items-center">
@@ -129,7 +133,7 @@ const Main = () => {
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => nextStep("Support")}>
-          <View className="flex flex-row items-center justify-between mt-6 mb-6">
+         < View className="flex flex-row items-center justify-between mt-6 mb-3">
             <View className="flex flex-row items-center">
               <Image source={supportImage}></Image>
               <Text style={styles.key}>Soporte</Text>
@@ -188,18 +192,18 @@ const styles = StyleSheet.create({
   },
   name: {
     color: "#0a252f",
-    fontSize: 19, // Numeric value
-    fontFamily: "Lexend Deca", // Custom font family
-    fontWeight: "700", // String for font weight
-    lineHeight: 27, // Numeric value
+    fontSize: 19, 
+    fontFamily: "Lexend Deca", 
+    fontWeight: "700", 
+    lineHeight: 27,
   },
   key: {
     marginLeft: 15,
     color: "#17233c",
-    fontSize: 16, // Use numeric value
-    fontFamily: "Lexend Deca", // Custom font family
-    fontWeight: "500", // String for font weight
-    lineHeight: 23, // Use numeric value
+    fontSize: 16, 
+    fontFamily: "Lexend Deca", 
+    fontWeight: "500", 
+    lineHeight: 23,
   },
 });
 export default Main;
