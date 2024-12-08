@@ -1,8 +1,9 @@
 import { ScrollView, StyleSheet, View, Text } from "react-native";
 import { React, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
-import { getAllboats } from "../../Actions/UserBoat/userboat";
+import { getAllboats, getBoatsCity } from "../../Actions/UserBoat/userboat";
 
 import Brands from "../Brands/Brands";
 import Boats from "../PopularCars/Boats";
@@ -11,22 +12,33 @@ import Navbar from "../Navbar";
 import LoadingIndicator from "../Basic/LoadingIndicator";
 
 const HomeBody = () => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
 
   const loading = useSelector((state) => state.Global.loading);
-  let curuser = useSelector((state) => state.Slice.user);
+  const curcity = useSelector((state) => state.Global.curcity);
 
   const [visible, setVisible] = useState(false);
   const [boats, setBoats] = useState([]);
 
   useEffect(() => {
     const fetchboats = async () => {
-      if (curuser?._id == undefined) curuser = {_id : 0};
-      let result = await dispatch(getAllboats(curuser._id));
+      let result = await dispatch(getAllboats());
       setBoats(result);
     };
-    fetchboats();
-  }, []);
+    const fetchboatscity = async () => {
+      let result = await dispatch(getBoatsCity(curcity));
+      setBoats(result);
+    };
+    const unsubscribe = navigation.addListener("focus", async () => {
+      if (curcity != "") {
+        fetchboatscity();
+      } else {
+        fetchboats();
+      }
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const openPopup = () => {
     setVisible(true);
@@ -42,7 +54,10 @@ const HomeBody = () => {
         <LoadingIndicator />
       ) : (
         <>
-          <Brands onpress={openPopup} setBoats={setBoats} userId = {curuser._id}/>
+          <Brands
+            onpress={openPopup}
+            setBoats={setBoats}
+          />
           <Popup
             visible={visible}
             transparent={true}

@@ -13,11 +13,11 @@ import TucacasImg from "../../../assets/Background/Destinos.png";
 
 const DesCard = ({ deslogo, descontent, price }) => {
   return (
-    <TouchableOpacity className="w-28 rounded-xl ">
+    <TouchableOpacity className="pt-5 w-28 rounded-2xl">
       <Image
-        className="mx-auto w-full rounded-xl h-85 object-fit"
-        source={deslogo}
-        style={{width : 80 , height : 80}}
+        className="mx-auto object-fit"
+        source={{ uri: deslogo }}
+        style={{ width: 90, height: 90, borderRadius: 10 }}
       />
       <Text className="mt-1" style={styles.model}>
         {descontent}

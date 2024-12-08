@@ -61,7 +61,7 @@ const Myboats = () => {
   };
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribe = navigation.addListener("focus", () => {
       fetchMyBoats();
     });
 
@@ -92,7 +92,7 @@ const Myboats = () => {
   return (
     <>
       {loading ? (
-          <LoadingIndicator />
+        <LoadingIndicator />
       ) : (
         <ScrollView>
           <View style={styles.container}>
@@ -101,11 +101,11 @@ const Myboats = () => {
               return (
                 <View
                   style={styles.card}
-                  className="flex flex-row items-center justify-between mt-4"
+                  className="flex flex-row items-center justify-between mt-4 w-full"
                 >
                   <View
                     className="flex flex-row items-center"
-                    style={{ width: "80%" }}
+                    style={{ width: "65%" }}
                   >
                     <Image style={styles.cardImage} source={boatcard}></Image>
                     <View className="ml-3 text-wrap">
@@ -123,8 +123,8 @@ const Myboats = () => {
                       </Text>
                     </View>
                   </View>
-                  <View style={{ width: "20%" }}>
-                    <TouchableOpacity onPress={() => handleEdit(item._id)}>
+                  <View style={{ width: "20%" }} className = "justify-center items-center">
+                    <TouchableOpacity onPress={() => handleEdit(item._id)} className="w-full">
                       <Text style={styles.edit} className="mb-2 text-center">
                         Editor
                       </Text>
@@ -138,16 +138,16 @@ const Myboats = () => {
                 </View>
               );
             })}
-            <View className="flex items-center mt-7 w-100">
-              <TouchableOpacity onPress={nextStep}>
-                <Text style={styles.addBoat} className="text-center w-72">
-                  + Agregar embarcación
-                </Text>
-              </TouchableOpacity>
-            </View>
           </View>
         </ScrollView>
       )}
+      <View className="flex items-center mt-2 mb-2 w-100">
+        <TouchableOpacity onPress={nextStep}>
+          <Text style={styles.addBoat} className="text-center w-72">
+            + Agregar embarcación
+          </Text>
+        </TouchableOpacity>
+      </View>
       <Navbar></Navbar>
     </>
   );

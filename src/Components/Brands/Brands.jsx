@@ -21,7 +21,7 @@ const IconComponent = () => (
   </Svg>
 );
 
-const Brands = ({ onpress, setBoats,userId }) => {
+const Brands = ({ onpress, setBoats }) => {
 
   const dispatch = useDispatch();
   const [keywords, setKeywords] = useState("");
@@ -35,9 +35,9 @@ const Brands = ({ onpress, setBoats,userId }) => {
   const search = async () => {
     let result = [];
     if(keywords.trim() != ""){
-       result = await dispatch(searchBoats(keywords, userId));
+       result = await dispatch(searchBoats(keywords));
     }else{
-       result = await dispatch(getAllboats(userId));
+       result = await dispatch(getAllboats());
     }
     setBoats(result);
   };
