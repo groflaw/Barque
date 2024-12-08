@@ -37,9 +37,11 @@ const Boarding = () => {
     const timer = setTimeout(() => {
       onSkipFun();
     }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
+    const unsubscribe = navigation.addListener("focus", async () => {
+      return () => clearTimeout(timer);
+    });
+    return unsubscribe
+  }, [navigation]);
 
   // Screens
   const FirstScreen = () => {
@@ -53,10 +55,7 @@ const Boarding = () => {
         ]}
       >
         <View className="z-50 px-6 space-y-5">
-          <Image
-            source={SplashImg}
-            preserveAspectRatio="xMidYMid slice"
-          />
+          <Image source={SplashImg} preserveAspectRatio="xMidYMid slice" />
         </View>
       </Animated.View>
     );

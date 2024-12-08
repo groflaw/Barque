@@ -57,8 +57,11 @@ const Allowed = () => {
         console.error("Error fetching boat types:", error);
       }
     };
-    fetchBoatTypes();
-  }, [dispatch]);
+    const unsubscribe = navigation.addListener("focus", async () => {
+      fetchBoatTypes();
+    })
+    return unsubscribe;
+  }, [navigation]);
   
   return (
     <>

@@ -88,8 +88,11 @@ const Detail = () => {
       await getCoordinates(curbooking.boatId.location2.address);
       await dispatch(setLoading(false));
     };
-    fetchBoatTypes();
-  }, []);
+    const unsubscribe = navigation.addListener("focus", async () => {
+      fetchBoatTypes();
+    })
+    return unsubscribe;
+  }, [navigation]);
 
   const SubmitStatus = async (value) => {
     if(mode){

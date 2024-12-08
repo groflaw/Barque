@@ -17,8 +17,15 @@ import { filterBoats } from "../../Actions/UserBoat/userboat";
 
 import Option from "../Basic/Option";
 import Number from "../Basic/Number";
+import CheckBox from "../Basic/CheckBox";
 
-export default function Popup({ visible, transparent, dismiss, margin, setBoats }) {
+export default function Popup({
+  visible,
+  transparent,
+  dismiss,
+  margin,
+  setBoats,
+}) {
   const dispatch = useDispatch();
 
   const [value, setValue] = useState(60);
@@ -27,6 +34,7 @@ export default function Popup({ visible, transparent, dismiss, margin, setBoats 
     boattype: 0,
     capacity: 0,
     price: 10,
+    any: true,
   });
 
   const boatTypes = useSelector((state) => state.BasicBoat.boattypes);
@@ -55,16 +63,23 @@ export default function Popup({ visible, transparent, dismiss, margin, setBoats 
     }));
   };
 
-  const search = async() => {
-    if (curuser?._id == undefined) curuser = {_id : 0};
-    let result = await dispatch(filterBoats(filter,curuser._id));
+  const toggleAnyCheckbox = (newValue) => {
+    setFilter((prevData) => ({
+      ...prevData,
+      any: newValue,
+    }));
+  };
+
+  const search = async () => {   
+    let result = await dispatch(filterBoats(filter));
     setBoats(result);
     dismiss();
     setFilter({
       size: 0,
       boattype: 0,
       capacity: 0,
-      price: 10,
+      price: 100,
+      any : true
     });
   };
 
@@ -115,14 +130,14 @@ export default function Popup({ visible, transparent, dismiss, margin, setBoats 
           <View className="flex mt-3 w-72">
             <View className="flex flex-row justify-between">
               <Text style={styles.sizeTitle}>Price Range</Text>
-              <Text style={styles.sizeTitle}>{filter.price * 10} - 1000 $</Text>
+              <Text style={styles.sizeTitle}>{filter.price } - 1000 $</Text>
             </View>
 
             <View style={styles.SliderContainer} className="mt-2">
-              <View style={{ ...styles.slider, width: `${filter.price}%` }} />
+              <View style={{ ...styles.slider, width: `${filter.price /10}%` }} />
               <Slider
                 minimumValue={1}
-                maximumValue={100}
+                maximumValue={1000}
                 value={filter.price}
                 onValueChange={onValueChange}
                 style={styles.SliderInput}
@@ -131,6 +146,13 @@ export default function Popup({ visible, transparent, dismiss, margin, setBoats 
                 maximumTrackTintColor="lightgray"
               />
             </View>
+          </View>
+          <View className="flex flex-row items-center">
+            <CheckBox
+              value={filter.any}
+              onValueChange={toggleAnyCheckbox}
+            ></CheckBox>
+            <Text>Any</Text>
           </View>
           <View className="flex items-center mt-3 w-72 ">
             <TouchableOpacity onPress={() => search()}>
@@ -147,8 +169,7 @@ export default function Popup({ visible, transparent, dismiss, margin, setBoats 
 
 const styles = StyleSheet.create({
   modalContent: {
-    justifyContent: "center",
-    marginVertical: "100%",
+    top: "10%",
   },
   modalOverlay: {
     position: "absolute",

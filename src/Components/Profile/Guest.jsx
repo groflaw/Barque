@@ -31,6 +31,8 @@ const Guest = () => {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
+    const navigation = useNavigation();
+
     const fetchboats = async () => {
       let response = [];
       if (!mode) {
@@ -41,8 +43,11 @@ const Guest = () => {
         setBookings(response);
       }
     };
-    fetchboats();
-  }, []);
+    const unsubscribe = navigation.addListener("focus", async () => {
+      fetchboats();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <>
@@ -73,14 +78,13 @@ const Guest = () => {
                 </Text>
               </View>
               <Text className="mt-2" style={styles.des}>
-                I'm the best captain out there, I have years of experience and I
-                know all the beaches around.
+                {curhost.bio}
               </Text>
               <Text className="mt-3" style={styles.property}>
                 Review: {curhost.review}/5
               </Text>
               <Text className="mt-3" style={styles.property}>
-                Locations: Caracas, Venezuela
+                Locations: {curhost.city + ", " + curhost.country}
               </Text>
               <Text className="mt-3" style={styles.property}>
                 Trips made: {curhost.booking}
@@ -163,7 +167,7 @@ const Guest = () => {
                               ? { uri: item.boatId.boatImage.cover }
                               : TucacasImg
                           }
-                          style={{ width: 60, height: 60,borderRadius: 5 }}
+                          style={{ width: 60, height: 60, borderRadius: 5 }}
                         ></Image>
                       </View>
                       <View className="flex justify-center ml-3">

@@ -31,8 +31,9 @@ const Personal = () => {
     address: curuser.address,
     country: curuser.country,
     city: curuser.city,
+    bio : curuser.bio
   });
-  const [isEdit, setEdit] = useState(true);
+  const [isEdit, setEdit] = useState(false);
   const [errorMessages, setErrorMessages] = useState({});
 
   const handleChange = (e) => {
@@ -63,6 +64,7 @@ const Personal = () => {
         address: result.address,
         country: result.country,
         city: result.city,
+        bio : result.bio
       });
     }
   };
@@ -70,7 +72,7 @@ const Personal = () => {
     <ScrollView>
       <View style={styles.container}>
         <Text style={styles.Title}>User Information</Text>
-        <View className="mt-5">
+        <View className="mt-7">
           <Text style={styles.key}>FirstName</Text>
 
           {!isEdit && <Text style={styles.value}>{user.firstName}</Text>}
@@ -85,7 +87,7 @@ const Personal = () => {
             <Text style={styles.error}>{errorMessages.firstName}</Text>
           )}
         </View>
-        <View className="mt-5">
+        <View className="mt-2">
           <Text style={styles.key}>LastName</Text>
 
           {!isEdit && <Text style={styles.value}>{user.lastName}</Text>}
@@ -100,7 +102,7 @@ const Personal = () => {
             <Text style={styles.error}>{errorMessages.lastName}</Text>
           )}
         </View>
-        <View className="mt-5">
+        <View className="mt-2">
           <Text style={styles.key}>Email</Text>
           {!isEdit && <Text style={styles.value}>{user.email}</Text>}
           {isEdit && (
@@ -114,8 +116,8 @@ const Personal = () => {
             <Text style={styles.error}>{errorMessages.email}</Text>
           )}
         </View>
-        <View className="mt-5">
-          <Text style={styles.key}>Número de Teléfono</Text>
+        <View className="mt-2">
+          <Text style={styles.key}>Telephone Number</Text>
           {!isEdit && <Text style={styles.value}>{user.phoneNumber}</Text>}
           {isEdit && (
             <CustomTextInput
@@ -125,8 +127,8 @@ const Personal = () => {
             ></CustomTextInput>
           )}
         </View>
-        <View className="mt-5">
-          <Text style={styles.key}>Fecha de Nacimiento</Text>
+        <View className="mt-2">
+          <Text style={styles.key}>Birthday</Text>
           {!isEdit && <Text style={styles.value}>{user.birthDay}</Text>}
           {isEdit && (
             <CustomTextInput
@@ -140,8 +142,8 @@ const Personal = () => {
             <Text style={styles.error}>{errorMessages.birthDay}</Text>
           )}
         </View>
-        <View className="mt-5">
-          <Text style={styles.key}>Dirección</Text>
+        <View className="mt-2">
+          <Text style={styles.key}>Address</Text>
           {!isEdit && <Text style={styles.value}>{user.address}</Text>}
           {isEdit && (
             <CustomTextInput
@@ -152,8 +154,8 @@ const Personal = () => {
             ></CustomTextInput>
           )}
         </View>
-        <View className="mt-5">
-          <Text style={styles.key}>País</Text>
+        <View className="mt-2">
+          <Text style={styles.key}>Country</Text>
           {!isEdit && <Text style={styles.value}>{user.country}</Text>}
           {isEdit && (
             <CustomTextInput
@@ -164,8 +166,8 @@ const Personal = () => {
             ></CustomTextInput>
           )}
         </View>
-        <View className="mt-5">
-          <Text style={styles.key}>Ciudad</Text>
+        <View className="mt-2">
+          <Text style={styles.key}>City</Text>
           {!isEdit && <Text style={styles.value}>{user.city}</Text>}
           {isEdit && (
             <CustomTextInput
@@ -176,10 +178,25 @@ const Personal = () => {
             ></CustomTextInput>
           )}
         </View>
-        <View className="flex items-center mt-7">
+        <View className="mt-2">
+            <Text style={styles.key}>Bio</Text>
+            {!isEdit && <Text style={styles.value}>{user.bio}</Text>}
+            {isEdit && (
+            <CustomTextInput
+              value={user.bio}
+              onChange={handleChange}
+              name="bio"
+            ></CustomTextInput>
+          )}
+        </View>
+        <View className="flex items-center mt-3">
           <TouchableOpacity
             onPress={() => {
-              handleSubmit();
+              if(isEdit){
+                handleSubmit();
+              }else{
+                setEdit(!isEdit)
+              }
             }}
           >
             <Text
@@ -187,7 +204,7 @@ const Personal = () => {
                 styles.button,
                 { backgroundColor: isEdit ? "#2a8500" : "#0a4195" },
               ]}
-              className="text-center w-60"
+              className="text-center w-80"
             >
               {isEdit == true ? "Guardar" : "Editar"}
             </Text>
@@ -213,17 +230,18 @@ const styles = StyleSheet.create({
   },
   key: {
     color: "#17233c",
-    fontSize: 14, 
+    fontSize: 17, 
     fontFamily: "Lexend Deca", 
     lineHeight: 20,
-    fontWeight: "700", 
+    fontWeight: "500", 
   },
   value: {
     color: "#17233c", 
-    fontSize: 15,
+    fontSize: 18,
     fontFamily: "Lexend Deca",
     fontWeight: "700",
     lineHeight: 20,
+    marginTop : 5,
   },
   button: {
     backgroundColor: "#0a4195", 

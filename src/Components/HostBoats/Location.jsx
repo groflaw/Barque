@@ -79,8 +79,11 @@ const Location = () => {
         console.error("Error fetching boat types:", error);
       }
     };
-    fetchBoatTypes();
-  }, []);
+    const unsubscribe = navigation.addListener("focus", async () => {
+      fetchBoatTypes();
+    })
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <>

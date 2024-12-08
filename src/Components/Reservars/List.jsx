@@ -60,8 +60,11 @@ const List = () => {
         setReservations(response);
       }
     };
-    fetchReservations();
-  }, []);
+    const unsubscribe = navigation.addListener("focus", async () => {
+      fetchReservations();
+    })
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <>

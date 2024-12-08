@@ -86,8 +86,11 @@ const HostProfileMain = () => {
         email: result.email,
       });
     };
-    fetchCoHost();
-  }, []);
+    const unsubscribe = navigation.addListener("focus", async () => {
+      fetchCoHost();
+    });
+    return unsubscribe;
+  }, [navigation]);
   return (
     <>
       {loading ? (

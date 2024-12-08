@@ -94,8 +94,11 @@ const BoatData = () => {
         console.error("Error fetching boat types:", error);
       }
     };
-    fetchBoatTypes();
-  }, []);
+    const unsubscribe = navigation.addListener("focus", async () => {
+      fetchBoatTypes();
+    })
+    return unsubscribe;
+  }, [navigation]);
 
   const [boatdata, setBoatData] = useState({
     user: curuser._id,

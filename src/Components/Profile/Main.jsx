@@ -107,7 +107,7 @@ const Main = () => {
           <View className="flex flex-row items-center justify-between mt-12 mb-6">
             <View className="flex flex-row items-center">
               <Image source={personalImage}></Image>
-              <Text style={styles.key}>Informacion de Cuenta</Text>
+              <Text style={styles.key}>Accouunt Information</Text>
             </View>
             <Image source={rightArrowImage}></Image>
           </View>
@@ -117,7 +117,7 @@ const Main = () => {
             <View className="flex flex-row items-center justify-between mt-6 mb-6">
               <View className="flex flex-row items-center">
                 <Image source={credietImage}></Image>
-                <Text style={styles.key}>Metodos de Pago</Text>
+                <Text style={styles.key}>Credit Cards</Text>
               </View>
               <Image source={rightArrowImage}></Image>
             </View>
@@ -127,7 +127,7 @@ const Main = () => {
           <View className="flex flex-row items-center justify-between mt-6 mb-6">
             <View className="flex flex-row items-center">
               <Image source={notifiImage}></Image>
-              <Text style={styles.key}>Ajustes de notificaciones</Text>
+              <Text style={styles.key}>Notification Settings</Text>
             </View>
             <Image source={rightArrowImage}></Image>
           </View>
@@ -136,7 +136,7 @@ const Main = () => {
          < View className="flex flex-row items-center justify-between mt-6 mb-3">
             <View className="flex flex-row items-center">
               <Image source={supportImage}></Image>
-              <Text style={styles.key}>Soporte</Text>
+              <Text style={styles.key}>Support</Text>
             </View>
             <Image source={rightArrowImage}></Image>
           </View>
