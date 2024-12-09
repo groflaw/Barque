@@ -105,9 +105,9 @@ const Myboats = () => {
                 >
                   <View
                     className="flex flex-row items-center"
-                    style={{ width: "65%" }}
+                    style={{ width: "60%" }}
                   >
-                    <Image style={styles.cardImage} source={boatcard}></Image>
+                    <Image style={styles.cardImage} source={{uri : item.boatImage.cover}}></Image>
                     <View className="ml-3 text-wrap">
                       <Text style={styles.boatName}>
                         {item.location2 ? item.location2.boatname : ""}
@@ -182,8 +182,8 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   cardImage: {
-    width: 50,
-    height: 50,
+    width: 80,
+    height: 80,
     borderRadius: 8,
     backgroundColor: "#0751c1",
   },
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
   edit: {
     borderRadius: 6,
     backgroundColor: "#072d4c",
-    padding: 8,
+    padding: 5,
     color: "#ffffff",
     fontSize: 14,
     fontFamily: "Lexend Deca",

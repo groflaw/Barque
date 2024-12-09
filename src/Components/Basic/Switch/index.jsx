@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   container: {},
   switch: {
     width: 60,
-    height: 30,
+    height: 28,
     borderRadius: 15,
 
     justifyContent: "center",
@@ -47,8 +47,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff", // White background for closed state
   },
   circle: {
-    width: 22,
-    height: 22,
+    width: 20,
+    height: 20,
     borderRadius: 11,
     backgroundColor: "#fff", // White circle
     position: "absolute",
