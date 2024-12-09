@@ -24,13 +24,38 @@ import backImage from "../../assets/Icons/hostheaderback.png";
 import markImage from "../../assets/Icons/dashboardmark.png";
 
 const HostBoats = () => {
-  const Stack = createNativeStackNavigator(); //Navigator Screen
+  const Stack = createNativeStackNavigator();
   const navigation = useNavigation();
   const route = useRoute();
 
   const HomeHeaderRight = () => {
     const gotoMain = () => {
-      navigation.navigate("Myboats");
+      // Access the navigation state
+      const state = navigation.getState();
+
+      // We want to drill down to the nested route
+      const currentRoute = state.routes[state.index];
+
+      // Check if we have a nested state
+      let currentRouteName = "";
+      if (currentRoute.state) {
+        const nestedState = currentRoute.state;
+        currentRouteName = nestedState.routes[nestedState.index].name; // Correctly get the name of the current nested route
+      } else {
+        currentRouteName = currentRoute.name; // Fallback to the current route name if no state
+      }
+      switch (currentRouteName) {
+        case "Myboats":
+          navigation.navigate("Main");
+          break;
+        case "Option":
+        case "NewScreen":
+          navigation.navigate("Myboats");
+          break;
+        default:
+          navigation.navigate("Option");
+          break;
+      }
     };
     return (
       <View

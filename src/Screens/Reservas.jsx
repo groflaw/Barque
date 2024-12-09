@@ -30,6 +30,34 @@ const Reservas = () => {
   const Stack = createNativeStackNavigator(); //Navigator Screen
   const navigation = useNavigation();
   const HomeHeaderRight = () => {
+    const state = navigation.getState();
+
+    const currentRoute = state.routes[state.index].state
+      ? state.routes[state.index].state.routes[
+          state.routes[state.index].state.index
+        ].name
+      : state.routes[state.index].name;
+    const handleBackPress = () => {
+      if (currentRoute === "List") {
+        navigation.navigate("Main");
+      } else if (
+        [
+          "Detail",
+          "Confirm",
+          "PaymentDetail",
+          "SelectPayment",
+          "CashPayment",
+          "CardPayment",
+          "PaymentConfirm",
+          "ZellePayment",
+          "BinancePayment",
+          "PaypalPayment",
+          "BankPayment",
+        ].includes(currentRoute)
+      ) {
+        navigation.navigate("List"); 
+      }
+    };
     return (
       <View
         className="p-5 mt-2"
@@ -43,7 +71,9 @@ const Reservas = () => {
         <View className="relative flex flex-row items-center justify-center space-x-3">
           <TouchableOpacity
             style={styles.headerback}
-            onPress={() => navigation.navigate("Main")}
+            onPress={() => {
+              handleBackPress();
+            }}
           >
             <Image source={backImage}></Image>
           </TouchableOpacity>

@@ -7,12 +7,16 @@ import {
   TouchableOpacity,
   StatusBar,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
 import Navbar from "../Components/Navbar";
 import backImage from "../../assets/Icons/hostheaderback.png";
 import markImage from "../../assets/Icons/dashboardmark.png";
 import { useEffect } from "react";
 
 const PaymentHistory = () => {
+  const navigation = useNavigation();
+
   return (
     <>
       <View
@@ -25,7 +29,13 @@ const PaymentHistory = () => {
         }}
       >
         <View className="relative flex flex-row items-center justify-center space-x-3">
-          <TouchableOpacity style={styles.headerback}>
+          <TouchableOpacity
+            style={styles.headerback}
+            onPress={() => {
+              navigation.navigate("DashBoard")
+            
+            }}
+          >
             <Image source={backImage}></Image>
           </TouchableOpacity>
           <Image source={markImage}></Image>
@@ -120,6 +130,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Lexend Deca",
     fontWeight: 600,
+  },
+  headerback: {
+    position: "absolute",
+    left: 0,
   },
 });
 export default PaymentHistory;

@@ -25,6 +25,29 @@ const Profile = () => {
   const navigation = useNavigation();
 
   const HomeHeaderRight = () => {
+    const state = navigation.getState();
+
+    const currentRoute = state.routes[state.index].state
+      ? state.routes[state.index].state.routes[
+          state.routes[state.index].state.index
+        ].name
+      : state.routes[state.index].name;
+    const handleBackPress = () => {
+      if (currentRoute === "MainProfile") {
+        navigation.navigate("Main");
+      } else if (
+        [
+          "Notification",
+          "Payment",
+          "AddPayment",
+          "AddBank",
+          "Personal",
+          "Support",
+        ].includes(currentRoute)
+      ) {
+        navigation.navigate("MainProfile");
+      }
+    };
     return (
       <View
         className="p-5 mt-2 bg-white"
@@ -35,7 +58,12 @@ const Profile = () => {
         }}
       >
         <View className="relative flex flex-row items-center justify-center space-x-3">
-          <TouchableOpacity style={styles.headerback} onPress={()=>{ navigation.navigate("Main");}}>
+          <TouchableOpacity
+            style={styles.headerback}
+            onPress={() => {
+              handleBackPress();
+            }}
+          >
             <Image source={backImage}></Image>
           </TouchableOpacity>
           <Image source={markImage}></Image>

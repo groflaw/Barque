@@ -23,6 +23,7 @@ import payhistoryImge from "../../assets/Icons/payhistory.png";
 import paytypeImge from "../../assets/Icons/paytype.png.png";
 import addhostImge from "../../assets/Icons/addhost.png";
 import boataddImge from "../../assets/Icons/boatadd.png";
+import supportImage from "../../assets/Icons/support.png";
 
 const DashBoard = () => {
   const navigation = useNavigation();
@@ -48,13 +49,19 @@ const DashBoard = () => {
             Dashboard
           </Text>
           <View className="flex flex-row items-center justify-start mt-3">
-            <Image  style={{width : 75, height : 75}}source={curuser.avatar ? { uri: curuser.avatar } : hostAvatar}></Image>
+            <Image
+              style={{ width: 75, height: 75 }}
+              source={curuser.avatar ? { uri: curuser.avatar } : hostAvatar}
+            ></Image>
             <View className="flex ml-4">
               <Text style={styles.Name}>
                 {curuser.firstName + " " + curuser.lastName}
               </Text>
               <View className="flex flex-row items-center">
-                <Image source={startImage} style={{width : 20, height : 20}}></Image>
+                <Image
+                  source={startImage}
+                  style={{ width: 20, height: 20 }}
+                ></Image>
                 <Text style={styles.review}>
                   {curuser.review ? "NO REVIEWS" : curuser.review}
                 </Text>
@@ -91,13 +98,13 @@ const DashBoard = () => {
           style={styles.action}
           className="flex flex-row justify-between mt-4"
         >
-          <TouchableOpacity onPress={()=>nextStep("Chat")}>
+          <TouchableOpacity onPress={() => nextStep("Chat")}>
             <View style={styles.card} className="flex flex-row items-center">
               <Text style={styles.item}>Messages</Text>
               <Image source={messageImage} className="ml-4"></Image>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>nextStep("Reservas")}>
+          <TouchableOpacity onPress={() => nextStep("Reservas")}>
             <View style={styles.card} className="flex flex-row items-center">
               <Text style={styles.item}>Reserves</Text>
               <Image source={reservarImage} className="ml-4"></Image>
@@ -112,32 +119,33 @@ const DashBoard = () => {
         >
           <View className="flex flex-row items-center justify-start px-6">
             <Image source={payhistoryImge}></Image>
-            <Text className="ml-6">Preferencias de Pago</Text>
+            <Text className="ml-6">Payment Preferences</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => nextStep("PaymentHistory")}>
           <View className="flex flex-row items-center justify-start px-6 mt-2">
             <Image source={paytypeImge}></Image>
-            <Text className="ml-6">Historial de Pago</Text>
+            <Text className="ml-6">Payment History</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => nextStep("HostProfile")}>
           <View className="flex flex-row items-center justify-start px-6 mt-3">
             <Image source={addhostImge}></Image>
-            <Text className="ml-6">Agregar un gestor de embarcaciones</Text>
+            <Text className="ml-6">Add Co-Host</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => nextStep("HostBoats")}>
           <View className="flex flex-row items-center justify-start px-6 mt-3">
             <Image source={boataddImge}></Image>
-            <Text className="ml-6">Agregar Embarcación</Text>
+            <Text className="ml-6">Add new boat</Text>
           </View>
         </TouchableOpacity>
+       
         <TouchableOpacity
           onPress={() => {
             changeMode();
           }}
-          style={{paddingBottom : 10}}
+          style={{ paddingBottom: 10 }}
         >
           <Convert></Convert>
         </TouchableOpacity>

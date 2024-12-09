@@ -23,6 +23,7 @@ import TucacasImg from "../../../assets/Profile/boat.png";
 
 const Guest = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const curhost = useSelector((state) => state.Global.curhost);
   const mode = useSelector((state) => state.Global.mode);
   const loading = useSelector((state) => state.Global.loading);
@@ -31,8 +32,6 @@ const Guest = () => {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    const navigation = useNavigation();
-
     const fetchboats = async () => {
       let response = [];
       if (!mode) {

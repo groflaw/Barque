@@ -7,6 +7,7 @@ import {
   Image,
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
 
 import HostProfileMain from "../Components/Profile/HostProfileMain";
 import ChangePasword from "../Components/Profile/ChangePassword";
@@ -16,8 +17,30 @@ import backImage from "../../assets/Icons/hostheaderback.png";
 import markImage from "../../assets/Icons/dashboardmark.png";
 
 const HostProfile = () => {
-  const Stack = createNativeStackNavigator(); //Navigator Screen
+  const Stack = createNativeStackNavigator(); 
+  const navigation = useNavigation();
   const HomeHeaderRight = () => {
+    const state = navigation.getState(); 
+    let currentRoute = "";
+
+    
+    const currentNavigator = state.routes[state.index];
+
+  
+    if (currentNavigator.state) {
+      const nestedState = currentNavigator.state;
+      currentRoute = nestedState.routes[nestedState.index].name;
+    } else {
+      currentRoute = currentNavigator.name;
+    }
+
+    const handleBackPress = () => {
+      if (currentRoute == "HostProfile") {
+        navigation.navigate("DashBoard");
+      } else if (["ChangePassword"].includes(currentRoute)) {
+        navigation.navigate("HostProfileMain");
+      }
+    };
     return (
       <View
         className="p-5 mt-2"
@@ -29,7 +52,12 @@ const HostProfile = () => {
         }}
       >
         <View className="relative flex flex-row items-center justify-center space-x-3">
-          <TouchableOpacity style={styles.headerback}>
+          <TouchableOpacity
+            style={styles.headerback}
+            onPress={() => {
+              handleBackPress();
+            }}
+          >
             <Image source={backImage}></Image>
           </TouchableOpacity>
           <Image source={markImage}></Image>

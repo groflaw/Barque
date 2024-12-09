@@ -26,6 +26,32 @@ const SignUp = () => {
   const curuser = useSelector((state) => state.Slice.user);
 
   const HomeHeaderRight = () => {
+    const state = navigation.getState();
+
+    let currentRoute = "";
+    if (state.routes[state.index].state) {
+      currentRoute =
+        state.routes[state.index].state.routes[
+          state.routes[state.index].state.index
+        ].name;
+    } else {
+      currentRoute = state.routes[state.index].name;
+    }
+
+    const handleBackPress = () => {
+      const navigationMap = {
+        First: "Main",
+        Second: "First",
+        Third: "Second",
+        Forth: "Second",
+        Login: "First",
+      };
+      const targetRoute = navigationMap[currentRoute];
+      if (targetRoute) {
+        navigation.navigate(targetRoute);
+      }
+    };
+
     return (
       <View
         className="p-5 mt-2 bg-white"
@@ -36,7 +62,12 @@ const SignUp = () => {
         }}
       >
         <View className="relative flex flex-row items-center justify-center space-x-3">
-          <TouchableOpacity style={styles.headerback} onPress={()=>{ navigation.navigate("Main");}}>
+          <TouchableOpacity
+            style={styles.headerback}
+            onPress={() => {
+              handleBackPress();
+            }}
+          >
             <Image source={backImage}></Image>
           </TouchableOpacity>
           <Image source={markImage}></Image>
