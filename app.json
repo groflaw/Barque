@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "CarRent",
+    "name": "Baraquea",
     "slug": "barquea",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -28,7 +28,7 @@
           "apiKey": "AIzaSyBUHaXnKMYi8ipKF-UgCHWH1TSdVCse8p0"
         }
       },
-      "package": "com.foreve0914.CarRent"
+      "package": "com.foreve0914.Baraquea"
     },
     "web": {
       "favicon": "./assets/favicon.png"
