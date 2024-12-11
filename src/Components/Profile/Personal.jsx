@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { changeProfile } from "../../Actions/Auth/auth.acitons";
 
@@ -17,25 +18,23 @@ const Personal = () => {
   const dispatch = useDispatch();
 
   const curuser = useSelector((state) => state.Slice.user);
+
+  const [startshow, setStartShow] = useState(false);
+  const [curdate, setCurdate] = useState(null);
+
+  const [isEdit, setEdit] = useState(false);
+  const [errorMessages, setErrorMessages] = useState({});
   const [user, setUser] = useState({
     firstName: curuser.firstName,
     lastName: curuser.lastName,
     email: curuser.email,
     phoneNumber: curuser.phoneNumber,
-    birthDay:
-      String(new Date(curuser.birthDay).getUTCMonth() + 1) +
-      "/" +
-      String(new Date(curuser.birthDay).getUTCDate()).padStart(2, "0") +
-      "/" +
-      new Date(curuser.birthDay).getUTCFullYear(),
+    birthDay: new Date(curuser.birthDay).toLocaleDateString(),
     address: curuser.address,
     country: curuser.country,
     city: curuser.city,
-    bio : curuser.bio
+    bio: curuser.bio,
   });
-  const [isEdit, setEdit] = useState(false);
-  const [errorMessages, setErrorMessages] = useState({});
-
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -43,6 +42,15 @@ const Personal = () => {
       ...prevData,
       [name]: value, // Update the 'year' property
     }));
+  };
+  const onChangeStart = (event, selectedDate) => {
+    if (selectedDate) {
+      const currentDate = selectedDate.toLocaleDateString(); // Format Date directly
+      setStartShow(false);
+      handleChange({
+        target: { name: "birthDay", value: currentDate }, // Pass formatted date
+      });
+    }
   };
 
   const handleSubmit = async () => {
@@ -64,9 +72,14 @@ const Personal = () => {
         address: result.address,
         country: result.country,
         city: result.city,
-        bio : result.bio
+        bio: result.bio,
       });
     }
+  };
+
+  const showDatepicker = (date) => {
+    setStartShow(true); // setshow datapicker
+    setCurdate(date); // selected date
   };
   return (
     <ScrollView>
@@ -131,17 +144,31 @@ const Personal = () => {
           <Text style={styles.key}>Birthday</Text>
           {!isEdit && <Text style={styles.value}>{user.birthDay}</Text>}
           {isEdit && (
-            <CustomTextInput
-              value={user.birthDay}
-              onChange={handleChange}
-              name="birthDay"
-              placeholder="01/01/1990"
-            ></CustomTextInput>
+            <TouchableOpacity
+              onPress={() => {
+                showDatepicker(user.birthDay);
+              }}
+            >
+              <View style={styles.birthDay}>
+                <Text style={styles.birthDaytext}>{user.birthDay}</Text>
+              </View>
+            </TouchableOpacity>
           )}
           {errorMessages.birthDay && (
             <Text style={styles.error}>{errorMessages.birthDay}</Text>
           )}
         </View>
+        {startshow && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={new Date("1990-10-01")}
+            mode="date"
+            is24Hour={true}
+            onChange={(event, selectedDate) =>
+              onChangeStart(event, selectedDate)
+            }
+          />
+        )}
         <View className="mt-2">
           <Text style={styles.key}>Address</Text>
           {!isEdit && <Text style={styles.value}>{user.address}</Text>}
@@ -179,9 +206,9 @@ const Personal = () => {
           )}
         </View>
         <View className="mt-2">
-            <Text style={styles.key}>Bio</Text>
-            {!isEdit && <Text style={styles.value}>{user.bio}</Text>}
-            {isEdit && (
+          <Text style={styles.key}>Bio</Text>
+          {!isEdit && <Text style={styles.value}>{user.bio}</Text>}
+          {isEdit && (
             <CustomTextInput
               value={user.bio}
               onChange={handleChange}
@@ -192,10 +219,10 @@ const Personal = () => {
         <View className="flex items-center mt-3">
           <TouchableOpacity
             onPress={() => {
-              if(isEdit){
+              if (isEdit) {
                 handleSubmit();
-              }else{
-                setEdit(!isEdit)
+              } else {
+                setEdit(!isEdit);
               }
             }}
           >
@@ -223,34 +250,34 @@ const styles = StyleSheet.create({
   },
   Title: {
     paddingTop: 20,
-    color: "#030303", 
-    fontSize: 20, 
+    color: "#030303",
+    fontSize: 20,
     fontFamily: "Lexend Deca",
     fontWeight: "700",
   },
   key: {
     color: "#17233c",
-    fontSize: 17, 
-    fontFamily: "Lexend Deca", 
+    fontSize: 17,
+    fontFamily: "Lexend Deca",
     lineHeight: 20,
-    fontWeight: "500", 
+    fontWeight: "500",
   },
   value: {
-    color: "#17233c", 
+    color: "#17233c",
     fontSize: 18,
     fontFamily: "Lexend Deca",
     fontWeight: "700",
     lineHeight: 20,
-    marginTop : 5,
+    marginTop: 5,
   },
   button: {
-    backgroundColor: "#0a4195", 
-    borderRadius: 8, 
+    backgroundColor: "#0a4195",
+    borderRadius: 8,
     padding: 15,
     margin: 10,
-    color: "#ffffff", 
-    fontSize: 14, 
-    fontFamily: "Lexend Deca", 
+    color: "#ffffff",
+    fontSize: 14,
+    fontFamily: "Lexend Deca",
     fontWeight: "500",
     lineHeight: 16,
   },
@@ -259,5 +286,26 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 2,
   },
+  birthDay: {
+    marginVertical: 10,
+    width: "100%",
+    shadowColor: "#030303",
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    borderRadius: 5,
+    elevation: 2,
+  },
+  birthDaytext : {
+    paddingTop : 7,
+    height: 40,
+    borderRadius: 4,
+    paddingHorizontal: 10,
+    fontSize: 16,
+    backgroundColor: "#fff",
+  }
 });
 export default Personal;
