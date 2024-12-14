@@ -22,7 +22,7 @@ import {
 } from "../../Actions/AddBoat/addboat";
 
 import { setLoading, setCurboat } from "../../Store/Global";
-import boatcard from "../../../assets/Icons/boatcard.png";
+import boatcard from "../../../assets/Profile/boat.png";
 
 const Myboats = () => {
   const navigation = useNavigation();
@@ -107,7 +107,14 @@ const Myboats = () => {
                     className="flex flex-row items-center"
                     style={{ width: "60%" }}
                   >
-                    <Image style={styles.cardImage} source={{uri : item.boatImage.cover}}></Image>
+                    <Image
+                      style={styles.cardImage}
+                      source={
+                        item.boatImage?.cover
+                          ? { uri: item.boatImage.cover }
+                          : boatcard
+                      }
+                    ></Image>
                     <View className="ml-3 text-wrap">
                       <Text style={styles.boatName}>
                         {item.location2 ? item.location2.boatname : ""}
@@ -123,8 +130,14 @@ const Myboats = () => {
                       </Text>
                     </View>
                   </View>
-                  <View style={{ width: "20%" }} className = "justify-center items-center">
-                    <TouchableOpacity onPress={() => handleEdit(item._id)} className="w-full">
+                  <View
+                    style={{ width: "20%" }}
+                    className="justify-center items-center"
+                  >
+                    <TouchableOpacity
+                      onPress={() => handleEdit(item._id)}
+                      className="w-full"
+                    >
                       <Text style={styles.edit} className="mb-2 text-center">
                         Editor
                       </Text>
