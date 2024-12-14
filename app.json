@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Baraquea",
-    "slug": "barquea",
+    "slug": "baraquea",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -11,7 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "config": {
@@ -33,10 +35,12 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-localization"],
+    "plugins": [
+      "expo-localization"
+    ],
     "extra": {
       "eas": {
-        "projectId": "34babaa5-df81-4385-b95d-2c7b16967875"
+        "projectId": "162f0bfc-1e05-4dae-bdf5-15d256ab3e1a"
       }
     },
     "owner": "foreve0914",
