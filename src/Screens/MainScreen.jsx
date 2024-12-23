@@ -103,7 +103,7 @@ const MainBody = () => {
     let result = await dispatch(getboatInfo(boatId));
     result = await dispatch(getUser(hostId));
     await dispatch(setCurhost(result));
-    await navigation.navigate("CarDetails");
+    await navigation.navigate("Booking");
   };
   return (
     <>

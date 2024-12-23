@@ -2,6 +2,7 @@ import { Backend_API } from "../../Utils/Constant";
 import axios from "axios";
 
 import { setLoading } from "../../Store/Global";
+import { log } from "react-native-reanimated";
 
 export const getAllboats = () => async (dispatch) => {
   await dispatch(setLoading(true));
@@ -191,13 +192,13 @@ export const getuserBookings = (userId) => async (dispatch) => {
 };
 
 export const reservation =
-  (userId, hostId, boatId, planId) => async (dispatch) => {
+  (userId, hostId, boatId, planId,count) => async (dispatch) => {
     await dispatch(setLoading(true));
     let errors = {};
     try {
       const response = await axios.post(
         `${Backend_API}/reservation/save`,
-        { userId, hostId, boatId, planId },
+        { userId, hostId, boatId, planId,count },
         {
           headers: {
             Accept: "application/json",

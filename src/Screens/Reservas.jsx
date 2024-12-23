@@ -27,7 +27,7 @@ import backImage from "../../assets/Icons/headerback.png";
 import hostmarkImage from "../../assets/Icons/headermark.png";
 
 const Reservas = () => {
-  const Stack = createNativeStackNavigator(); //Navigator Screen
+  const Stack = createNativeStackNavigator(); 
   const navigation = useNavigation();
   const HomeHeaderRight = () => {
     const state = navigation.getState();

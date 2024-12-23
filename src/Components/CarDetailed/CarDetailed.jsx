@@ -3,8 +3,8 @@ import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
-import { reservation } from "../../Actions/UserBoat/userboat";
 import { setCurboat, setCurhost } from "../../Store/Global";
+import { setBooking } from "../../Store/Global";
 
 import HeaderImage from "./HeaderImage";
 import Summary from "./Summary";
@@ -64,19 +64,13 @@ const CarDetailed = () => {
     if (curhost.cohost == userId || curboat.user == userId) {
       setErrorMessage(
         "You are a cohost or host on this boat. You cannot reserve the boat."
-      );
-      handleShowToast();
-      return;
-    }
-    let result = await dispatch(reservation(userId, curhost._id, boatId, plan));
-    if (result && result.errors) {
-      setErrorMessage(result.errors.general);
-      handleShowToast();
-    } else {
-      // await dispatch(setCurboat({}));
-      // await dispatch(setCurhost({}));
-      navigation.navigate("Reservas");
-    }
+        );
+        handleShowToast();
+        return;
+      }
+      await dispatch(setBooking({userId, hostId : curhost._id, boatId, planId : plan}))
+      navigation.navigate("Booking", { screen: "BookingDetail" })
+   
   };
 
   return (

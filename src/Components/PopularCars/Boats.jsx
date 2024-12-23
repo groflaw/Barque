@@ -18,7 +18,7 @@ const Boats = ({data}) => {
     let result = await dispatch(getboatInfo(id));
     result = await dispatch(getUser(hostId));
     await dispatch(setCurhost(result));
-    await navigation.navigate("CarDetails");
+    await navigation.navigate("Booking");
   };
   
   useEffect(()=>{
