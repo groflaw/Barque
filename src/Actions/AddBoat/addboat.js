@@ -84,7 +84,7 @@ export const submitBasic = (basicdata,boatId) => async (dispatch) => {
 
   try {
     const modelValidation = isValidString(basicdata.model);
-    const descriptionValidation = isValidString(basicdata.model);
+    const descriptionValidation = isValidString(basicdata.description);
     const locationValidation = isValidString(basicdata.location1);
     const yearValidation = isValidNumber(basicdata.year);
     const sizeValidation = isValidNumber(basicdata.size);
