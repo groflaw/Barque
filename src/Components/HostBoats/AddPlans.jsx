@@ -197,7 +197,7 @@ const AddPlans = () => {
                   <View className="flex items-center mb-2 ">
                     {!cusplan && (
                       <View className="flex flex-row justify-around mt-2 items-center  w-full">
-                        <Text style = {styles.clockdes}>Duratoin:</Text>
+                        <Text style={styles.clockdes}>Duratoin:</Text>
                         <TouchableOpacity
                           onPress={() => {
                             showDatepicker(
@@ -241,8 +241,12 @@ const AddPlans = () => {
                       </TouchableOpacity>
                     </View>
                     {cusplan && (
-                      <>
-                        <View className="flex flex-row items-center justify-around mt-2" style={{width : '70%'}}>
+                      <View className="flex flex-row justify-between w-4/5 items-center mt-2">
+                        <Image
+                          source={calendar}
+                          style={{ width: 30, height: 30 }}
+                        />
+                        <View className="flex flex-col justify-start gap-2">
                           <TouchableOpacity
                             onPress={() => {
                               showDatepicker(
@@ -260,6 +264,17 @@ const AddPlans = () => {
 
                           <TouchableOpacity
                             onPress={() => {
+                              showDatepicker("end", "time", item._id, item.end);
+                            }}
+                          >
+                            <Text style={styles.clock}>
+                              {new Date(item.end).toTimeString().slice(0, 5)}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View className="flex flex-col justify-start gap-2">
+                          <TouchableOpacity
+                            onPress={() => {
                               showDatepicker(
                                 "start",
                                 "date",
@@ -272,18 +287,7 @@ const AddPlans = () => {
                               {new Date(item.start).toLocaleDateString()}
                             </Text>
                           </TouchableOpacity>
-                        </View>
 
-                        <View className="flex flex-row items-center justify-around w-full mt-2" style={{width : '70%'}}>
-                          <TouchableOpacity
-                            onPress={() => {
-                              showDatepicker("end", "time", item._id, item.end);
-                            }}
-                          >
-                            <Text style={styles.clock}>
-                              {new Date(item.end).toTimeString().slice(0, 5)}
-                            </Text>
-                          </TouchableOpacity>
                           <TouchableOpacity
                             onPress={() => {
                               showDatepicker("end", "date", item._id, item.end);
@@ -294,7 +298,7 @@ const AddPlans = () => {
                             </Text>
                           </TouchableOpacity>
                         </View>
-                      </>
+                      </View>
                     )}
 
                     {errorMessages.start && (
@@ -332,7 +336,7 @@ const AddPlans = () => {
                       className="w-32"
                     >
                       <Text
-                        style={[styles.addTemp,{backgroundColor : '#ff3b30'}]}
+                        style={[styles.addTemp, { backgroundColor: "#ff3b30" }]}
                         className="w-full text-center"
                       >
                         DELETE
@@ -391,7 +395,7 @@ const styles = StyleSheet.create({
     padding: 10,
     color: "#ffffff",
     fontSize: 14,
-    fontWeight : 700,
+    fontWeight: 700,
     fontFamily: "Lexend Deca",
   },
   savePlan: {
@@ -470,11 +474,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 2,
   },
-  clockdes : {
-    color: '#17233c',
+  clockdes: {
+    color: "#17233c",
     fontSize: 15,
-    fontFamily: 'Lexend Deca',
+    fontFamily: "Lexend Deca",
     fontWeight: 700,
-  }
+  },
 });
 export default AddPlans;

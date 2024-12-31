@@ -400,12 +400,14 @@ const styles = StyleSheet.create({
     height: 250,
   },
   btn: {
-    paddingTop: 8,
-    paddingBottom: 8,
+    paddingTop: 4,
+    paddingBottom: 4,
     paddingLeft: 10,
     paddingRight: 10,
     borderRadius: 6,
     width: "40%",
+    alignItems : "center",
+    justifyContent : 'center'
   },
   btntext: {
     textAlign: "center",

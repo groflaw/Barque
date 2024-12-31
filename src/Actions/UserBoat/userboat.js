@@ -8,9 +8,7 @@ export const getAllboats = () => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};
   try {
-    const response = await axios.get(
-      `${Backend_API}/boats/getAllboats`
-    );
+    const response = await axios.get(`${Backend_API}/boats/getAllboats`);
     if (response.data.flag == true) {
       return response.data.data;
     } else {
@@ -24,61 +22,63 @@ export const getAllboats = () => async (dispatch) => {
     await dispatch(setLoading(false));
   }
 };
-export const getBoatsCity = (location1) =>async(dispatch)=>{
+export const getBoatsCity = (location1) => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};
-  try{
-    const response = await axios.get(`${Backend_API}/boats/getAllboatsCity/${location1}`)
-    if(response.data.flag == true){
-      return response.data.data
-    }else{
-      errors[response.data.sort]=response.data.error;
-      return {errors}
+  try {
+    const response = await axios.get(
+      `${Backend_API}/boats/getAllboatsCity/${location1}`
+    );
+    if (response.data.flag == true) {
+      return response.data.data;
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
     }
-  }catch(error){
+  } catch (error) {
     errors.general = "There was an error fetching the boats from City";
-    return {errors}
-  }finally{
-    await dispatch(setLoading(false))
+    return { errors };
+  } finally {
+    await dispatch(setLoading(false));
   }
 };
 
-export const getTopDes = () =>async(dispatch)=>{
+export const getTopDes = () => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};
-  try{
+  try {
     const response = await axios.get(`${Backend_API}/boats/getTopdes`);
-    if(response.data.flag == true){
-      return response.data.data
-    }else{
+    if (response.data.flag == true) {
+      return response.data.data;
+    } else {
       errors[response.data.sort] = response.data.error;
-      return {errors}
+      return { errors };
     }
-  }catch(error){
+  } catch (error) {
     errors.general = "There was an error fetching the Top Destinations";
-    return {errors};
-  }finally{
-    await dispatch(setLoading(false))
+    return { errors };
+  } finally {
+    await dispatch(setLoading(false));
   }
-}
-export const getNewBoats = () => async(dispatch)=>{
+};
+export const getNewBoats = () => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};
-  try{
+  try {
     const response = await axios.get(`${Backend_API}/boats/getNewBoats`);
-    if(response.data.flag == true){
-      return response.data.data
-    }else{
+    if (response.data.flag == true) {
+      return response.data.data;
+    } else {
       errors[response.data.sort] = response.data.error;
-      return {errors}
+      return { errors };
     }
-  }catch(error){
+  } catch (error) {
     errors.general = "There was an error fetching the New boats";
-    return {errors};
-  }finally{
-    await dispatch(setLoading(false))
+    return { errors };
+  } finally {
+    await dispatch(setLoading(false));
   }
-}
+};
 export const getSimilar = (location, boatId) => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};
@@ -95,8 +95,8 @@ export const getSimilar = (location, boatId) => async (dispatch) => {
   } catch (error) {
     errors.general = "There was an error fetching the boats";
     return { errors };
-  }finally{
-    await dispatch(setLoading(false))
+  } finally {
+    await dispatch(setLoading(false));
   }
 };
 
@@ -192,13 +192,22 @@ export const getuserBookings = (userId) => async (dispatch) => {
 };
 
 export const reservation =
-  (userId, hostId, boatId, planId,count) => async (dispatch) => {
+  ({ userId, hostId, boatId, planId, count, start, end }) =>
+  async (dispatch) => {
     await dispatch(setLoading(true));
     let errors = {};
     try {
       const response = await axios.post(
         `${Backend_API}/reservation/save`,
-        { userId, hostId, boatId, planId,count },
+        {
+          userId,
+          hostId,
+          boatId,
+          planId,
+          count,
+          start,
+          end,
+        },
         {
           headers: {
             Accept: "application/json",

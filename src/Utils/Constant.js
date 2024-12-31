@@ -1,4 +1,4 @@
-export const Backend_API = "https://1126-13-51-86-64.ngrok-free.app/api";
+export const Backend_API = "https://barqueadmin.com/api"
 
 export const BookingStatus = [
   { title: "TobeConfirmed", color: "#0751c1" },
