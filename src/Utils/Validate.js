@@ -76,3 +76,9 @@ export const isValidNumber = (value) => {
   }
   return { valid: true, message: "Valid input number" };
 };
+
+export const calculateAverageReview = (reviews) => {
+  if (!reviews || reviews.length === 0) return 0;
+  const total = reviews.reduce((sum, review) => sum + review.review, 0);
+  return (total / reviews.length).toFixed(2);
+};

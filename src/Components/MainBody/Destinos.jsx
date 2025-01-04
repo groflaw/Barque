@@ -17,7 +17,7 @@ import HiguerImg from "../../../assets/Background/Destinos.png";
 const DesCard = ({ deslogo, descontent, setLocation }) => {
   return (
     <TouchableOpacity
-      className="pt-5 w-28 rounded-2xl flex justify-center items-center"
+      className="pt-2 w-28 rounded-2xl flex justify-center items-center"
       onPress={() => {
         setLocation(descontent);
       }}
@@ -66,7 +66,7 @@ const Destinos = ({ data, setLocation }) => {
 };
 const styles = StyleSheet.create({
   destinos: {
-    paddingTop: "8%",
+    paddingTop: "3%",
   },
   destinostitle: {
     paddingLeft: "4%",
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontFamily: "Lexend Deca",
     fontWeight: 700,
-    lineHeight: 26,
+    lineHeight: 20,
   },
   descontent: {
     color: "#102a5e",

@@ -112,7 +112,7 @@ const Guest = () => {
                           style={{ width: 60, height: 60, borderRadius: 5 }}
                         ></Image>
                       </View>
-                      <View className=" flex justify-around">
+                      <View className="flex justify-around">
                         <Text style={styles.boatmodel}>{item.model}</Text>
                         <View className="flex flex-row">
                           <View
@@ -269,6 +269,7 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     lineHeight: 14,
     marginLeft: 4,
+    maxWidth : 215
   },
   searchbtn: {
     borderRadius: 6,

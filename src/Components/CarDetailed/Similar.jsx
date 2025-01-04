@@ -42,25 +42,29 @@ const Similar = ({ location1, boatId }) => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.Title}>Similar Boats</Text>
-      <ScrollView
-        className="!space-x-4"
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      >
-        {boats.map((item, index) => {
-          return (
-            <DesCard
-              descontent={item.model}
-              deslogo={item.coverImage}
-              price={item.price}
-              key={index}
-            />
-          );
-        })}
-      </ScrollView>
-    </View>
+    <>
+      {boats.length > 0 && (
+        <View style={styles.container}>
+          <Text style={styles.Title}>Similar Boats</Text>
+          <ScrollView
+            className="!space-x-4"
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          >
+            {boats.map((item, index) => {
+              return (
+                <DesCard
+                  descontent={item.model}
+                  deslogo={item.coverImage}
+                  price={item.price}
+                  key={index}
+                />
+              );
+            })}
+          </ScrollView>
+        </View>
+      )}
+    </>
   );
 };
 const styles = StyleSheet.create({

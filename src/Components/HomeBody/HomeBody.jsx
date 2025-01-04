@@ -54,10 +54,7 @@ const HomeBody = () => {
         <LoadingIndicator />
       ) : (
         <>
-          <Brands
-            onpress={openPopup}
-            setBoats={setBoats}
-          />
+          <Brands onpress={openPopup} setBoats={setBoats} />
           <Popup
             visible={visible}
             transparent={true}

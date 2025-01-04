@@ -7,12 +7,18 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Navbar from "../Navbar";
+import { FontAwesome } from "@expo/vector-icons";
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 
-import { getResrvations, getBookings } from "../../Actions/UserBoat/userboat";
+import {
+  getResrvations,
+  getBookings,
+  checkHostReview,
+  setUserReview,
+} from "../../Actions/UserBoat/userboat";
 import { setBooking } from "../../Store/Global";
 import { BookingStatus } from "../../Utils/Constant";
 
@@ -27,7 +33,9 @@ const List = () => {
   const toastRef = useRef(null);
 
   const [reservations, setReservations] = useState([]);
+  const [pendingreviews, setPendingReviews] = useState([]);
   const [errormessage, setErrorMessage] = useState("");
+  const [review, setReview] = useState(0);
   const [toastType, setToastType] = useState("success");
 
   const loading = useSelector((state) => state.Global.loading);
@@ -45,6 +53,23 @@ const List = () => {
     }
   };
 
+  const handleSubmit = async (userId, reservationId) => {
+    let result = await dispatch(setUserReview(userId, review, reservationId));
+    if (result.errors) {
+      setToastType("warning");
+      setErrorMessage(result.errors.general);
+      handleShowToast();
+    } else {
+      result = await dispatch(checkHostReview(curuser._id));
+      if (result.errors) {
+        setToastType("warning");
+        setErrorMessage(result.errors.general);
+        handleShowToast();
+      } else {
+        setPendingReviews(result);
+      }
+    }
+  };
   useEffect(() => {
     const fetchReservations = async () => {
       let response;
@@ -60,9 +85,25 @@ const List = () => {
         setReservations(response);
       }
     };
+    const fetchReviews = async () => {
+      let result;
+      if (curuser._id != null) {
+        if (mode) {
+          result = await dispatch(checkHostReview(curuser._id));
+        }
+      }
+      if (result.errors) {
+        setToastType("warning");
+        setErrorMessage(result.errors.general);
+        handleShowToast();
+      } else {
+        setPendingReviews(result);
+      }
+    };
     const unsubscribe = navigation.addListener("focus", async () => {
       fetchReservations();
-    })
+      fetchReviews();
+    });
     return unsubscribe;
   }, [navigation]);
 
@@ -73,8 +114,75 @@ const List = () => {
       ) : (
         <ScrollView>
           <View style={styles.container}>
-            <Text style={styles.title} className="mt-5 ">
-              Reservations
+            {pendingreviews.length > 0 && (
+              <Text style={styles.title}>Pending Review</Text>
+            )}
+            {pendingreviews?.map((item, index) => (
+              <View
+                style={styles.card}
+                className="flex flex-col mt-2"
+                key={index}
+              >
+                <View className="flex flex-row gap-3 items-center">
+                  <Image
+                    source={
+                      item.userId.avatar ? { uri: item.userId.avatar } : avatar
+                    }
+                    style={{ width: 60, height: 60, borderRadius: 8 }}
+                  ></Image>
+                  <View className="flex flex-col gap-2">
+                    <Text style={styles.model}>
+                      {item.userId.firstName + " " + item.userId.lastName}
+                    </Text>
+                    <Text style={styles.date}>
+                      Date : {new Date(item.date).toLocaleDateString()}
+                    </Text>
+                  </View>
+                </View>
+                <Text style={styles.header} className="mt-2">
+                  How was the experience?
+                </Text>
+                <View className="flex flex-row items-center justify-between mt-2">
+                  <View
+                    style={styles.reviewbar}
+                    className="flex flex-row items-center py-1 px-3 justify-around w-2/3"
+                  >
+                    {[...Array(5)].map((_, index) => (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => {
+                          setReview(index + 1);
+                        }}
+                      >
+                        <FontAwesome
+                          name="star"
+                          style={{
+                            ...styles.icon,
+                            color: index + 1 <= review ? "#ffbf00" : "white",
+                          }}
+                        />
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                  <View className="w-1/3 px-4">
+                    <TouchableOpacity
+                      onPress={() => {
+                        handleSubmit(item.userId._id, item._id);
+                      }}
+                    >
+                      <Text
+                        style={styles.continue}
+                        className="text-center py-2"
+                      >
+                        Send
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            ))}
+            <Text style={styles.title} className="mt-2">
+              {mode ? "Booking" : "Reservations"}
             </Text>
             {reservations.map((item, index) => {
               return (
@@ -83,12 +191,15 @@ const List = () => {
                     <Text style={styles.date}>
                       Date: {new Date(item.date).toLocaleDateString()}
                     </Text>
-                    <View className="flex flex-row justify-around" style={{width : '56%'}}>
+                    <View
+                      className="flex flex-row justify-around"
+                      style={{ width: "56%" }}
+                    >
                       <View
                         style={[
                           styles.type,
                           { backgroundColor: BookingStatus[item.status].color },
-                          {width : '60%'}
+                          { width: "60%" },
                         ]}
                       >
                         <Text className="text-white text-center">
@@ -105,7 +216,7 @@ const List = () => {
                         onPress={() => {
                           nextStep(item);
                         }}
-                        style={{width : '25%'}}
+                        style={{ width: "25%" }}
                       >
                         <Text
                           style={[styles.type, { backgroundColor: "#102a5e" }]}
@@ -263,6 +374,36 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontFamily: "Lexend Deca",
     fontWeight: "700",
+  },
+  model: {
+    color: "#17233c",
+    fontSize: 16,
+    fontFamily: "Lexend Deca",
+    fontWeight: "700",
+    lineHeight: 24,
+  },
+  header: {
+    color: "#17233c",
+    fontSize: 16,
+    fontFamily: "Lexend Deca",
+    lineHeight: 21,
+  },
+  reviewbar: {
+    backgroundColor: "#17233c",
+    borderRadius: 54,
+    borderWidth: 1,
+  },
+  icon: {
+    fontSize: 24,
+    color: "white",
+  },
+  continue: {
+    borderRadius: 54,
+    backgroundColor: "#17233c",
+    color: "#ffffff",
+    fontSize: 16,
+    fontFamily: "Mulish",
+    fontWeight: "900",
   },
 });
 export default List;

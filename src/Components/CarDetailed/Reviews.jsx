@@ -1,27 +1,34 @@
 import { View, Image, StyleSheet, Text, ScrollView } from "react-native";
 import IconStarImage from "../../../assets/Icons/Iconstar.png";
 
-import ReviewImage from "../../../assets/Icons/Review.png";
+import AvatarImage from "../../../assets/Profile/user.png";
 import { useEffect } from "react";
 
-const ReviewCard = ({index, item}) => {
+const ReviewCard = ({ index, item, }) => {
   return (
-    <View className="flex flex-row items-center justify-between pt-1 pb-1 pl-3 pr-3 ml-3 mr-3 bg-white w-72 rounded-xl">
+    <View className="flex flex-row items-center justify-between pt-1 pb-1 pl-3 pr-3 ml-3 mr-3 bg-white w-52 rounded-xl">
       <View className="flex flex-row items-center">
-        <Image source={ReviewImage}></Image>
+        <Image
+          source={item.avatar ? { uri: item.avatar } : AvatarImage}
+          style={{ width: 55, height: 55 }}
+        ></Image>
         <View className="ml-4">
           <View
             style={stylesCard.review}
-            className="flex flex-row items-center w-20 mt-2 "
+            className="flex flex-row items-center w-20 mt-2"
           >
             <Image source={IconStarImage}></Image>
             <Text style={stylesCard.mark}>{item.review}/ 5</Text>
           </View>
-          <Text style={stylesCard.name}>{item.customer}</Text>
-          <Text style={stylesCard.date}>{new Date(item.date).toLocaleDateString()}</Text>
+          <Text style={stylesCard.name}>
+            {item.customer.firstName + " " + item.customer.lastName}
+          </Text>
+          <Text style={stylesCard.date}>
+            {new Date(item.date).toLocaleDateString()}
+          </Text>
         </View>
       </View>
-      <Text>{index+1}/247</Text>
+      {/* <Text>{index + 1}/247</Text> */}
     </View>
   );
 };
@@ -45,7 +52,7 @@ const Reviews = ({ review, booking, data }) => {
         showsHorizontalScrollIndicator={false}
       >
         {data.map((item, index) => (
-          <ReviewCard key={index} index = {index} item = {item}/>
+          <ReviewCard index={index} item={item} />
         ))}
       </ScrollView>
     </View>
@@ -61,16 +68,16 @@ const styles = StyleSheet.create({
   },
   Title: {
     color: "#0a252f",
-    fontSize: 20, 
+    fontSize: 20,
     fontFamily: "Lexend Deca",
-    fontWeight: "700", 
+    fontWeight: "700",
     lineHeight: 26,
   },
   review: {
     backgroundColor: "#072d4c",
     borderRadius: 9,
-    borderWidth: 1, 
-    borderColor: "#ffffff", 
+    borderWidth: 1,
+    borderColor: "#ffffff",
     paddingLeft: 5,
     paddingRight: 5,
     paddingTop: 2,
