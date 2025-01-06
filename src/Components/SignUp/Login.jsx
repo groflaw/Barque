@@ -15,6 +15,7 @@ import CustomSwitch from "../Basic/Switch";
 import LoadingIndicator from "../Basic/LoadingIndicator";
 
 import { Signin } from "../../Actions/Auth/auth.acitons";
+
 const Login = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -42,9 +43,8 @@ const Login = () => {
 
   const handleLogin = async () => {
     const result = await dispatch(Signin(personInfo));
-
     if (result.errors) {
-      setErrorMessages(result.errors); // Set error messages in state
+      setErrorMessages(result.errors);
     } else {
       navigation.navigate("Main");
     }
@@ -53,6 +53,7 @@ const Login = () => {
   const handleRemember = (id, status) => {
     setRemeber(status);
   };
+
   return (
     <>
       {loading ? (

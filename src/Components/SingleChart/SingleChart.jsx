@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from "react-native";
 import React, { useEffect, useState, useRef } from "react";
-import { data } from "../Charts.jsx/Data";
+import { data } from "../Charts/Data";
 import {
   ChevronLeftIcon,
   PaperAirplaneIcon,

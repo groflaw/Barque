@@ -107,7 +107,6 @@ const BookingDetail = () => {
     });
     return fetchplan;
   }, [navigation]);
-
   return (
     <>
       {loading ? (
@@ -194,7 +193,7 @@ const BookingDetail = () => {
             </View>
             <View style={styles.card} className="mt-2 py-4 px-4">
               <Text style={styles.header}>Select Number of Passengers</Text>
-              <Number value={data.count} onChange={handleChange} name="count" />
+              <Number value={data.count} onChange={handleChange} name="count" max={curboat.capacity}/>
             </View>
             <View className="flex flex-row justify-center mt-8">
               <TouchableOpacity

@@ -85,6 +85,7 @@ export const Signin = (personInfo) => async (dispatch) => {
     );
     if (response.data.flag == true) {
       dispatch(addUser(response.data.existingUser));
+      return response.data.existingUser
     } else {
       errors[response.data.sort] = response.data.error;
       return { errors };

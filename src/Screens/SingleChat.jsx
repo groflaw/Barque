@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import ChatInput from "../Components/Charts.jsx/ChatInput";
-import BackButton from "../Components/Charts.jsx/BackButton";
+import ChatInput from "../Components/Charts/ChatInput";
+import BackButton from "../Components/Charts/BackButton";
 const SingleChat = () => {
   return (
     <View style={styles.container}>
