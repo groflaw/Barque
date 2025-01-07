@@ -38,8 +38,8 @@ const Allowed = () => {
 
   const handleSubmit = async () => {
     const result = await dispatch(submitAllowes(curboat._id, all));
-    if (result.errors) {
-      setErrorMessages(result.errors);
+    if (result?.errors) {
+      setErrorMessages(result.errors.general);
     }
     navigation.navigate("Myboats");
   };
@@ -49,8 +49,8 @@ const Allowed = () => {
       try {
         await dispatch(setLoading(true));
         let result = await dispatch(getAllowes());
-        if (result.errors) {
-          setErrorMessages(result.errors);
+        if (result?.errors) {
+          setErrorMessages(result.errors.general);
         }
         await dispatch(setLoading(false));
       } catch (error) {

@@ -36,8 +36,8 @@ const ChangePasword = () => {
 
   const handleSubmit = async () => {
     const result = await dispatch(changePassword(curuser.cohost, data));
-    if (result.errors) {
-      setErrorMessages(result.errors);
+    if (result?.errors) {
+      setErrorMessages(result.errors.general);
     }else{
         setErrorMessages({})
     }

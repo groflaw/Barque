@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import React, { useState, useEffect, useRef } from "react";
 import { ScrollView, View, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import * as Notifications from "expo-notifications";
 
 import {
   getHostNews,
@@ -49,9 +50,9 @@ const MainBody = () => {
         } else {
           result = await dispatch(getUserNews(curuser._id));
         }
-        if (result.errors) {
+        if (result?.errors) {
           setToastType("warning");
-          setErrorMessage(result.errors.general);
+          setErrorMessage(result?.errors?.general);
           handleShowToast();
         }
         if (result == true) {
@@ -62,9 +63,9 @@ const MainBody = () => {
     const fetchDes = async () => {
       let result;
       result = await dispatch(getTopDes());
-      if (result.errors) {
+      if (result?.errors) {
         setToastType("warning");
-        setErrorMessage(result.errors.general);
+        setErrorMessage(result?.errors?.general);
         handleShowToast();
       } else {
         setDestinations(result);
@@ -73,9 +74,9 @@ const MainBody = () => {
     const fetchNewBoats = async () => {
       let result;
       result = await dispatch(getNewBoats());
-      if (result.errors) {
+      if (result?.errors) {
         setToastType("warning");
-        setErrorMessage(result.errors.general);
+        setErrorMessage(result?.errors?.general);
         handleShowToast();
       } else {
         setNewBoats(result);
@@ -88,9 +89,9 @@ const MainBody = () => {
           result = await dispatch(checkUserReview(curuser._id));
         }
       }
-      if (result.errors) {
+      if (result?.errors) {
         setToastType("warning");
-        setErrorMessage(result.errors.general);
+        setErrorMessage(result?.errors?.general);
         handleShowToast();
       } else {
         setPendingReviews(result);
@@ -111,11 +112,9 @@ const MainBody = () => {
       toastRef.current.show();
     }
   };
-
   const closePopup = () => {
     setVisible(false);
   };
-
   const toLocation = async (location) => {
     await dispatch(setCurcity(location));
     navigation.navigate("HomeTabs");
@@ -126,6 +125,15 @@ const MainBody = () => {
     await dispatch(setCurhost(result));
     await navigation.navigate("Booking");
   };
+
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+    }),
+  });
+
   return (
     <>
       {!loading ? (
@@ -139,13 +147,13 @@ const MainBody = () => {
           ></BookPopup>
           <ScrollView style={{ backgroundColor: "#f0f1ff", marginBottom: 20 }}>
             <Top></Top>
-            {curuser._id && pendingreviews.length > 0 && (
+            {curuser._id && pendingreviews?.length > 0 && (
               <Review data={pendingreviews}></Review>
             )}
-            {destinations.length > 0 && (
+            {destinations?.length > 0 && (
               <Destinos data={destinations} setLocation={toLocation}></Destinos>
             )}
-            {newboats.length > 0 && (
+            {newboats?.length > 0 && (
               <Newboat data={newboats} toBoat={toBoat}></Newboat>
             )}
           </ScrollView>

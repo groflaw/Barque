@@ -32,8 +32,8 @@ const Cancellation = () => {
   const handleChange = async (value) => {
     setCancellation(value);
     const result = await dispatch(submitCancellation(curboat._id, value));
-    if (result.errors) {
-      setErrorMessages(result.errors);
+    if (result?.errors) {
+      setErrorMessages(result.errors.general);
     } else {
       setErrorMessages({});
     }

@@ -47,15 +47,15 @@ const Myboats = () => {
       )
     );
     let result = await dispatch(setBoatFlag(id, status));
-    if (result.errors) {
-      setErrorMessages(result.errors);
+    if (result?.errors) {
+      setErrorMessages(result.errors.general);
     }
   };
 
   const handleEdit = async (id) => {
     let result = await dispatch(getboatInfo(id));
-    if (result.errors) {
-      setErrorMessages(result.errors);
+    if (result?.errors) {
+      setErrorMessages(result.errors.general);
     }
     navigation.navigate("Option");
   };
@@ -69,12 +69,12 @@ const Myboats = () => {
       try {
         await dispatch(setLoading(true));
         let result = await dispatch(getAllBoatTypes());
-        if (result.errors) {
-          setErrorMessages(result.errors);
+        if (result?.errors) {
+          setErrorMessages(result.errors.general);
         }
         result = await dispatch(getMyboats(curuser._id));
-        if (result.errors) {
-          setErrorMessages(result.errors);
+        if (result?.errors) {
+          setErrorMessages(result.errors.general);
         }
         setMyboats(result);
       } catch (error) {

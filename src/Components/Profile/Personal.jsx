@@ -55,8 +55,8 @@ const Personal = () => {
 
   const handleSubmit = async () => {
     const result = await dispatch(changeProfile(curuser._id, user));
-    if (result.errors) {
-      setErrorMessages(result.errors);
+    if (result?.errors) {
+      setErrorMessages(result.errors.general);
     } else {
       setUser({
         firstName: result.firstName,

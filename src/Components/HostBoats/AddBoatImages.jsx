@@ -73,8 +73,8 @@ const AddBoatImages = () => {
       const result = await dispatch(
         uploadBoatImage(curboat._id, formDataFromImagePicker(temp), type)
       );
-      if (result.errors) {
-        setErrorMessages(result.errors);
+      if (result?.errors) {
+        setErrorMessages(result.errors.general);
       } else {
         setPlans(result.plans);
       }

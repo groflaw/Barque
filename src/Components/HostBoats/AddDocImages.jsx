@@ -65,8 +65,8 @@ const AddDocImage = () => {
       const result = await dispatch(
         uploadDocImage(curboat._id, formDataFromImagePicker(temp), type)
       );
-      if (result.errors) {
-        setErrorMessages(result.errors);
+      if (result?.errors) {
+        setErrorMessages(result.errors.general);
       }
     }
   };

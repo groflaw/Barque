@@ -11,9 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "config": {
@@ -30,14 +28,13 @@
           "apiKey": "AIzaSyBUHaXnKMYi8ipKF-UgCHWH1TSdVCse8p0"
         }
       },
-      "package": "com.foreve0914.Baraquea"
+      "package": "com.foreve0914.Baraquea",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-localization"
-    ],
+    "plugins": ["expo-localization", "@react-native-firebase/app"],
     "extra": {
       "eas": {
         "projectId": "162f0bfc-1e05-4dae-bdf5-15d256ab3e1a"

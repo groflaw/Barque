@@ -4,8 +4,6 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-url-polyfill/auto";
 import { Provider } from "react-redux";
 
-import CarDetailed from "./src/Components/CarDetailed/CarDetailed";
-
 import Chat from "./src/Screens/Chat";
 import HomeScreen from "./src/Screens/HomeScreen";
 import MainBody from "./src/Screens/MainScreen";

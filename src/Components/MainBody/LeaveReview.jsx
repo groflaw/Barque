@@ -49,7 +49,7 @@ const LeaveReview = () => {
   const handleSubmit = async () => {
     let result;
     result = await dispatch(setHostReview(data, curboat._id, curbooking._id));
-    if (result.errors) {
+    if (result?.errors) {
       setToastType("warning");
       setErrorMessage(result.errors.general);
       handleShowToast();

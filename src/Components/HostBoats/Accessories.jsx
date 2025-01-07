@@ -35,8 +35,8 @@ const Accessories = () => {
       try {
         await dispatch(setLoading(true));
         let result = await dispatch(getAccessories());
-        if (result.errors) {
-          setErrorMessages(result.errors);
+        if (result?.errors) {
+          setErrorMessage(result.errors.general);
         }
         await dispatch(setLoading(false));
       } catch (error) {
@@ -45,7 +45,7 @@ const Accessories = () => {
     };
     const unsubscribe = navigation.addListener("focus", async () => {
       fetchBoatTypes();
-    })
+    });
     return unsubscribe;
   }, [navigation]);
 
@@ -59,8 +59,8 @@ const Accessories = () => {
 
   const handleSubmit = async () => {
     const result = await dispatch(submitAccessories(curboat._id, access));
-    if (result.errors) {
-      setErrorMessages(result.errors);
+    if (result?.errors) {
+      setErrorMessages(result.errors.general);
     }
     navigation.navigate("Allowed");
   };

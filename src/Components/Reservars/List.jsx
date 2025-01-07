@@ -55,13 +55,13 @@ const List = () => {
 
   const handleSubmit = async (userId, reservationId) => {
     let result = await dispatch(setUserReview(userId, review, reservationId));
-    if (result.errors) {
+    if (result?.errors) {
       setToastType("warning");
       setErrorMessage(result.errors.general);
       handleShowToast();
     } else {
       result = await dispatch(checkHostReview(curuser._id));
-      if (result.errors) {
+      if (result?.errors) {
         setToastType("warning");
         setErrorMessage(result.errors.general);
         handleShowToast();
@@ -92,7 +92,7 @@ const List = () => {
           result = await dispatch(checkHostReview(curuser._id));
         }
       }
-      if (result.errors) {
+      if (result?.errors) {
         setToastType("warning");
         setErrorMessage(result.errors.general);
         handleShowToast();

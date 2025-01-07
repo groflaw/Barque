@@ -57,8 +57,8 @@ const Main = () => {
       const result = await dispatch(
         setAvatar(user._id, formDataFromImagePicker(temp))
       );
-      if (result.errors) {
-        setErrorMessages(result.errors);
+      if (result?.errors) {
+        setErrorMessages(result.errors.general);
       }
       setUser(result);
     }

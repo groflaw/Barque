@@ -3,18 +3,23 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  Button,
   TouchableOpacity,
 } from "react-native";
 import Navbar from "../Navbar";
 import { useNavigation } from "@react-navigation/native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import * as Notifications from "expo-notifications";
+import Constants from "expo-constants";
 
 import CustomTextInput from "../Basic/Input";
 import CustomSwitch from "../Basic/Switch";
 import LoadingIndicator from "../Basic/LoadingIndicator";
 
-import { Signin } from "../../Actions/Auth/auth.acitons";
+import socket from "../../Utils/Socket";
+
+import { Signin, saveToken } from "../../Actions/Auth/auth.acitons";
 
 const Login = () => {
   const navigation = useNavigation();
@@ -24,9 +29,13 @@ const Login = () => {
   const [personInfo, setPersonInfo] = useState({
     email: "",
     password: "",
+    expoPushToken: "",
   });
   const [errorMessages, setErrorMessages] = useState({});
   const [remember, setRemeber] = useState(false);
+  const [notification, setNotification] = useState(undefined);
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
   const nextStep = (url) => {
     navigation.navigate(url);
@@ -43,9 +52,10 @@ const Login = () => {
 
   const handleLogin = async () => {
     const result = await dispatch(Signin(personInfo));
-    if (result.errors) {
-      setErrorMessages(result.errors);
+    if (result?.errors) {
+      setErrorMessages(result.errors.general);
     } else {
+      socket.emit("registerUser", result._id);
       navigation.navigate("Main");
     }
   };
@@ -53,6 +63,82 @@ const Login = () => {
   const handleRemember = (id, status) => {
     setRemeber(status);
   };
+
+  const handleRegistrationError = (errorMessage) => {
+    setErrorMessages(errorMessage);
+    throw new Error(errorMessage);
+  };
+
+  const registerForPushNotificationsAsync = async () => {
+    if (Platform.OS === "android") {
+      await Notifications.setNotificationChannelAsync("default", {
+        name: "default",
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: "#FF231F7C",
+      });
+    }
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      handleRegistrationError(
+        "Permission not granted to get push token for push notification!"
+      );
+      return;
+    }
+    const projectId =
+      Constants?.expoConfig?.extra?.eas?.projectId ??
+      Constants?.easConfig?.projectId;
+    if (!projectId) {
+      handleRegistrationError("Project ID not found");
+    }
+    try {
+      const pushTokenString = (
+        await Notifications.getExpoPushTokenAsync({ projectId })
+      ).data;
+      return pushTokenString;
+    } catch (e) {
+      handleRegistrationError(`${e}`);
+    }
+  };
+
+  useEffect(() => {
+    registerForPushNotificationsAsync()
+      .then((token) =>
+        setPersonInfo((prevState) => ({
+          ...prevState,
+          expoPushToken: token ?? "",
+        }))
+      )
+      .catch((error) =>
+        setPersonInfo((prevState) => ({
+          ...prevState,
+          expoPushToken: `${error}`,
+        }))
+      );
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
+
+    return () => {
+      notificationListener.current &&
+        Notifications.removeNotificationSubscription(
+          notificationListener.current
+        );
+      responseListener.current &&
+        Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
 
   return (
     <>

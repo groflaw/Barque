@@ -16,8 +16,8 @@ const Notification = () => {
 
   const handleSwitch = async (field, status) => {
     let result = await dispatch(setNotifi(curuser._id, field, status));
-    if (result.errors) {
-      setErrorMessages(result.errors);
+    if (result?.errors) {
+      setErrorMessages(result.errors.general);
     }
   };
 

@@ -54,32 +54,32 @@ const BoatData = () => {
       try {
         await dispatch(setLoading(true));
         let result = await dispatch(getAllBoatTypes());
-        if (result.errors) {
-          setErrorMessages(result.errors);
+        if (result?.errors) {
+          setErrorMessages(result.errors.general);
         }
         result = await dispatch(getAllBoatBrands());
-        if (result.errors) {
-          setErrorMessages(result.errors);
+        if (result?.errors) {
+          setErrorMessages(result.errors.general);
         }
         result = await dispatch(getEnginesCount());
-        if (result.errors) {
-          setErrorMessages(result.errors);
+        if (result?.errors) {
+          setErrorMessages(result.errors.general);
         }
         result = await dispatch(getBathroomCount());
-        if (result.errors) {
-          setErrorMessages(result.errors);
+        if (result?.errors) {
+          setErrorMessages(result.errors.general);
         }
         result = await dispatch(getCabinscount());
-        if (result.errors) {
-          setErrorMessages(result.errors);
+        if (result?.errors) {
+          setErrorMessages(result.errors.general);
         }
         result = await dispatch(getCapacity());
-        if (result.errors) {
-          setErrorMessages(result.errors);
+        if (result?.errors) {
+          setErrorMessages(result.errors.general);
         }
         result = await dispatch(getPowers());
-        if (result.errors) {
-          setErrorMessages(result.errors);
+        if (result?.errors) {
+          setErrorMessages(result.errors.general);
         }
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status === "granted") {
@@ -127,8 +127,8 @@ const BoatData = () => {
 
   const handleSubmit = async () => {
     const result = await dispatch(submitBasic(boatdata, curboat?._id));
-    if (result.errors) {
-      setErrorMessages(result.errors);
+    if (result?.errors) {
+      setErrorMessages(result.errors.general);
     } else {
       navigation.navigate("AddPlans");
     }

@@ -70,8 +70,8 @@ const HostProfileMain = () => {
   };
   const handleSubmit = async () => {
     const result = await dispatch(AddCoHost(curuser._id, profile));
-    if (result.errors) {
-      setErrorMessages(result.errors);
+    if (result?.errors) {
+      setErrorMessages(result.errors.general);
     }
   };
 

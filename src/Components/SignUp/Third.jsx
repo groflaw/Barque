@@ -72,8 +72,8 @@ const Third = () => {
   const handleSignup = async () => {
     const result = await dispatch(Signup(personInfo));
 
-    if (result.errors) {
-      setErrorMessages(result.errors); // Set error messages in state
+    if (result?.errors) {
+      setErrorMessages(result.errors.general); // Set error messages in state
     } else {
       navigation.navigate("Login");
     }

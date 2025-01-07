@@ -89,8 +89,8 @@ const AddPlans = () => {
   const handleSubmit = async (id) => {
     const plan = plans.find((item) => item._id === id);
     const result = await dispatch(addPlan(curboat._id, plan));
-    if (result.errors) {
-      setErrorMessages(result.errors);
+    if (result?.errors) {
+      setErrorMessages(result.errors.general);
     } else {
       setErrorMessages({});
       setPlans(result.plans);
@@ -98,8 +98,8 @@ const AddPlans = () => {
   };
   const handleDelet = async (id) => {
     const result = await dispatch(delPlan(curboat._id, id));
-    if (result.errors) {
-      setErrorMessages(result.errors);
+    if (result?.errors) {
+      setErrorMessages(result.errors.general);
     } else {
       setPlans(result.plans);
     }

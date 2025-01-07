@@ -51,8 +51,8 @@ const Location = () => {
   };
   const handleSubmit = async () => {
     const result = await dispatch(submitLocation(curboat._id, location));
-    if (result.errors) {
-      setErrorMessages(result.errors);
+    if (result?.errors) {
+      setErrorMessages(result.errors.general);
     } else {
       setErrorMessages({})
       navigation.navigate("AddBoatImages");
@@ -63,8 +63,8 @@ const Location = () => {
       try {
         await dispatch(setLoading(true));
         let result = await dispatch(getLocationType());
-        if (result.errors) {
-          setErrorMessages(result.errors);
+        if (result?.errors) {
+          setErrorMessages(result.errors.general);
         }
         let { status } = await LocationModule.requestForegroundPermissionsAsync();
         if (status === "granted") {

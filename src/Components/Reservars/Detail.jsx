@@ -78,7 +78,7 @@ const Detail = () => {
   const SubmitStatus = async (value) => {
     if (mode) {
       let result = await dispatch(setBookStatus(curbooking._id, value));
-      if (result.errors) {
+      if (result?.errors) {
         setErrorMessage(result.errors.general);
         handleShowToast();
       } else {
@@ -101,7 +101,7 @@ const Detail = () => {
     const fetchBoatTypes = async () => {
       await dispatch(setLoading(true));
       let result = await dispatch(getAllBoatTypes());
-      if (result.errors) {
+      if (result?.errors) {
         setErrorMessage(response.errors.general);
         handleShowToast();
       }

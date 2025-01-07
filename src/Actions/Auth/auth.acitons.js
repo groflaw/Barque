@@ -61,8 +61,7 @@ export const Signup = (personInfo) => async (dispatch) => {
   return {};
 };
 
-export const Signin = (personInfo) => async (dispatch) => {  
-
+export const Signin = (personInfo) => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};
 
@@ -81,11 +80,11 @@ export const Signin = (personInfo) => async (dispatch) => {
     }
 
     const response = await axios.get(
-      `${Backend_API}/users/${personInfo.email}/${personInfo.password}`
+      `${Backend_API}/users/${personInfo.email}/${personInfo.password}/${personInfo.expoPushToken}`
     );
     if (response.data.flag == true) {
       dispatch(addUser(response.data.existingUser));
-      return response.data.existingUser
+      return response.data.existingUser;
     } else {
       errors[response.data.sort] = response.data.error;
       return { errors };
@@ -96,7 +95,34 @@ export const Signin = (personInfo) => async (dispatch) => {
   } finally {
     await dispatch(setLoading(false)); // Hide loading indicator once done
   }
-  return {};
+};
+
+export const saveToken = (userId,expoPushToken) => async (dispatch) => {
+  await dispatch(setLoading(true));
+  let errors = {};
+  try {
+    const response = await axios.post(
+      `${Backend_API}/users/save-token`,
+      {userId,expoPushToken},
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.data.flag == true) {
+      return response.data.data;
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
+    }
+  } catch (error) {
+    errors.general = "There was an error fetching the data.";
+    return { errors };
+  } finally {
+    await dispatch(setLoading(false));
+  }
 };
 
 export const setAvatar = (id, data) => async (dispatch) => {
@@ -280,29 +306,29 @@ export const AddCoHost = (id, profile) => async (dispatch) => {
   return {};
 };
 
-export const getUser = (id) => async(dispatch) =>{
+export const getUser = (id) => async (dispatch) => {
   await dispatch(setLoading(true));
-  let errors = {}
-  try{
+  let errors = {};
+  try {
     const response = await axios.get(`${Backend_API}/users/${id}`);
-    if(response.data.flag == true){
-      return response.data.data
-    }else{
-      errors[response.data.sort] = response.data.error
-      return {errors}
+    if (response.data.flag == true) {
+      return response.data.data;
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
     }
-  }catch(error){
+  } catch (error) {
     errors.general = "There was an error fetching the data";
-  }finally{
-    await dispatch(setLoading(false))
+  } finally {
+    await dispatch(setLoading(false));
   }
-}
+};
 
-export const changePassword =(id, data) =>async (dispatch) =>{
+export const changePassword = (id, data) => async (dispatch) => {
   await dispatch(setLoading(true));
-  const {curpassword, newpassword, confirmpassword} = data;
-  let errors = {}
-  try{
+  const { curpassword, newpassword, confirmpassword } = data;
+  let errors = {};
+  try {
     const curpasswordValidation = isValidPassword(curpassword);
     if (!curpasswordValidation.valid) {
       errors.curpassword = curpasswordValidation.message;
@@ -311,27 +337,31 @@ export const changePassword =(id, data) =>async (dispatch) =>{
     if (!newpasswordValidation.valid) {
       errors.newpassword = newpasswordValidation.message;
     }
-    if(newpassword != confirmpassword){
+    if (newpassword != confirmpassword) {
       errors.confirmpassword = "Please confirm password again";
     }
     if (Object.keys(errors).length > 0) {
       return { errors };
     }
-    const response = await axios.post(`${Backend_API}/users/changePassword/${id}`,{curpassword,newpassword}, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    })
+    const response = await axios.post(
+      `${Backend_API}/users/changePassword/${id}`,
+      { curpassword, newpassword },
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
     if (response.data.flag == true) {
       dispatch(addUser(response.data.data));
     } else {
       errors[response.data.sort] = response.data.error;
       return { errors };
     }
-  }catch(error){
+  } catch (error) {
     errors.general = "There was an error fetching the data";
-  }finally{
-    await dispatch(setLoading(false))
+  } finally {
+    await dispatch(setLoading(false));
   }
-}
+};
