@@ -31,24 +31,26 @@ export const getMyboats = (userid) => async (dispatch) => {
   }
   return {};
 };
-export const delMyboat = (boatId) => async(dispatch)=>{
+export const delMyboat = (boatId) => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};
-  try{
-    const response = await axios.delete(`${Backend_API}/boats/delboat/${boatId}`);
-    if(response.data.flag == true){
-      return response.data.data
-    }else{
-      errors[response.data.sort] =response.data.error;
-      return {errors}
+  try {
+    const response = await axios.delete(
+      `${Backend_API}/boats/delboat/${boatId}`
+    );
+    if (response.data.flag == true) {
+      return response.data.data;
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
     }
-  }catch (error) {
+  } catch (error) {
     errors.general = "There was an error delete boat";
     return { errors };
   } finally {
     await dispatch(setLoading(false));
   }
-}
+};
 export const setBoatFlag = (id, flag) => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};
@@ -78,7 +80,7 @@ export const setBoatFlag = (id, flag) => async (dispatch) => {
   return {};
 };
 
-export const submitBasic = (basicdata,boatId) => async (dispatch) => {
+export const submitBasic = (basicdata, boatId) => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};
 
@@ -97,13 +99,13 @@ export const submitBasic = (basicdata,boatId) => async (dispatch) => {
     const cabinscountValidation = isValidNumber(basicdata.cabinscount);
 
     if (!modelValidation.valid) {
-      errors.model = modelValidation.message;
+      errors.model = "Model" + modelValidation.message;
     }
     if (!descriptionValidation.valid) {
-      errors.description = descriptionValidation.message;
+      errors.description = "Description" + descriptionValidation.message;
     }
     if (!locationValidation.valid) {
-      errors.location1 = locationValidation.message;
+      errors.location1 = "Location" + locationValidation.message;
     }
     if (!yearValidation.valid) {
       errors.year = yearValidation.message;
@@ -136,18 +138,14 @@ export const submitBasic = (basicdata,boatId) => async (dispatch) => {
       return { errors };
     }
     let response = {};
-    if(boatId == null){
-      response = await axios.post(
-        `${Backend_API}/boats/addboat`,
-        basicdata,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      );
-    }else{
+    if (boatId == null) {
+      response = await axios.post(`${Backend_API}/boats/addboat`, basicdata, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+    } else {
       response = await axios.put(
         `${Backend_API}/boats/updateboat/${boatId}`,
         basicdata,
@@ -187,7 +185,7 @@ export const addPlan = (id, plan) => async (dispatch) => {
       errors.price = priceValidation.message;
     }
     if (!descriptionValidation.valid) {
-      errors.description = descriptionValidation.message;
+      errors.description = "Description" + descriptionValidation.message;
     }
     if (!captainValidation.valid) {
       errors.captain = captainValidation.message;
@@ -287,16 +285,16 @@ export const submitLocation = (id, location) => async (dispatch) => {
     const marinanameValidation = isValidString(location.marinaname);
     const addressValidation = isValidString(location.address);
     if (!boatnameValidation.valid) {
-      errors.boatname = boatnameValidation.message;
+      errors.boatname = "Boat Name" + boatnameValidation.message;
     }
     if (!locationtypeValidation.valid) {
       errors.locationtype = locationtypeValidation.message;
     }
     if (!marinanameValidation.valid) {
-      errors.marinaname = marinanameValidation.message;
+      errors.marinaname = "Marina Name" + marinanameValidation.message;
     }
     if (!addressValidation.valid) {
-      errors.address = addressValidation.message;
+      errors.address = "Address" + addressValidation.message;
     }
     if (Object.keys(errors).length > 0) {
       return { errors };

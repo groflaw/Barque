@@ -32,10 +32,10 @@ export const Signup = (personInfo) => async (dispatch) => {
       errors.birthDay = dateValidation.message;
     }
     if (!firstNameValidation.valid) {
-      errors.firstName = firstNameValidation.message;
+      errors.firstName = "FirstName" + firstNameValidation.message;
     }
     if (!lastNameValidation.valid) {
-      errors.lastName = lastNameValidation.message;
+      errors.lastName = "LastName" + lastNameValidation.message;
     }
 
     if (Object.keys(errors).length > 0) {
@@ -140,10 +140,10 @@ export const changeProfile = (id, profile) => async (dispatch) => {
     }
 
     if (!firstNameValidation.valid) {
-      errors.firstName = firstNameValidation.message;
+      errors.firstName = "FirstName" + firstNameValidation.message;
     }
     if (!lastNameValidation.valid) {
-      errors.lastName = lastNameValidation.message;
+      errors.lastName = "LastName" + lastNameValidation.message;
     }
 
     if (Object.keys(errors).length > 0) {
@@ -217,7 +217,7 @@ export const AddCoHost = (id, profile) => async (dispatch) => {
       errors.email = emailValidation.message;
     }
     if (!idNumberValidation.valid) {
-      errors.idNumber = idNumberValidation.message;
+      errors.idNumber = "ID Number" + idNumberValidation.message;
     }
     if (!profileValidation.valid) {
       errors.image = profileValidation.message;

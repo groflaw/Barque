@@ -55,13 +55,13 @@ export const isValidDate = (dateString) => {
 
 export const isValidString = (inputString) => {
   if (!inputString) {
-    return { valid: false, message: "This field is required." };
+    return { valid: false, message: " field is required." };
   }
 
   if (inputString.trim().length === 0) {
     return {
       valid: false,
-      message: "This field must not be empty or consist only of spaces.",
+      message: " field must not be empty or consist only of spaces.",
     };
   }
   return { valid: true, message: "Valid input string." };
@@ -71,7 +71,7 @@ export const isValidNumber = (value) => {
   if (value <= 0 || value == null) {
     return {
       valid: false,
-      message: "This fields must not be empty",
+      message: " fields must not be empty",
     };
   }
   return { valid: true, message: "Valid input number" };
