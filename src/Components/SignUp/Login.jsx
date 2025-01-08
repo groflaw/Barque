@@ -16,6 +16,7 @@ import io from "socket.io-client";
 
 import CustomTextInput from "../Basic/Input";
 import CustomSwitch from "../Basic/Switch";
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 import LoadingIndicator from "../Basic/LoadingIndicator";
 import { Socket_API } from "../../Utils/Constant";
 
@@ -25,13 +26,17 @@ const Login = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.Global.loading);
+  const toastRef = useRef(null);
 
   const [personInfo, setPersonInfo] = useState({
     email: "",
     password: "",
     expoPushToken: "",
   });
-  const [errorMessages, setErrorMessages] = useState({});
+
+  const [toastType, setToastType] = useState("success");
+  const [errormessage, setErrorMessage] = useState("");
+
   const [remember, setRemeber] = useState(false);
   const [notification, setNotification] = useState(undefined);
   const notificationListener = useRef();
@@ -50,10 +55,22 @@ const Login = () => {
     }));
   };
 
+  const handleShowToast = () => {
+    if (toastRef.current) {
+      toastRef.current.show();
+    }
+  };
+
   const handleLogin = async () => {
     const result = await dispatch(Signin(personInfo));
     if (result?.errors) {
-      setErrorMessages(result.errors.general);
+      setToastType("warning");
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
     } else {
       socket = io(Socket_API);
       socket.emit("registerUser", result._id);
@@ -65,8 +82,9 @@ const Login = () => {
   };
 
   const handleRegistrationError = (errorMessage) => {
-    setErrorMessages(errorMessage);
-    throw new Error(errorMessage);
+    setToastType("warning");
+    setErrorMessage(errorMessage);
+    handleShowToast();
   };
 
   const registerForPushNotificationsAsync = async () => {

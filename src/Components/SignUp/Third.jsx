@@ -19,6 +19,7 @@ import { Socket_API } from "../../Utils/Constant";
 import CheckBox from "../Basic/CheckBox";
 import CustomTextInput from "../Basic/Input";
 import LoadingIndicator from "../Basic/LoadingIndicator";
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 
 import { Signup } from "../../Actions/Auth/auth.acitons";
 
@@ -26,6 +27,7 @@ const Third = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.Global.loading);
+  const toastRef = useRef(null);
 
   const [personInfo, setPersonInfo] = useState({
     firstName: "",
@@ -41,7 +43,8 @@ const Third = () => {
   const [checkSMS, setCheckSMS] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [inputValue, setInputValue] = useState("");
-  const [errorMessages, setErrorMessages] = useState({});
+  const [toastType, setToastType] = useState("success");
+  const [errormessage, setErrorMessage] = useState("");
   const [notification, setNotification] = useState(undefined);
   const notificationListener = useRef();
   const responseListener = useRef();
@@ -54,6 +57,12 @@ const Third = () => {
         ...prevState,
         phoneNumber: fullPhoneNumber,
       }));
+    }
+  };
+
+  const handleShowToast = () => {
+    if (toastRef.current) {
+      toastRef.current.show();
     }
   };
 
@@ -81,7 +90,13 @@ const Third = () => {
     const result = await dispatch(Signup(personInfo));
 
     if (result?.errors) {
-      setErrorMessages(result.errors.general); // Set error messages in state
+      setToastType("warning");
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      } // Set error messages in state
     } else {
       const socket = io(Socket_API);
       socket.emit("registerUser", result._id);
@@ -90,8 +105,9 @@ const Third = () => {
   };
 
   const handleRegistrationError = (errorMessage) => {
-    setErrorMessages(errorMessage);
-    throw new Error(errorMessage);
+    setToastType("warning");
+    setErrorMessage(errorMessage);
+    handleShowToast();
   };
 
   const registerForPushNotificationsAsync = async () => {
@@ -181,9 +197,7 @@ const Third = () => {
                 name="firstName"
                 sort={false}
               />
-              {errorMessages.firstName && (
-                <Text style={styles.error}>{errorMessages.firstName}</Text>
-              )}
+
               <CustomTextInput
                 placeholder="Last Name"
                 value={personInfo.lastName}
@@ -191,9 +205,7 @@ const Third = () => {
                 name="lastName"
                 sort={false}
               />
-              {errorMessages.lastName && (
-                <Text style={styles.error}>{errorMessages.lastName}</Text>
-              )}
+
               <CustomTextInput
                 placeholder="example@example.com"
                 value={personInfo.email}
@@ -201,9 +213,7 @@ const Third = () => {
                 name="email"
                 sort={false}
               />
-              {errorMessages.email && (
-                <Text style={styles.error}>{errorMessages.email}</Text>
-              )}
+
               <CustomTextInput
                 placeholder="Enter a password of at least 6 characters."
                 value={personInfo.password}
@@ -211,9 +221,7 @@ const Third = () => {
                 name="password"
                 sort={true}
               />
-              {errorMessages.password && (
-                <Text style={styles.error}>{errorMessages.password}</Text>
-              )}
+
               <View className="flex flex-row items-center justify-between mt-5 mb-3">
                 <PhoneInput
                   value={inputValue}
@@ -229,9 +237,7 @@ const Third = () => {
                 name="birthDay"
                 sort={false}
               />
-              {errorMessages.birthDay && (
-                <Text style={styles.error}>{errorMessages.birthDay}</Text>
-              )}
+
               <Text style={styles.rule} className="mt-5">
                 Debes tener al menos 18 años para registrarte. Otros usuarios de
                 Barquea no verán tu cumpleaños.
@@ -275,11 +281,13 @@ const Third = () => {
                   Confirmar
                 </Text>
               </TouchableOpacity>
-              {errorMessages.general && (
-                <Text style={styles.error}>{errorMessages.general}</Text>
-              )}
             </View>
           </View>
+          <ToastMessage
+            type={toastType}
+            description={errormessage}
+            ref={toastRef}
+          />
         </ScrollView>
       )}
     </>

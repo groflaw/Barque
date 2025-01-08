@@ -6,13 +6,14 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 
 import Navbar from "../Navbar";
 import CustomSwitch from "../Basic/Switch";
 import LoadingIndicator from "../Basic/LoadingIndicator";
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 
 import { getAllBoatTypes } from "../../Actions/BasicBoat/basicboat";
 import {
@@ -27,17 +28,25 @@ import boatcard from "../../../assets/Profile/boat.png";
 const Myboats = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const toastRef = useRef(null);
 
   const curuser = useSelector((state) => state.Slice.user);
   const loading = useSelector((state) => state.Global.loading);
   const boatTypes = useSelector((state) => state.BasicBoat.boattypes);
 
   const [myboats, setMyboats] = useState([]);
-  const [errorMessages, setErrorMessages] = useState({});
+  const [toastType, setToastType] = useState("success");
+  const [errormessage, setErrorMessage] = useState("");
 
   const nextStep = async () => {
     dispatch(setCurboat({}));
     navigation.navigate("Option");
+  };
+
+  const handleShowToast = () => {
+    if (toastRef.current) {
+      toastRef.current.show();
+    }
   };
 
   const handleSwitch = async (id, status) => {
@@ -48,14 +57,26 @@ const Myboats = () => {
     );
     let result = await dispatch(setBoatFlag(id, status));
     if (result?.errors) {
-      setErrorMessages(result.errors.general);
+      setToastType("warning");
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
     }
   };
 
   const handleEdit = async (id) => {
     let result = await dispatch(getboatInfo(id));
     if (result?.errors) {
-      setErrorMessages(result.errors.general);
+      setToastType("warning");
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
     }
     navigation.navigate("Option");
   };
@@ -70,11 +91,23 @@ const Myboats = () => {
         await dispatch(setLoading(true));
         let result = await dispatch(getAllBoatTypes());
         if (result?.errors) {
-          setErrorMessages(result.errors.general);
+          setToastType("warning");
+          for (let key in result.errors) {
+            if (result.errors.hasOwnProperty(key)) {
+              setErrorMessage(`${result.errors[key]}`);
+              handleShowToast();
+            }
+          }
         }
         result = await dispatch(getMyboats(curuser._id));
         if (result?.errors) {
-          setErrorMessages(result.errors.general);
+          setToastType("warning");
+          for (let key in result.errors) {
+            if (result.errors.hasOwnProperty(key)) {
+              setErrorMessage(`${result.errors[key]}`);
+              handleShowToast();
+            }
+          }
         }
         setMyboats(result);
       } catch (error) {
@@ -152,6 +185,11 @@ const Myboats = () => {
               );
             })}
           </View>
+          <ToastMessage
+            type={toastType}
+            description={errormessage}
+            ref={toastRef}
+          />
         </ScrollView>
       )}
       <View className="flex items-center mt-2 mb-2 w-100">

@@ -11,7 +11,6 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 import io from "socket.io-client";
 
 import {
@@ -25,6 +24,7 @@ import { BookingStatus } from "../../Utils/Constant";
 import { Socket_API } from "../../Utils/Constant";
 
 import LoadingIndicator from "../Basic/LoadingIndicator";
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 
 import boatcard from "../../../assets/Icons/boatcard.png";
 import avatar from "../../../assets/Profile/user.png";
@@ -36,8 +36,8 @@ const List = () => {
 
   const [reservations, setReservations] = useState([]);
   const [pendingreviews, setPendingReviews] = useState([]);
-  const [errormessage, setErrorMessage] = useState("");
   const [review, setReview] = useState(0);
+  const [errormessage, setErrorMessage] = useState("");
   const [toastType, setToastType] = useState("success");
 
   const loading = useSelector((state) => state.Global.loading);
@@ -59,14 +59,22 @@ const List = () => {
     let result = await dispatch(setUserReview(userId, review, reservationId));
     if (result?.errors) {
       setToastType("warning");
-      setErrorMessage(result.errors.general);
-      handleShowToast();
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
     } else {
       result = await dispatch(checkHostReview(curuser._id));
       if (result?.errors) {
         setToastType("warning");
-        setErrorMessage(result.errors.general);
-        handleShowToast();
+        for (let key in result.errors) {
+          if (result.errors.hasOwnProperty(key)) {
+            setErrorMessage(`${result.errors[key]}`);
+            handleShowToast();
+          }
+        }
       } else {
         setPendingReviews(result);
       }
@@ -79,9 +87,14 @@ const List = () => {
     } else {
       response = await dispatch(getResrvations(curuser._id));
     }
-    if (response.errors) {
-      setErrorMessage(response.errors.general);
-      handleShowToast();
+    if (response?.errors) {
+      setToastType("warning");
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
     } else {
       setReservations(response);
     }
@@ -95,8 +108,12 @@ const List = () => {
     }
     if (result?.errors) {
       setToastType("warning");
-      setErrorMessage(result.errors.general);
-      handleShowToast();
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
     } else {
       setPendingReviews(result);
     }
@@ -108,7 +125,7 @@ const List = () => {
     });
     return unsubscribe;
   }, [navigation]);
-  
+
   const socket = io(Socket_API);
   socket.on("receivebooking", (message) => {
     console.log(message);

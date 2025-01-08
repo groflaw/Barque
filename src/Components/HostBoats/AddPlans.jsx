@@ -8,9 +8,10 @@ import {
   Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 
 import { addPlan, delPlan } from "../../Actions/AddBoat/addboat";
 
@@ -23,6 +24,7 @@ import calendar from "../../../assets/Icons/calendar.png";
 const AddPlans = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const toastRef = useRef(null);
 
   const curboat = useSelector((state) => state.Global.curboat);
   const loading = useSelector((state) => state.Global.loading);
@@ -32,7 +34,8 @@ const AddPlans = () => {
   const [curdate, setCurdate] = useState(null);
   const [curid, setCurId] = useState(null);
   const [cursort, setCursort] = useState(null);
-  const [errorMessages, setErrorMessages] = useState({});
+  const [toastType, setToastType] = useState("success");
+  const [errormessage, setErrorMessage] = useState("");
   const [plans, setPlans] = useState(curboat.plans);
   const [cusplan, setCusplan] = useState(false);
 
@@ -85,21 +88,37 @@ const AddPlans = () => {
       )
     );
   };
-
+  const handleShowToast = () => {
+    if (toastRef.current) {
+      toastRef.current.show();
+    }
+  };
   const handleSubmit = async (id) => {
     const plan = plans.find((item) => item._id === id);
     const result = await dispatch(addPlan(curboat._id, plan));
     if (result?.errors) {
-      setErrorMessages(result.errors.general);
+      setToastType("warning");
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
     } else {
-      setErrorMessages({});
+      setErrorMessage({});
       setPlans(result.plans);
     }
   };
   const handleDelet = async (id) => {
     const result = await dispatch(delPlan(curboat._id, id));
     if (result?.errors) {
-      setErrorMessages(result.errors.general);
+      setToastType("warning");
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
     } else {
       setPlans(result.plans);
     }
@@ -168,9 +187,7 @@ const AddPlans = () => {
                       ></TextInput>
                     </View>
                   </View>
-                  {errorMessages.price && (
-                    <Text style={styles.error}>{errorMessages.price}</Text>
-                  )}
+
                   <TextInput
                     onChangeText={(text) =>
                       handleChange({
@@ -189,11 +206,7 @@ const AddPlans = () => {
                     placeholderTextColor="#aaaaaa"
                     value={item.description}
                   />
-                  {errorMessages.description && (
-                    <Text style={styles.error}>
-                      {errorMessages.description}
-                    </Text>
-                  )}
+
                   <View className="flex items-center mb-2 ">
                     {!cusplan && (
                       <View className="flex flex-row justify-around mt-2 items-center  w-full">
@@ -300,10 +313,6 @@ const AddPlans = () => {
                         </View>
                       </View>
                     )}
-
-                    {errorMessages.start && (
-                      <Text style={styles.error}>{errorMessages.start}</Text>
-                    )}
                   </View>
 
                   <View className="flex flex-row items-center justify-between">
@@ -316,9 +325,7 @@ const AddPlans = () => {
                       _id={item._id}
                     ></Option>
                   </View>
-                  {errorMessages.captain && (
-                    <Text style={styles.error}>{errorMessages.captain}</Text>
-                  )}
+
                   <View className="flex flex-row items-center justify-around w-full mt-3">
                     <TouchableOpacity
                       onPress={() => handleSubmit(item._id)}
@@ -365,6 +372,11 @@ const AddPlans = () => {
               </TouchableOpacity>
             </View>
           </View>
+          <ToastMessage
+            type={toastType}
+            description={errormessage}
+            ref={toastRef}
+          />
         </ScrollView>
       )}
     </>

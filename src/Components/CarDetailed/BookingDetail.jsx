@@ -25,6 +25,7 @@ import calendar from "../../../assets/Icons/calendar.png";
 const BookingDetail = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const toastRef = useRef(null);
 
   const loading = useSelector((state) => state.Global.loading);
   const curboat = useSelector((state) => state.Global.curboat);
@@ -42,7 +43,6 @@ const BookingDetail = () => {
   const [cursort, setCursort] = useState(null);
   const [mode, setMode] = useState(null);
 
-  const toastRef = useRef(null);
 
   const showDatepicker = (sort, mode, date) => {
     setStartShow(true);

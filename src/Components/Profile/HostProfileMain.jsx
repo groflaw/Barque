@@ -7,13 +7,14 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 
 import CustomTextInput from "../Basic/Input";
 import LoadingIndicator from "../Basic/LoadingIndicator";
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 
 import { AddCoHost, getUser } from "../../Actions/Auth/auth.acitons";
 
@@ -23,11 +24,14 @@ import photoImage from "../../../assets/Icons/photo.png";
 const HostProfileMain = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const toastRef = useRef(null);
 
   const curuser = useSelector((state) => state.Slice.user);
   const loading = useSelector((state) => state.Global.loading);
 
-  const [errorMessages, setErrorMessages] = useState({});
+  const [toastType, setToastType] = useState("success");
+  const [errormessage, setErrorMessage] = useState("");
+
   const [profile, setProfile] = useState({
     profileImage: null,
     frontID: null,
@@ -35,6 +39,12 @@ const HostProfileMain = () => {
     idNumber: "",
     email: "",
   });
+
+  const handleShowToast = () => {
+    if (toastRef.current) {
+      toastRef.current.show();
+    }
+  };
 
   const pickImage = async (field) => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -65,13 +75,21 @@ const HostProfileMain = () => {
     if (curuser.cohost) {
       navigation.navigate("ChangePassword");
     } else {
-      setErrorMessages({ changepassword: "You should add co-host profile." });
+      setToastType("warning");
+      setErrorMessage("You should add co-host profile.");
+      handleShowToast();
     }
   };
   const handleSubmit = async () => {
     const result = await dispatch(AddCoHost(curuser._id, profile));
     if (result?.errors) {
-      setErrorMessages(result.errors.general);
+      setToastType("warning");
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
     }
   };
 
@@ -91,6 +109,7 @@ const HostProfileMain = () => {
     });
     return unsubscribe;
   }, [navigation]);
+  
   return (
     <>
       {loading ? (
@@ -237,6 +256,11 @@ const HostProfileMain = () => {
               </Text>
             )}
           </View>
+          <ToastMessage
+            type={toastType}
+            description={errormessage}
+            ref={toastRef}
+          />
         </ScrollView>
       )}
     </>

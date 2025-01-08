@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import * as LocationModule from "expo-location";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -14,6 +14,7 @@ import { setLoading } from "../../Store/Global";
 import { getLocationType } from "../../Actions/BasicBoat/basicboat";
 import { submitLocation } from "../../Actions/AddBoat/addboat";
 import GoogleAddress from "../Basic/GoogleAddress";
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 
 import CustomTextInput from "../Basic/Input";
 import Option from "../Basic/Option";
@@ -22,6 +23,7 @@ import LoadingIndicator from "../Basic/LoadingIndicator";
 const Location = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const toastRef = useRef(null);
 
   const locationtypes = useSelector((state) => state.BasicBoat.locationtype);
   const curboat = useSelector((state) => state.Global.curboat);
@@ -39,7 +41,14 @@ const Location = () => {
   );
   const [locationEnv, setLocationEnv] = useState(null);
   const [locationPermission, setLocationPermission] = useState(false);
-  const [errorMessages, setErrorMessages] = useState({});
+  const [toastType, setToastType] = useState("success");
+  const [errormessage, setErrorMessage] = useState("");
+
+  const handleShowToast = () => {
+    if (toastRef.current) {
+      toastRef.current.show();
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,12 +58,19 @@ const Location = () => {
       [name]: value,
     }));
   };
+
   const handleSubmit = async () => {
     const result = await dispatch(submitLocation(curboat._id, location));
     if (result?.errors) {
-      setErrorMessages(result.errors.general);
+      setToastType("warning");
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
     } else {
-      setErrorMessages({})
+      setErrorMessage({});
       navigation.navigate("AddBoatImages");
     }
   };
@@ -64,9 +80,16 @@ const Location = () => {
         await dispatch(setLoading(true));
         let result = await dispatch(getLocationType());
         if (result?.errors) {
-          setErrorMessages(result.errors.general);
+          setToastType("warning");
+          for (let key in result.errors) {
+            if (result.errors.hasOwnProperty(key)) {
+              setErrorMessage(`${result.errors[key]}`);
+              handleShowToast();
+            }
+          }
         }
-        let { status } = await LocationModule.requestForegroundPermissionsAsync();
+        let { status } =
+          await LocationModule.requestForegroundPermissionsAsync();
         if (status === "granted") {
           setLocationPermission(true);
           const userLocation = await LocationModule.getCurrentPositionAsync({});
@@ -81,7 +104,7 @@ const Location = () => {
     };
     const unsubscribe = navigation.addListener("focus", async () => {
       fetchBoatTypes();
-    })
+    });
     return unsubscribe;
   }, [navigation]);
 
@@ -142,7 +165,11 @@ const Location = () => {
                 onChange={handleChange}
                 name="address"
               ></CustomTextInput> */}
-              <GoogleAddress value={location.address} name="address" onChange={handleChange}></GoogleAddress>
+              <GoogleAddress
+                value={location.address}
+                name="address"
+                onChange={handleChange}
+              ></GoogleAddress>
               {errorMessages.address && (
                 <Text style={styles.error}>{errorMessages.address}</Text>
               )}
@@ -164,6 +191,11 @@ const Location = () => {
               )}
             </View>
           </View>
+          <ToastMessage
+            type={toastType}
+            description={errormessage}
+            ref={toastRef}
+          />
         </ScrollView>
       )}
     </>

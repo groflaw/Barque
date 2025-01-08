@@ -5,18 +5,20 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { useState } from "react";
-import { useSelector,useDispatch } from "react-redux";
+import { useState, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import { changePassword } from "../../Actions/Auth/auth.acitons";
 
 import CustomTextInput from "../Basic/Input";
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 
 const ChangePasword = () => {
-
   const dispatch = useDispatch();
+  const toastRef = useRef(null);
 
-  const [errorMessages, setErrorMessages] = useState({});
+  const [toastType, setToastType] = useState("success");
+  const [errormessage, setErrorMessage] = useState("");
 
   const curuser = useSelector((state) => state.Slice.user);
 
@@ -25,6 +27,12 @@ const ChangePasword = () => {
     newpassword: "",
     confirmpassword: "",
   });
+
+  const handleShowToast = () => {
+    if (toastRef.current) {
+      toastRef.current.show();
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,9 +45,15 @@ const ChangePasword = () => {
   const handleSubmit = async () => {
     const result = await dispatch(changePassword(curuser.cohost, data));
     if (result?.errors) {
-      setErrorMessages(result.errors.general);
-    }else{
-        setErrorMessages({})
+      setToastType("warning");
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
+    } else {
+      setErrorMessage({});
     }
   };
 
@@ -103,6 +117,11 @@ const ChangePasword = () => {
           )}
         </View>
       </View>
+      <ToastMessage
+        type={toastType}
+        description={errormessage}
+        ref={toastRef}
+      />
     </ScrollView>
   );
 };

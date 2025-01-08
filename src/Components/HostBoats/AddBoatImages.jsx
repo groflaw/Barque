@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
@@ -15,11 +15,12 @@ import photoImage from "../../../assets/Icons/photo.png";
 
 import LoadingIndicator from "../Basic/LoadingIndicator";
 import { uploadBoatImage } from "../../Actions/AddBoat/addboat";
-
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 
 const AddBoatImages = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const toastRef = useRef(null);
 
   const curboat = useSelector((state) => state.Global.curboat);
   const loading = useSelector((state) => state.Global.loading);
@@ -35,6 +36,8 @@ const AddBoatImages = () => {
           photo5: null,
         }
   );
+  const [toastType, setToastType] = useState("success");
+  const [errormessage, setErrorMessage] = useState("");
 
   const nextStep = () => {
     navigation.navigate("Cancellation");
@@ -60,6 +63,12 @@ const AddBoatImages = () => {
     return formData;
   };
 
+  const handleShowToast = () => {
+    if (toastRef.current) {
+      toastRef.current.show();
+    }
+  };
+
   const pickImage = async (options, type) => {
     let temp = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -74,7 +83,13 @@ const AddBoatImages = () => {
         uploadBoatImage(curboat._id, formDataFromImagePicker(temp), type)
       );
       if (result?.errors) {
-        setErrorMessages(result.errors.general);
+        setToastType("warning");
+        for (let key in result.errors) {
+          if (result.errors.hasOwnProperty(key)) {
+            setErrorMessage(`${result.errors[key]}`);
+            handleShowToast();
+          }
+        }
       } else {
         setPlans(result.plans);
       }
@@ -197,6 +212,11 @@ const AddBoatImages = () => {
               </TouchableOpacity>
             </View>
           </View>
+          <ToastMessage
+            type={toastType}
+            description={errormessage}
+            ref={toastRef}
+          />
         </ScrollView>
       )}
     </>

@@ -6,9 +6,8 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import { useNavigation } from "@react-navigation/native";
 
 import { getAllowes } from "../../Actions/BasicBoat/basicboat";
@@ -17,16 +16,20 @@ import { setLoading } from "../../Store/Global";
 
 import CheckBox from "../Basic/CheckBox";
 import LoadingIndicator from "../Basic/LoadingIndicator";
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 
 const Allowed = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const toastRef = useRef(null);
+
   const allowes = useSelector((state) => state.BasicBoat.allowes);
   const curboat = useSelector((state) => state.Global.curboat);
   const loading = useSelector((state) => state.Global.loading);
 
   const [all, setAll] = useState(curboat.allowes ? curboat.allowes : []);
-  const [errorMessages, setErrorMessages] = useState({});
+  const [toastType, setToastType] = useState("success");
+  const [errormessage, setErrorMessage] = useState("");
 
   const handleCheckboxChange = async (checked, id) => {
     if (checked) {
@@ -36,10 +39,22 @@ const Allowed = () => {
     }
   };
 
+  const handleShowToast = () => {
+    if (toastRef.current) {
+      toastRef.current.show();
+    }
+  };
+
   const handleSubmit = async () => {
     const result = await dispatch(submitAllowes(curboat._id, all));
     if (result?.errors) {
-      setErrorMessages(result.errors.general);
+      setToastType("warning");
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
     }
     navigation.navigate("Myboats");
   };
@@ -50,7 +65,13 @@ const Allowed = () => {
         await dispatch(setLoading(true));
         let result = await dispatch(getAllowes());
         if (result?.errors) {
-          setErrorMessages(result.errors.general);
+          setToastType("warning");
+          for (let key in result.errors) {
+            if (result.errors.hasOwnProperty(key)) {
+              setErrorMessage(`${result.errors[key]}`);
+              handleShowToast();
+            }
+          }
         }
         await dispatch(setLoading(false));
       } catch (error) {
@@ -59,10 +80,10 @@ const Allowed = () => {
     };
     const unsubscribe = navigation.addListener("focus", async () => {
       fetchBoatTypes();
-    })
+    });
     return unsubscribe;
   }, [navigation]);
-  
+
   return (
     <>
       {loading ? (
@@ -105,6 +126,11 @@ const Allowed = () => {
               </TouchableOpacity>
             </View>
           </View>
+          <ToastMessage
+            type={toastType}
+            description={errormessage}
+            ref={toastRef}
+          />
         </ScrollView>
       )}
     </>

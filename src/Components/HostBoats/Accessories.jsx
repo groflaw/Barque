@@ -134,14 +134,11 @@ const Accessories = () => {
                   CONTINUAR
                 </Text>
               </TouchableOpacity>
-              {errorMessages.general && (
-                <Text style={styles.error}>{errorMessages.general}</Text>
-              )}
             </View>
           </View>
           <ToastMessage
             type={toastType}
-            description={errormessage}
+            description={errorMessages}
             ref={toastRef}
           />
         </ScrollView>

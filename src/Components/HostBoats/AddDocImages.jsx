@@ -6,18 +6,20 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import { useDispatch, useSelector } from "react-redux";
 
 import { uploadDocImage } from "../../Actions/AddBoat/addboat";
 import LoadingIndicator from "../Basic/LoadingIndicator";
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 import photoImage from "../../../assets/Icons/photo.png";
 
 const AddDocImage = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const toastRef = useRef(null);
 
   const curboat = useSelector((state) => state.Global.curboat);
   const loading = useSelector((state) => state.Global.loading);
@@ -30,7 +32,14 @@ const AddDocImage = () => {
           authorization: null,
         }
   );
-  const [errorMessages, setErrorMessages] = useState({});
+  const [toastType, setToastType] = useState("success");
+  const [errormessage, setErrorMessage] = useState("");
+
+  const handleShowToast = () => {
+    if (toastRef.current) {
+      toastRef.current.show();
+    }
+  };
 
   const nextStep = () => {
     navigation.navigate("Location");
@@ -66,7 +75,13 @@ const AddDocImage = () => {
         uploadDocImage(curboat._id, formDataFromImagePicker(temp), type)
       );
       if (result?.errors) {
-        setErrorMessages(result.errors.general);
+        setToastType("warning");
+        for (let key in result.errors) {
+          if (result.errors.hasOwnProperty(key)) {
+            setErrorMessage(`${result.errors[key]}`);
+            handleShowToast();
+          }
+        }
       }
     }
   };
@@ -160,6 +175,11 @@ const AddDocImage = () => {
               </TouchableOpacity>
             </View>
           </View>
+          <ToastMessage
+            type={toastType}
+            description={errormessage}
+            ref={toastRef}
+          />
         </ScrollView>
       )}
     </>

@@ -6,7 +6,7 @@ import {
   Text,
 } from "react-native";
 import * as Location from "expo-location";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -28,10 +28,12 @@ import Option from "../Basic/Option";
 import Number from "../Basic/Number";
 import GoogleAddress from "../Basic/GoogleAddress";
 import LoadingIndicator from "../Basic/LoadingIndicator";
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 
 const BoatData = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const toastRef = useRef(null);
 
   const boatTypes = useSelector((state) => state.BasicBoat.boattypes);
   const boatBrands = useSelector((state) => state.BasicBoat.boatbrands);
@@ -45,7 +47,8 @@ const BoatData = () => {
   const curuser = useSelector((state) => state.Slice.user);
   const curboat = useSelector((state) => state.Global.curboat);
 
-  const [errorMessages, setErrorMessages] = useState({});
+  const [toastType, setToastType] = useState("success");
+  const [errormessage, setErrorMessage] = useState("");
   const [location, setLocation] = useState(null);
   const [locationPermission, setLocationPermission] = useState(false);
 
@@ -55,31 +58,73 @@ const BoatData = () => {
         await dispatch(setLoading(true));
         let result = await dispatch(getAllBoatTypes());
         if (result?.errors) {
-          setErrorMessages(result.errors.general);
+          setToastType("warning");
+          for (let key in result.errors) {
+            if (result.errors.hasOwnProperty(key)) {
+              setErrorMessage(`${result.errors[key]}`);
+              handleShowToast();
+            }
+          }
         }
         result = await dispatch(getAllBoatBrands());
         if (result?.errors) {
-          setErrorMessages(result.errors.general);
+          setToastType("warning");
+          for (let key in result.errors) {
+            if (result.errors.hasOwnProperty(key)) {
+              setErrorMessage(`${result.errors[key]}`);
+              handleShowToast();
+            }
+          }
         }
         result = await dispatch(getEnginesCount());
         if (result?.errors) {
-          setErrorMessages(result.errors.general);
+          setToastType("warning");
+          for (let key in result.errors) {
+            if (result.errors.hasOwnProperty(key)) {
+              setErrorMessage(`${result.errors[key]}`);
+              handleShowToast();
+            }
+          }
         }
         result = await dispatch(getBathroomCount());
         if (result?.errors) {
-          setErrorMessages(result.errors.general);
+          setToastType("warning");
+          for (let key in result.errors) {
+            if (result.errors.hasOwnProperty(key)) {
+              setErrorMessage(`${result.errors[key]}`);
+              handleShowToast();
+            }
+          }
         }
         result = await dispatch(getCabinscount());
         if (result?.errors) {
-          setErrorMessages(result.errors.general);
+          setToastType("warning");
+          for (let key in result.errors) {
+            if (result.errors.hasOwnProperty(key)) {
+              setErrorMessage(`${result.errors[key]}`);
+              handleShowToast();
+            }
+          }
         }
         result = await dispatch(getCapacity());
         if (result?.errors) {
-          setErrorMessages(result.errors.general);
+          setToastType("warning");
+          for (let key in result.errors) {
+            if (result.errors.hasOwnProperty(key)) {
+              setErrorMessage(`${result.errors[key]}`);
+              handleShowToast();
+            }
+          }
         }
         result = await dispatch(getPowers());
         if (result?.errors) {
-          setErrorMessages(result.errors.general);
+          setToastType("warning");
+          for (let key in result.errors) {
+            if (result.errors.hasOwnProperty(key)) {
+              setErrorMessage(`${result.errors[key]}`);
+              handleShowToast();
+            }
+          }
         }
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status === "granted") {
@@ -96,7 +141,7 @@ const BoatData = () => {
     };
     const unsubscribe = navigation.addListener("focus", async () => {
       fetchBoatTypes();
-    })
+    });
     return unsubscribe;
   }, [navigation]);
 
@@ -128,9 +173,20 @@ const BoatData = () => {
   const handleSubmit = async () => {
     const result = await dispatch(submitBasic(boatdata, curboat?._id));
     if (result?.errors) {
-      setErrorMessages(result.errors.general);
+      setToastType("warning");
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
     } else {
       navigation.navigate("AddPlans");
+    }
+  };
+  const handleShowToast = () => {
+    if (toastRef.current) {
+      toastRef.current.show();
     }
   };
   return (
@@ -169,7 +225,12 @@ const BoatData = () => {
             </View>
             <View className="mt-2">
               <Text style={styles.item}>Location </Text>
-              <GoogleAddress value={boatdata.location1} name="location1" onChange={handleChange} type={true}></GoogleAddress>
+              <GoogleAddress
+                value={boatdata.location1}
+                name="location1"
+                onChange={handleChange}
+                type={true}
+              ></GoogleAddress>
               {/* <CustomTextInput
                 value={boatdata.location1} // Ensure you're using the correct property
                 onChange={handleChange}
@@ -342,6 +403,11 @@ const BoatData = () => {
               <Text style={styles.error}>{errorMessages.general}</Text>
             )}
           </View>
+          <ToastMessage
+            type={toastType}
+            description={errormessage}
+            ref={toastRef}
+          />
         </ScrollView>
       )}
 

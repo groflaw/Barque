@@ -1,23 +1,38 @@
 import { View, Text, Image, StyleSheet } from "react-native";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import CustomSwitch from "../Basic/Switch";
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 
 import { setNotifi } from "../../Actions/Auth/auth.acitons";
 
 const Notification = () => {
   const dispatch = useDispatch();
+  const toastRef = useRef(null);
 
   const curuser = useSelector((state) => state.Slice.user);
 
   const [notofi, setNotofi] = useState(curuser.notification);
-  const [errorMessages, setErrorMessages] = useState({});
+  const [toastType, setToastType] = useState("success");
+  const [errormessage, setErrorMessage] = useState("");
 
   const handleSwitch = async (field, status) => {
     let result = await dispatch(setNotifi(curuser._id, field, status));
     if (result?.errors) {
-      setErrorMessages(result.errors.general);
+      setToastType("warning");
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
+    }
+  };
+
+  const handleShowToast = () => {
+    if (toastRef.current) {
+      toastRef.current.show();
     }
   };
 
@@ -46,6 +61,11 @@ const Notification = () => {
           onSwitchChange={handleSwitch}
         ></CustomSwitch>
       </View>
+      <ToastMessage
+        type={toastType}
+        description={errormessage}
+        ref={toastRef}
+      />
     </View>
   );
 };

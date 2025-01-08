@@ -6,13 +6,14 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { changeProfile } from "../../Actions/Auth/auth.acitons";
 
 import CustomTextInput from "../Basic/Input";
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 
 const Personal = () => {
   const dispatch = useDispatch();
@@ -21,9 +22,9 @@ const Personal = () => {
 
   const [startshow, setStartShow] = useState(false);
   const [curdate, setCurdate] = useState(null);
-
   const [isEdit, setEdit] = useState(false);
-  const [errorMessages, setErrorMessages] = useState({});
+  const [toastType, setToastType] = useState("success");
+  const [errormessage, setErrorMessage] = useState("");
   const [user, setUser] = useState({
     firstName: curuser.firstName,
     lastName: curuser.lastName,
@@ -35,6 +36,13 @@ const Personal = () => {
     city: curuser.city,
     bio: curuser.bio,
   });
+
+  const handleShowToast = () => {
+    if (toastRef.current) {
+      toastRef.current.show();
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -43,6 +51,7 @@ const Personal = () => {
       [name]: value, // Update the 'year' property
     }));
   };
+
   const onChangeStart = (event, selectedDate) => {
     if (selectedDate) {
       const currentDate = selectedDate.toLocaleDateString(); // Format Date directly
@@ -57,7 +66,13 @@ const Personal = () => {
     const result = await dispatch(changeProfile(curuser._id, user));
     console.log(result);
     if (result?.errors) {
-      setErrorMessages(result.errors.general);
+      setToastType("warning");
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
     } else {
       setUser({
         firstName: result.firstName,
@@ -239,6 +254,11 @@ const Personal = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <ToastMessage
+        type={toastType}
+        description={errormessage}
+        ref={toastRef}
+      />
     </ScrollView>
   );
 };
