@@ -14,8 +14,8 @@ import * as ImagePicker from "expo-image-picker";
 import photoImage from "../../../assets/Icons/photo.png";
 
 import LoadingIndicator from "../Basic/LoadingIndicator";
-
 import { uploadBoatImage } from "../../Actions/AddBoat/addboat";
+
 
 const AddBoatImages = () => {
   const navigation = useNavigation();

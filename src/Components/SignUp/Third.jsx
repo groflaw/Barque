@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import PhoneInput from "react-native-international-phone-number";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";

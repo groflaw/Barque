@@ -71,10 +71,14 @@ const BookingDetail = () => {
         end: new Date(data.end).toISOString(),
       })
     );
-    if (result && result.errors) {
+    if (result && result?.errors) {
       setToastType("warning");
-      setErrorMessage(result.errors.general);
-      handleShowToast();
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
     } else {
       const socket = io(Socket_API);
       await socket.emit("reqbooking", result.hostId);

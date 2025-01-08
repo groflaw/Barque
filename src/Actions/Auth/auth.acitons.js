@@ -132,15 +132,13 @@ export const changeProfile = (id, profile) => async (dispatch) => {
   let errors = {};
   try {
     const emailValidation = isValidEmail(profile.email);
-    const dateValidation = isValidDate(profile.birthDay);
+
     const firstNameValidation = isValidString(profile.firstName);
     const lastNameValidation = isValidString(profile.lastName);
     if (!emailValidation.valid) {
       errors.email = emailValidation.message;
     }
-    if (!dateValidation.valid) {
-      errors.birthDay = dateValidation.message;
-    }
+
     if (!firstNameValidation.valid) {
       errors.firstName = firstNameValidation.message;
     }
@@ -174,7 +172,6 @@ export const changeProfile = (id, profile) => async (dispatch) => {
   } finally {
     await dispatch(setLoading(false));
   }
-  return {};
 };
 
 export const setNotifi = (id, field, value) => async (dispatch) => {

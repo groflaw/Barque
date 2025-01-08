@@ -55,6 +55,7 @@ const Personal = () => {
 
   const handleSubmit = async () => {
     const result = await dispatch(changeProfile(curuser._id, user));
+    console.log(result);
     if (result?.errors) {
       setErrorMessages(result.errors.general);
     } else {
@@ -299,13 +300,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     elevation: 2,
   },
-  birthDaytext : {
-    paddingTop : 7,
+  birthDaytext: {
+    paddingTop: 7,
     height: 40,
     borderRadius: 4,
     paddingHorizontal: 10,
     fontSize: 16,
     backgroundColor: "#fff",
-  }
+  },
 });
 export default Personal;
