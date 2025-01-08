@@ -108,31 +108,31 @@ export const submitBasic = (basicdata, boatId) => async (dispatch) => {
       errors.location1 = "Location" + locationValidation.message;
     }
     if (!yearValidation.valid) {
-      errors.year = yearValidation.message;
+      errors.year ="Year" + yearValidation.message;
     }
     if (!sizeValidation.valid) {
-      errors.size = sizeValidation.message;
+      errors.size ="Size" + sizeValidation.message;
     }
     if (!boattypeValidation.valid) {
-      errors.boattype = boattypeValidation.message;
+      errors.boattype ="Boat Type" + boattypeValidation.message;
     }
     if (!boatbrandValidation.valid) {
-      errors.boatbrand = boatbrandValidation.message;
+      errors.boatbrand ="Boat Brand" + boatbrandValidation.message;
     }
     if (!enginecountValidation.valid) {
-      errors.enginecount = enginecountValidation.message;
+      errors.enginecount ="Engine Count" + enginecountValidation.message;
     }
     if (!bathroomcountValidation.valid) {
-      errors.bathroomcount = bathroomcountValidation.message;
+      errors.bathroomcount ="BathRoom Count" + bathroomcountValidation.message;
     }
     if (!powerValidation.valid) {
-      errors.powers = powerValidation.message;
+      errors.powers ="Power Type" + powerValidation.message;
     }
     if (!capacityValidation.valid) {
-      errors.capacity = capacityValidation.message;
+      errors.capacity = "Capacity" + capacityValidation.message;
     }
     if (!cabinscountValidation.valid) {
-      errors.cabinscount = cabinscountValidation.message;
+      errors.cabinscount ="Cabins Count" +  cabinscountValidation.message;
     }
     if (Object.keys(errors).length > 0) {
       return { errors };
@@ -182,13 +182,13 @@ export const addPlan = (id, plan) => async (dispatch) => {
     const captainValidation = isValidNumber(plan.captain);
 
     if (!priceValidation.valid) {
-      errors.price = priceValidation.message;
+      errors.price ="Price" + priceValidation.message;
     }
     if (!descriptionValidation.valid) {
       errors.description = "Description" + descriptionValidation.message;
     }
     if (!captainValidation.valid) {
-      errors.captain = captainValidation.message;
+      errors.captain ="Captain Option" + captainValidation.message;
     }
     if (Object.keys(errors).length > 0) {
       return { errors };
@@ -288,7 +288,7 @@ export const submitLocation = (id, location) => async (dispatch) => {
       errors.boatname = "Boat Name" + boatnameValidation.message;
     }
     if (!locationtypeValidation.valid) {
-      errors.locationtype = locationtypeValidation.message;
+      errors.locationtype ="Location" + locationtypeValidation.message;
     }
     if (!marinanameValidation.valid) {
       errors.marinaname = "Marina Name" + marinanameValidation.message;
@@ -377,7 +377,7 @@ export const submitCancellation = (id, cancellation) => async (dispatch) => {
     const cancellationValidation = isValidNumber(cancellation);
 
     if (!cancellationValidation.valid) {
-      errors.cancellation = cancellationValidation.message;
+      errors.cancellation ="Cancellation" + cancellationValidation.message;
     }
 
     if (Object.keys(errors).length > 0) {

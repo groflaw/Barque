@@ -47,7 +47,7 @@ const Brands = ({ onpress, setBoats }) => {
       <View className="flex flex-row justify-between items-center pt-3">
         <View
           style={styles.search}
-          className="flex flex-row items-center flex-1 p-2  space-x-2 bg-white rounded-lg"
+          className="flex flex-row items-center flex-1 px-2 bg-white rounded-lg"
         >
           <Image source={searchImage} style={styles.icon}></Image>
           <TextInput
@@ -75,7 +75,7 @@ const Brands = ({ onpress, setBoats }) => {
 const styles = StyleSheet.create({
   search: {
     width: "100%",
-    padding: 5,
+    padding: 2,
     backgroundColor: "white",
     borderRadius: 10,
     shadowColor: "rgba(0, 0, 0, 0.75)",

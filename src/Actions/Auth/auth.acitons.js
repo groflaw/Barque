@@ -220,13 +220,13 @@ export const AddCoHost = (id, profile) => async (dispatch) => {
       errors.idNumber = "ID Number" + idNumberValidation.message;
     }
     if (!profileValidation.valid) {
-      errors.image = profileValidation.message;
+      errors.image = "Profile Image" + profileValidation.message;
     }
     if (!frontValidation.valid) {
-      errors.image = frontValidation.message;
+      errors.image ="ID Front Image" + frontValidation.message;
     }
     if (!backValidation.valid) {
-      errors.image = backValidation.message;
+      errors.image ="ID Back Image" + backValidation.message;
     }
 
     if (Object.keys(errors).length > 0) {

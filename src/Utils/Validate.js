@@ -74,7 +74,7 @@ export const isValidNumber = (value) => {
       message: " fields must not be empty",
     };
   }
-  return { valid: true, message: "Valid input number" };
+  return { valid: true, message: "field is required" };
 };
 
 export const calculateAverageReview = (reviews) => {
