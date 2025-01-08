@@ -256,7 +256,7 @@ export const uploadDocImage = (id, data, type) => async (dispatch) => {
   let errors = {};
   try {
     const response = await axios.post(
-      `https://baraqua-server.vercel.app/api/boats/adddocImage/${id}/${type}`,
+      `${Backend_API}/boats/adddocImage/${id}/${type}`,
       data,
       {
         headers: {
@@ -331,7 +331,7 @@ export const uploadBoatImage = (id, data, type) => async (dispatch) => {
   let errors = {};
   try {
     const response = await axios.post(
-      `https://baraqua-server.vercel.app/api/boats/addboatImage/${id}/${type}`,
+      `${Backend_API}/boats/addboatImage/${id}/${type}`,
       data,
       {
         headers: {

@@ -12,6 +12,7 @@ import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import ToastMessage from "../Basic/ToastMessage/ToastMessage";
+import io from "socket.io-client";
 
 import {
   getResrvations,
@@ -21,6 +22,7 @@ import {
 } from "../../Actions/UserBoat/userboat";
 import { setBooking } from "../../Store/Global";
 import { BookingStatus } from "../../Utils/Constant";
+import { Socket_API } from "../../Utils/Constant";
 
 import LoadingIndicator from "../Basic/LoadingIndicator";
 
@@ -70,42 +72,48 @@ const List = () => {
       }
     }
   };
-  useEffect(() => {
-    const fetchReservations = async () => {
-      let response;
+  const fetchReservations = async () => {
+    let response;
+    if (mode) {
+      response = await dispatch(getBookings(curuser._id));
+    } else {
+      response = await dispatch(getResrvations(curuser._id));
+    }
+    if (response.errors) {
+      setErrorMessage(response.errors.general);
+      handleShowToast();
+    } else {
+      setReservations(response);
+    }
+  };
+  const fetchReviews = async () => {
+    let result;
+    if (curuser._id != null) {
       if (mode) {
-        response = await dispatch(getBookings(curuser._id));
-      } else {
-        response = await dispatch(getResrvations(curuser._id));
+        result = await dispatch(checkHostReview(curuser._id));
       }
-      if (response.errors) {
-        setErrorMessage(response.errors.general);
-        handleShowToast();
-      } else {
-        setReservations(response);
-      }
-    };
-    const fetchReviews = async () => {
-      let result;
-      if (curuser._id != null) {
-        if (mode) {
-          result = await dispatch(checkHostReview(curuser._id));
-        }
-      }
-      if (result?.errors) {
-        setToastType("warning");
-        setErrorMessage(result.errors.general);
-        handleShowToast();
-      } else {
-        setPendingReviews(result);
-      }
-    };
+    }
+    if (result?.errors) {
+      setToastType("warning");
+      setErrorMessage(result.errors.general);
+      handleShowToast();
+    } else {
+      setPendingReviews(result);
+    }
+  };
+  useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
       fetchReservations();
       fetchReviews();
     });
     return unsubscribe;
   }, [navigation]);
+  
+  const socket = io(Socket_API);
+  socket.on("receivebooking", (message) => {
+    console.log(message);
+    fetchReservations();
+  });
 
   return (
     <>

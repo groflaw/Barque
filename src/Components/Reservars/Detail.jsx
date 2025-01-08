@@ -9,8 +9,9 @@ import MapView, { Marker } from "react-native-maps";
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import socket from "../../Utils/Socket";
+import io from "socket.io-client"; 
 
+import { Socket_API } from "../../Utils/Constant";
 import { BookingStatus, apiKey, cancelback } from "../../Utils/Constant";
 import { setCurhost, setLoading } from "../../Store/Global";
 import { getAllBoatTypes } from "../../Actions/BasicBoat/basicboat";
@@ -91,6 +92,7 @@ const Detail = () => {
   };
 
   const reqCancel = async () => {
+    const socket = io(Socket_API);
     socket.emit("requestCancel", {
       userId: curuser._id,
     });

@@ -11,6 +11,10 @@ import { useNavigation } from "@react-navigation/native";
 import PhoneInput from "react-native-international-phone-number";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import * as Notifications from "expo-notifications";
+import Constants from "expo-constants";
+import io from "socket.io-client";
+import { Socket_API } from "../../Utils/Constant";
 
 import CheckBox from "../Basic/CheckBox";
 import CustomTextInput from "../Basic/Input";
@@ -30,6 +34,7 @@ const Third = () => {
     birthDay: "",
     password: "",
     phoneNumber: "",
+    expoPushToken: "",
   });
 
   const [checkPolish, setCheckPolish] = useState(false);
@@ -37,6 +42,9 @@ const Third = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [errorMessages, setErrorMessages] = useState({});
+  const [notification, setNotification] = useState(undefined);
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
   const handleInputValue = (phoneNumber) => {
     setInputValue(phoneNumber);
@@ -75,9 +83,87 @@ const Third = () => {
     if (result?.errors) {
       setErrorMessages(result.errors.general); // Set error messages in state
     } else {
+      const socket = io(Socket_API);
+      socket.emit("registerUser", result._id);
       navigation.navigate("Login");
     }
   };
+
+  const handleRegistrationError = (errorMessage) => {
+    setErrorMessages(errorMessage);
+    throw new Error(errorMessage);
+  };
+
+  const registerForPushNotificationsAsync = async () => {
+    if (Platform.OS === "android") {
+      await Notifications.setNotificationChannelAsync("default", {
+        name: "default",
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: "#FF231F7C",
+      });
+    }
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      handleRegistrationError(
+        "Permission not granted to get push token for push notification!"
+      );
+      return;
+    }
+    const projectId =
+      Constants?.expoConfig?.extra?.eas?.projectId ??
+      Constants?.easConfig?.projectId;
+    if (!projectId) {
+      handleRegistrationError("Project ID not found");
+    }
+    try {
+      const pushTokenString = (
+        await Notifications.getExpoPushTokenAsync({ projectId })
+      ).data;
+      return pushTokenString;
+    } catch (e) {
+      handleRegistrationError(`${e}`);
+    }
+  };
+
+  useEffect(() => {
+    registerForPushNotificationsAsync()
+      .then((token) =>
+        setPersonInfo((prevState) => ({
+          ...prevState,
+          expoPushToken: token ?? "",
+        }))
+      )
+      .catch((error) =>
+        setPersonInfo((prevState) => ({
+          ...prevState,
+          expoPushToken: `${error}`,
+        }))
+      );
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
+
+    return () => {
+      notificationListener.current &&
+        Notifications.removeNotificationSubscription(
+          notificationListener.current
+        );
+      responseListener.current &&
+        Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
 
   return (
     <>

@@ -16,7 +16,6 @@ import markImage from "../../assets/Icons/headermark.png";
 
 import HomeBody from "../Components/HomeBody/HomeBody";
 import { useSelector } from "react-redux";
-import { io } from "socket.io-client";
 
 const HomeScreen = () => {
   const navigation = useNavigation();

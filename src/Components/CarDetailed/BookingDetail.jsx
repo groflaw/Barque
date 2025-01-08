@@ -9,13 +9,15 @@ import {
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
+import io from "socket.io-client";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 import Number from "../Basic/Number";
+import LoadingIndicator from "../Basic/LoadingIndicator";
 import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 import { reservation } from "../../Actions/UserBoat/userboat";
+import { Socket_API } from "../../Utils/Constant";
 
-import LoadingIndicator from "../Basic/LoadingIndicator";
 import boatcard from "../../../assets/Icons/boatcard.png";
 import selectImage from "../../../assets/Icons/select.png";
 import calendar from "../../../assets/Icons/calendar.png";
@@ -74,6 +76,8 @@ const BookingDetail = () => {
       setErrorMessage(result.errors.general);
       handleShowToast();
     } else {
+      const socket = io(Socket_API);
+      await socket.emit("reqbooking", result.hostId);
       navigation.navigate("BookingConfirm");
     }
   };
@@ -193,7 +197,12 @@ const BookingDetail = () => {
             </View>
             <View style={styles.card} className="mt-2 py-4 px-4">
               <Text style={styles.header}>Select Number of Passengers</Text>
-              <Number value={data.count} onChange={handleChange} name="count" max={curboat.capacity}/>
+              <Number
+                value={data.count}
+                onChange={handleChange}
+                name="count"
+                max={curboat.capacity}
+              />
             </View>
             <View className="flex flex-row justify-center mt-8">
               <TouchableOpacity

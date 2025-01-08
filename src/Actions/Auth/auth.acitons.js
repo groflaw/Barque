@@ -51,6 +51,8 @@ export const Signup = (personInfo) => async (dispatch) => {
     if (response.data.flag == false) {
       errors[response.data.sort] = response.data.error;
       return { errors };
+    } else {
+      return response.data.data;
     }
   } catch (error) {
     errors.general = "There was an error fetching the data.";
@@ -94,34 +96,6 @@ export const Signin = (personInfo) => async (dispatch) => {
     return { errors };
   } finally {
     await dispatch(setLoading(false)); // Hide loading indicator once done
-  }
-};
-
-export const saveToken = (userId,expoPushToken) => async (dispatch) => {
-  await dispatch(setLoading(true));
-  let errors = {};
-  try {
-    const response = await axios.post(
-      `${Backend_API}/users/save-token`,
-      {userId,expoPushToken},
-      {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    if (response.data.flag == true) {
-      return response.data.data;
-    } else {
-      errors[response.data.sort] = response.data.error;
-      return { errors };
-    }
-  } catch (error) {
-    errors.general = "There was an error fetching the data.";
-    return { errors };
-  } finally {
-    await dispatch(setLoading(false));
   }
 };
 

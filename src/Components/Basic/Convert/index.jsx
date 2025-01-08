@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import io from "socket.io-client";
 
 import convertBoatImage from "../../../../assets/Icons/convertBoat.png";
 import asyncImage from "../../../../assets/Icons/async.png";
 
+import { Socket_API } from "../../../Utils/Constant";
 import { addUser } from "../../../Store/Slice";
 import { setMode, setCurboat, setCurhost } from "../../../Store/Global";
-
-import socket from "../../../Utils/Socket";
 
 const Convert = () => {
   const navigation = useNavigation();
@@ -19,6 +19,7 @@ const Convert = () => {
   const curuser = useSelector((state) => state.Slice.user);
 
   const handlelogout = () => {
+    const socket = io(Socket_API);
     socket.disconnect();
     dispatch(addUser({}));
     dispatch(setCurboat({}));

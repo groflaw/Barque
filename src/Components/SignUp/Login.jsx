@@ -12,14 +12,14 @@ import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
+import io from "socket.io-client";
 
 import CustomTextInput from "../Basic/Input";
 import CustomSwitch from "../Basic/Switch";
 import LoadingIndicator from "../Basic/LoadingIndicator";
+import { Socket_API } from "../../Utils/Constant";
 
-import socket from "../../Utils/Socket";
-
-import { Signin, saveToken } from "../../Actions/Auth/auth.acitons";
+import { Signin } from "../../Actions/Auth/auth.acitons";
 
 const Login = () => {
   const navigation = useNavigation();
@@ -55,11 +55,11 @@ const Login = () => {
     if (result?.errors) {
       setErrorMessages(result.errors.general);
     } else {
+      socket = io(Socket_API);
       socket.emit("registerUser", result._id);
       navigation.navigate("Main");
     }
   };
-
   const handleRemember = (id, status) => {
     setRemeber(status);
   };
