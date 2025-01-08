@@ -207,9 +207,6 @@ const BoatData = () => {
                 name="model"
                 // sort={false}
               ></CustomTextInput>
-              {errorMessages.model && (
-                <Text style={styles.error}>{errorMessages.model}</Text>
-              )}
             </View>
             <View className="mt-2">
               <Text style={styles.item}>Description </Text>
@@ -219,9 +216,6 @@ const BoatData = () => {
                 name="description"
                 sort={false}
               ></CustomTextInput>
-              {errorMessages.description && (
-                <Text style={styles.error}>{errorMessages.description}</Text>
-              )}
             </View>
             <View className="mt-2">
               <Text style={styles.item}>Location </Text>
@@ -237,9 +231,6 @@ const BoatData = () => {
                 name="location1"
                 sort={false}
               ></CustomTextInput> */}
-              {errorMessages.location1 && (
-                <Text style={styles.error}>{errorMessages.location1}</Text>
-              )}
             </View>
             <View className="mt-2">
               <Text style={styles.item}>Year</Text>
@@ -248,9 +239,6 @@ const BoatData = () => {
                 onChange={handleChange}
                 name="year"
               ></Number>
-              {errorMessages.year && (
-                <Text style={styles.error}>{errorMessages.year}</Text>
-              )}
             </View>
             <View className="mt-6">
               <Text style={styles.item}>Size (ft)</Text>
@@ -259,9 +247,6 @@ const BoatData = () => {
                 onChange={handleChange}
                 name="size"
               ></Number>
-              {errorMessages.size && (
-                <Text style={styles.error}>{errorMessages.size}</Text>
-              )}
             </View>
             <View className="mt-6">
               <Text style={styles.item} className="mb-2">
@@ -274,9 +259,6 @@ const BoatData = () => {
                 placeholder="Select Type"
                 defaultValue={boatdata.boattype}
               ></Option>
-              {errorMessages.boattype && (
-                <Text style={styles.error}>{errorMessages.boattype}</Text>
-              )}
             </View>
             <View className="mt-6">
               <Text style={styles.item} className="mb-2">
@@ -289,9 +271,6 @@ const BoatData = () => {
                 placeholder="Choose a brand"
                 defaultValue={boatdata.boatbrand}
               ></Option>
-              {errorMessages.boatbrand && (
-                <Text style={styles.error}>{errorMessages.boatbrand}</Text>
-              )}
             </View>
             <View className="mt-6">
               <Text style={styles.item} className="mb-2">
@@ -310,9 +289,6 @@ const BoatData = () => {
                 placeholder="Select number of engines"
                 defaultValue={boatdata.enginecount}
               ></Option> */}
-              {errorMessages.enginecount && (
-                <Text style={styles.error}>{errorMessages.enginecount}</Text>
-              )}
             </View>
             <View className="mt-6">
               <Text style={styles.item} className="mb-2">
@@ -331,9 +307,6 @@ const BoatData = () => {
                 placeholder="Select N* bathrooms"
                 defaultValue={boatdata.bathroomcount}
               ></Option> */}
-              {errorMessages.bathroomcount && (
-                <Text style={styles.error}>{errorMessages.bathroomcount}</Text>
-              )}
             </View>
             <View className="mt-6">
               <Text style={styles.item} className="mb-2">
@@ -346,9 +319,6 @@ const BoatData = () => {
                 placeholder="Select propulation of type"
                 defaultValue={boatdata.power}
               ></Option>
-              {errorMessages.powers && (
-                <Text style={styles.error}>{errorMessages.powers}</Text>
-              )}
             </View>
             <View className="mt-6">
               <Text style={styles.item} className="mb-2">
@@ -367,9 +337,6 @@ const BoatData = () => {
                 placeholder="Select capacity"
                 defaultValue={boatdata.capacity}
               ></Option> */}
-              {errorMessages.capacity && (
-                <Text style={styles.error}>{errorMessages.capacity}</Text>
-              )}
             </View>
             <View className="mt-6">
               <Text style={styles.item} className="mb-2">
@@ -388,9 +355,6 @@ const BoatData = () => {
                 placeholder="Select cabins"
                 defaultValue={boatdata.cabinscount}
               ></Option> */}
-              {errorMessages.cabinscount && (
-                <Text style={styles.error}>{errorMessages.cabinscount}</Text>
-              )}
             </View>
             <View className="mt-6">
               <TouchableOpacity onPress={handleSubmit}>
@@ -399,9 +363,6 @@ const BoatData = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-            {errorMessages.general && (
-              <Text style={styles.error}>{errorMessages.general}</Text>
-            )}
           </View>
           <ToastMessage
             type={toastType}

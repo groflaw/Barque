@@ -184,9 +184,7 @@ const Login = () => {
                   name="email"
                   sort={false}
                 />
-                {errorMessages.email && (
-                  <Text style={styles.error}>{errorMessages.email}</Text>
-                )}
+              
               </View>
               <View className="mt-3">
                 <Text style={styles.content}>Password</Text>
@@ -197,9 +195,7 @@ const Login = () => {
                   name="password"
                   sort={true}
                 />
-                {errorMessages.password && (
-                  <Text style={styles.error}>{errorMessages.password}</Text>
-                )}
+               
               </View>
               <View className="flex flex-row items-center mt-3">
                 <CustomSwitch

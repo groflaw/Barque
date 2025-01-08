@@ -130,9 +130,7 @@ const Location = () => {
                 onChange={handleChange}
                 name="boatname"
               ></CustomTextInput>
-              {errorMessages.boatname && (
-                <Text style={styles.error}>{errorMessages.boatname}</Text>
-              )}
+             
             </View>
             <Option
               defaultValue={location.locationtype}
@@ -141,9 +139,7 @@ const Location = () => {
               name="locationtype"
               placeholder="Select Type"
             ></Option>
-            {errorMessages.locationtype && (
-              <Text style={styles.error}>{errorMessages.locationtype}</Text>
-            )}
+            
             <Text style={styles.title} className="mt-5">
               Address
             </Text>
@@ -154,9 +150,7 @@ const Location = () => {
                 onChange={handleChange}
                 name="marinaname"
               ></CustomTextInput>
-              {errorMessages.marinaname && (
-                <Text style={styles.error}>{errorMessages.marinaname}</Text>
-              )}
+             
             </View>
             <View>
               <Text>Address </Text>
@@ -170,9 +164,7 @@ const Location = () => {
                 name="address"
                 onChange={handleChange}
               ></GoogleAddress>
-              {errorMessages.address && (
-                <Text style={styles.error}>{errorMessages.address}</Text>
-              )}
+             
             </View>
             <View className="mt-5">
               <TouchableOpacity
@@ -184,11 +176,7 @@ const Location = () => {
                   CONTINUAR
                 </Text>
               </TouchableOpacity>
-              {errorMessages.general && (
-                <Text style={styles.error} className="text-center">
-                  {errorMessages.general}
-                </Text>
-              )}
+              
             </View>
           </View>
           <ToastMessage

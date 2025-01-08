@@ -70,9 +70,7 @@ const ChangePasword = () => {
             name="curpassword"
             sort={true}
           />
-          {errorMessages.curpassword && (
-            <Text style={styles.error}>{errorMessages.curpassword}</Text>
-          )}
+        
         </View>
         <View className="mt-4">
           <Text style={styles.item}>New Password </Text>
@@ -83,9 +81,7 @@ const ChangePasword = () => {
             name="newpassword"
             sort={true}
           />
-          {errorMessages.newpassword && (
-            <Text style={styles.error}>{errorMessages.newpassword}</Text>
-          )}
+          
         </View>
         <View className="mt-5">
           <Text style={styles.item}>Confirm New Password </Text>
@@ -96,9 +92,7 @@ const ChangePasword = () => {
             name="confirmpassword"
             sort={true}
           />
-          {errorMessages.confirmpassword && (
-            <Text style={styles.error}>{errorMessages.confirmpassword}</Text>
-          )}
+         
         </View>
         <View className="mt-5">
           <TouchableOpacity
@@ -110,11 +104,7 @@ const ChangePasword = () => {
               Change Password
             </Text>
           </TouchableOpacity>
-          {errorMessages.general && (
-            <Text style={styles.error} className="text-center">
-              {errorMessages.general}
-            </Text>
-          )}
+          
         </View>
       </View>
       <ToastMessage

@@ -140,11 +140,7 @@ const HostProfileMain = () => {
               onChange={handleChange}
               name="idNumber"
             ></CustomTextInput>
-            {errorMessages.idNumber && (
-              <Text style={styles.error} className="text-center">
-                {errorMessages.idNumber}
-              </Text>
-            )}
+            
           </View>
           <View className="flex px-5 mt-4">
             <Text>Email Address</Text>
@@ -154,11 +150,7 @@ const HostProfileMain = () => {
               onChange={handleChange}
               name="email"
             ></CustomTextInput>
-            {errorMessages.email && (
-              <Text style={styles.error} className="text-center">
-                {errorMessages.email}
-              </Text>
-            )}
+           
           </View>
           <View className="px-5 mt-5">
             <Text>Subir Identificación</Text>
@@ -218,11 +210,7 @@ const HostProfileMain = () => {
                 )}
               </View>
             </View>
-            {errorMessages.image && (
-              <Text style={styles.error} className="text-center">
-                {errorMessages.image}
-              </Text>
-            )}
+          
           </View>
           <View className="px-5 mt-5">
             <TouchableOpacity
@@ -234,11 +222,7 @@ const HostProfileMain = () => {
                 Change Password
               </Text>
             </TouchableOpacity>
-            {errorMessages.changepassword && (
-              <Text style={styles.error} className="text-center">
-                {errorMessages.changepassword}
-              </Text>
-            )}
+           
           </View>
           <View style={styles.save} className="mt-5">
             <TouchableOpacity
@@ -250,11 +234,7 @@ const HostProfileMain = () => {
                 Save Changes
               </Text>
             </TouchableOpacity>
-            {errorMessages.general && (
-              <Text style={styles.error} className="text-center">
-                {errorMessages.general}
-              </Text>
-            )}
+           
           </View>
           <ToastMessage
             type={toastType}

@@ -145,16 +145,8 @@ const Cancellation = () => {
                     CONTINUAR
                   </Text>
                 </TouchableOpacity>
-                {errorMessages.general && (
-                  <Text style={styles.error} className="text-center">
-                    {errorMessages.general}
-                  </Text>
-                )}
-                {errorMessages.cancellation && (
-                  <Text style={styles.error} className="text-center">
-                    {errorMessages.cancellation}
-                  </Text>
-                )}
+               
+                
               </View>
             </>
           </View>
