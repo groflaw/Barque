@@ -97,6 +97,7 @@ const Personal = () => {
     setStartShow(true); // setshow datapicker
     setCurdate(date); // selected date
   };
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -112,9 +113,7 @@ const Personal = () => {
               name="firstName"
             ></CustomTextInput>
           )}
-          {errorMessages.firstName && (
-            <Text style={styles.error}>{errorMessages.firstName}</Text>
-          )}
+         
         </View>
         <View className="mt-2">
           <Text style={styles.key}>LastName</Text>
@@ -127,9 +126,7 @@ const Personal = () => {
               name="lastName"
             ></CustomTextInput>
           )}
-          {errorMessages.lastName && (
-            <Text style={styles.error}>{errorMessages.lastName}</Text>
-          )}
+
         </View>
         <View className="mt-2">
           <Text style={styles.key}>Email</Text>
@@ -141,9 +138,7 @@ const Personal = () => {
               name="email"
             ></CustomTextInput>
           )}
-          {errorMessages.email && (
-            <Text style={styles.error}>{errorMessages.email}</Text>
-          )}
+         
         </View>
         <View className="mt-2">
           <Text style={styles.key}>Telephone Number</Text>
@@ -170,9 +165,7 @@ const Personal = () => {
               </View>
             </TouchableOpacity>
           )}
-          {errorMessages.birthDay && (
-            <Text style={styles.error}>{errorMessages.birthDay}</Text>
-          )}
+        
         </View>
         {startshow && (
           <DateTimePicker

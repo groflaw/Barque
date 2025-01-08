@@ -4,8 +4,6 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  Image,
-  TextInput,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import PhoneInput from "react-native-international-phone-number";
@@ -14,6 +12,8 @@ import { useDispatch, useSelector } from "react-redux";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
 import io from "socket.io-client";
+import DateTimePicker from "@react-native-community/datetimepicker";
+
 import { Socket_API } from "../../Utils/Constant";
 
 import CheckBox from "../Basic/CheckBox";
@@ -33,7 +33,7 @@ const Third = () => {
     firstName: "",
     lastName: "",
     email: "",
-    birthDay: "",
+    birthDay: new Date().toLocaleDateString(),
     password: "",
     phoneNumber: "",
     expoPushToken: "",
@@ -43,6 +43,8 @@ const Third = () => {
   const [checkSMS, setCheckSMS] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [inputValue, setInputValue] = useState("");
+  const [startshow, setStartShow] = useState(false);
+  const [curdate, setCurdate] = useState(null);
   const [toastType, setToastType] = useState("success");
   const [errormessage, setErrorMessage] = useState("");
   const [notification, setNotification] = useState(undefined);
@@ -57,6 +59,21 @@ const Third = () => {
         ...prevState,
         phoneNumber: fullPhoneNumber,
       }));
+    }
+  };
+
+  const showDatepicker = (date) => {
+    setStartShow(true); // setshow datapicker
+    setCurdate(date); // selected date
+  };
+
+  const onChangeStart = (event, selectedDate) => {
+    if (selectedDate) {
+      const currentDate = selectedDate.toLocaleDateString(); // Format Date directly
+      setStartShow(false);
+      handleChange({
+        target: { name: "birthDay", value: currentDate }, // Pass formatted date
+      });
     }
   };
 
@@ -96,7 +113,7 @@ const Third = () => {
           setErrorMessage(`${result.errors[key]}`);
           handleShowToast();
         }
-      } // Set error messages in state
+      }
     } else {
       const socket = io(Socket_API);
       socket.emit("registerUser", result._id);
@@ -230,13 +247,27 @@ const Third = () => {
                   onChangeSelectedCountry={handleSelectedCountry}
                 />
               </View>
-              <CustomTextInput
-                placeholder="01/01/1990"
-                value={personInfo.birthDay}
-                onChange={handleChange}
-                name="birthDay"
-                sort={false}
-              />
+
+              <TouchableOpacity
+                onPress={() => {
+                  showDatepicker(personInfo.birthDay);
+                }}
+              >
+                <View style={styles.birthDay}>
+                  <Text style={styles.birthDaytext}>{personInfo.birthDay}</Text>
+                </View>
+              </TouchableOpacity>
+              {startshow && (
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={new Date("1990-10-01")}
+                  mode="date"
+                  is24Hour={true}
+                  onChange={(event, selectedDate) =>
+                    onChangeStart(event, selectedDate)
+                  }
+                />
+              )}
 
               <Text style={styles.rule} className="mt-5">
                 Debes tener al menos 18 años para registrarte. Otros usuarios de
@@ -320,24 +351,40 @@ const styles = StyleSheet.create({
   },
   checkLabel: {
     color: "#102a5e",
-    fontSize: 13, // fontSize in number
-    fontFamily: "Lexend Deca", // Ensure you have this font loaded
-    fontWeight: "300", // fontWeight, you can also use 'normal' for 400
-    lineHeight: 20, // lineHeight in number
+    fontSize: 13,
+    fontFamily: "Lexend Deca",
+    fontWeight: "300",
+    lineHeight: 20,
   },
   Button: {
-    borderRadius: 6, // Set as a number, no "px"
-    backgroundColor: "#17233c", // Background color as a string
+    borderRadius: 6,
+    backgroundColor: "#17233c",
     padding: 20,
-    color: "#dbe6fe", // Text color as a string
-    fontSize: 18, // Font size as a number
-    fontFamily: "Lexend Deca", // Ensure this font is loaded
-    fontWeight: "500", // Font weight as a string
+    color: "#dbe6fe",
+    fontSize: 18,
+    fontFamily: "Lexend Deca",
+    fontWeight: "500",
   },
-  error: {
-    color: "red", // Red color for the error message
-    fontSize: 12, // Small font size
-    marginTop: 2, // Space between the input and the error message
+  birthDay: {
+    marginVertical: 10,
+    width: "100%",
+    shadowColor: "#030303",
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    borderRadius: 5,
+    elevation: 2,
+  },
+  birthDaytext: {
+    paddingTop: 7,
+    height: 40,
+    borderRadius: 4,
+    paddingHorizontal: 10,
+    fontSize: 16,
+    backgroundColor: "#fff",
   },
 });
 export default Third;
