@@ -109,9 +109,9 @@ const Detail = () => {
     socket.emit("requestCancel", {
       userId: curuser._id,
       bookId: curbooking._id,
-      hostId: curbooking.hostId,
+      hostId: curbooking.hostId._id,
     });
-    nextStep("List");
+    navigation.navigate("List");
   };
 
   useEffect(() => {
