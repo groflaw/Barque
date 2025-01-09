@@ -15,7 +15,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import Number from "../Basic/Number";
 import LoadingIndicator from "../Basic/LoadingIndicator";
 import ToastMessage from "../Basic/ToastMessage/ToastMessage";
-import { reservation } from "../../Actions/UserBoat/userboat";
+import { reservation, getBoatBookings } from "../../Actions/UserBoat/userboat";
 import { Socket_API } from "../../Utils/Constant";
 
 import boatcard from "../../../assets/Icons/boatcard.png";
@@ -42,7 +42,7 @@ const BookingDetail = () => {
   const [curdate, setCurdate] = useState(null);
   const [cursort, setCursort] = useState(null);
   const [mode, setMode] = useState(null);
-
+  const [existingReservations, setexistingReservations] = useState([]);
 
   const showDatepicker = (sort, mode, date) => {
     setStartShow(true);
@@ -92,11 +92,18 @@ const BookingDetail = () => {
       setStartShow(false);
       const startDate = new Date(data.start);
       const endDate = new Date(data.end);
-      if (startDate <= currentDate && currentDate <= endDate) {
+
+      const result = canReserveBoat(
+        startDate,
+        endDate,
+        currentDate,
+        existingReservations
+      );
+      if (result.success) {
         setData({ ...data, [cursort]: currentDate });
       } else {
         setToastType("warning");
-        setErrorMessage("Your plan is out of the boat plan..");
+        setErrorMessage(result.message);
         handleShowToast();
       }
       setMode(null);
@@ -106,8 +113,55 @@ const BookingDetail = () => {
     }
   };
 
+  const isTimeWithinPlan = (currentDate, planStart, planEnd) => {
+    return currentDate >= planStart && currentDate <= planEnd;
+  };
+
+  const isTimeSlotAvailable = (currentDate, existingReservations) => {
+    return !existingReservations.some((reservation) => {
+      const reservedStart = new Date(reservation.start);
+      const reservedEnd = new Date(reservation.end);
+      return currentDate < reservedEnd && currentDate > reservedStart;
+    });
+  };
+
+  const canReserveBoat = (
+    startDate,
+    endDate,
+    currentDate,
+    existingReservations
+  ) => {
+    if (!isTimeWithinPlan(currentDate, startDate, endDate)) {
+      return {
+        success: false,
+        message: "Requested times are outside the plan period.",
+      };
+    }
+
+    if (!isTimeSlotAvailable(currentDate, existingReservations)) {
+      return {
+        success: false,
+        message: "Requested time slot is already booked.",
+      };
+    }
+
+    return { success: true, message: "Reservation can be made." };
+  };
+
   useEffect(() => {
     const fetchplan = navigation.addListener("focus", async () => {
+      let result = await dispatch(getBoatBookings(curbooking.boatId));
+      if (result && result?.errors) {
+        setToastType("warning");
+        for (let key in result.errors) {
+          if (result.errors.hasOwnProperty(key)) {
+            setErrorMessage(`${result.errors[key]}`);
+            handleShowToast();
+          }
+        }
+      } else {
+        setexistingReservations(result);
+      }
       let temp = curboat.plans.filter(
         (item) => item._id == curbooking.planId
       )[0];
@@ -115,6 +169,7 @@ const BookingDetail = () => {
     });
     return fetchplan;
   }, [navigation]);
+
   return (
     <>
       {loading ? (
@@ -199,6 +254,25 @@ const BookingDetail = () => {
                 </View>
               </View>
             </View>
+            {existingReservations.length > 0 && (
+              <View style={styles.card} className="mt-2 items-center py-2">
+                 <Text style={styles.marina}>Reservations</Text>
+                {existingReservations?.map((item, index) => (
+                  <View
+                    className="flex flex-row justify-around w-full mt-2"
+                    key={index}
+                  >
+                    <Text style={styles.des}>
+                      start : {new Date(item.start).toLocaleString()}
+                    </Text>
+                    <Text style={styles.des}>
+                      end : {new Date(item.end).toLocaleString()}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            )}
+
             <View style={styles.card} className="mt-2 py-4 px-4">
               <Text style={styles.header}>Select Number of Passengers</Text>
               <Number

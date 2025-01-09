@@ -135,6 +135,7 @@ const Myboats = () => {
                 <View
                   style={styles.card}
                   className="flex flex-row items-center justify-between mt-4 w-full"
+                  key={index}
                 >
                   <View
                     className="flex flex-row items-center"

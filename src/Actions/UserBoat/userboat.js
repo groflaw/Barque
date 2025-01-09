@@ -228,6 +228,27 @@ export const reservation =
     }
   };
 
+export const getBoatBookings = (boatId) => async (dispatch) => {
+  await dispatch(setLoading(true));
+  let errors = {};
+  try {
+    const response = await axios.get(
+      `${Backend_API}/reservation/getBoatBookings/${boatId}`
+    );
+    if (response.data.flag == true) {
+      return response.data.data;
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
+    }
+  } catch (error) {
+    errors.general = "There was an error fetching the boat's reservations";
+    return { errors };
+  } finally {
+    await dispatch(setLoading(false));
+  }
+};
+
 export const getResrvations = (userId) => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};

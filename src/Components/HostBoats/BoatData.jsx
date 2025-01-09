@@ -9,6 +9,8 @@ import * as Location from "expo-location";
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+import io from "socket.io-client";
+
 import {
   getAllBoatTypes,
   getAllBoatBrands,
@@ -21,6 +23,7 @@ import {
 
 import { submitBasic } from "../../Actions/AddBoat/addboat";
 import { setLoading } from "../../Store/Global";
+import { Socket_API } from "../../Utils/Constant";
 
 import Navbar from "../Navbar";
 import CustomTextInput from "../Basic/Input";
@@ -181,6 +184,8 @@ const BoatData = () => {
         }
       }
     } else {
+      const socket = io(Socket_API);
+      await socket.emit("addnewboat");
       navigation.navigate("AddPlans");
     }
   };

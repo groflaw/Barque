@@ -139,7 +139,7 @@ const List = () => {
       ) : (
         <ScrollView>
           <View style={styles.container}>
-            {pendingreviews.length > 0 && (
+            {pendingreviews?.length > 0 && (
               <Text style={styles.title}>Pending Review</Text>
             )}
             {pendingreviews?.map((item, index) => (

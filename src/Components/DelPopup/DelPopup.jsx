@@ -27,7 +27,7 @@ export default function DelPopup({ visible, transparent, dismiss, margin,delBoat
           <Text style={styles.title}>
             Are you sure want to delete this boat?
           </Text>
-          <View className="flex flex-row justify-around gap-10">
+          <View className="flex flex-row justify-around mt-3">
             <View style={[styles.btn, { backgroundColor: "#ff3b30" }]}>
               <TouchableOpacity style={{ width: "100%" }} onPress={delBoat}>
                 <Text style={styles.btntext} className="text-center">
@@ -62,21 +62,19 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.5)",
   },
   popupContent: {
-    height: 150,
     backgroundColor: "#ffffff",
     borderRadius: 8,
     boxShadow: "0px 10px 15px rgba(0,0,0,0.1)",
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 40,
-    gap: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 20,
+    paddingBottom: 15,
   },
   title: {
     color: "#030303",
     fontSize: 20,
     fontFamily: "Lexend Deca",
     fontWeight: 700,
-    lineHeight: 28,
   },
   btn: {
     paddingTop: 8,
