@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  Platform
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import PhoneInput from "react-native-international-phone-number";
@@ -47,6 +48,8 @@ const Third = () => {
   const [curdate, setCurdate] = useState(null);
   const [toastType, setToastType] = useState("success");
   const [errormessage, setErrorMessage] = useState("");
+
+  const [channels, setChannels] = useState([]);
   const [notification, setNotification] = useState(undefined);
   const notificationListener = useRef();
   const responseListener = useRef();
@@ -121,21 +124,18 @@ const Third = () => {
     }
   };
 
-  const handleRegistrationError = (errorMessage) => {
-    setToastType("warning");
-    setErrorMessage(errorMessage);
-    handleShowToast();
-  };
+  async function registerForPushNotificationsAsync() {
+    let token;
 
-  const registerForPushNotificationsAsync = async () => {
     if (Platform.OS === "android") {
-      await Notifications.setNotificationChannelAsync("default", {
-        name: "default",
+      await Notifications.setNotificationChannelAsync("myNotificationChannel", {
+        name: "A channel is needed for the permissions prompt to appear",
         importance: Notifications.AndroidImportance.MAX,
         vibrationPattern: [0, 250, 250, 250],
         lightColor: "#FF231F7C",
       });
     }
+
     const { status: existingStatus } =
       await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
@@ -143,46 +143,49 @@ const Third = () => {
       const { status } = await Notifications.requestPermissionsAsync();
       finalStatus = status;
     }
+
     if (finalStatus !== "granted") {
-      handleRegistrationError(
-        "Permission not granted to get push token for push notification!"
-      );
+      alert("Failed to get push token for push notification!");
       return;
     }
-    const projectId =
-      Constants?.expoConfig?.extra?.eas?.projectId ??
-      Constants?.easConfig?.projectId;
-    if (!projectId) {
-      handleRegistrationError("Project ID not found");
-    }
+
     try {
-      const pushTokenString = (
-        await Notifications.getExpoPushTokenAsync({ projectId })
-      ).data;
-      return pushTokenString;
+      const projectId =
+        Constants?.expoConfig?.extra?.eas?.projectId ??
+        Constants?.easConfig?.projectId;
+      if (!projectId) {
+        throw new Error("Project ID not found");
+      }
+
+      token = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
     } catch (e) {
-      handleRegistrationError(`${e}`);
+      token = `${e}`;
     }
-  };
+
+    return token;
+  }
 
   useEffect(() => {
-    registerForPushNotificationsAsync()
-      .then((token) =>
+    registerForPushNotificationsAsync().then(
+      (token) =>
+        token &&
         setPersonInfo((prevState) => ({
           ...prevState,
-          expoPushToken: token ?? "",
+          expoPushToken: token,
         }))
-      )
-      .catch((error) =>
-        setPersonInfo((prevState) => ({
-          ...prevState,
-          expoPushToken: `${error}`,
-        }))
+    );
+
+    if (Platform.OS === "android") {
+      Notifications.getNotificationChannelsAsync().then((value) =>
+        setChannels(value ?? [])
       );
+    }
+
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         setNotification(notification);
       });
+
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
         console.log(response);
