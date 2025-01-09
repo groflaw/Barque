@@ -128,7 +128,6 @@ const List = () => {
 
   const socket = io(Socket_API);
   socket.on("receivebooking", (message) => {
-    console.log(message);
     fetchReservations();
   });
 

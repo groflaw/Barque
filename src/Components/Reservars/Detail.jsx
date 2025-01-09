@@ -9,7 +9,7 @@ import MapView, { Marker } from "react-native-maps";
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import io from "socket.io-client"; 
+import io from "socket.io-client";
 
 import { Socket_API } from "../../Utils/Constant";
 import { BookingStatus, apiKey, cancelback } from "../../Utils/Constant";
@@ -83,8 +83,21 @@ const Detail = () => {
         setErrorMessage(result.errors.general);
         handleShowToast();
       } else {
-        if (value == 2) navigation.navigate("Confirm");
-        if (value == 1) navigation.navigate("Main");
+        if (value == 2) {
+          const socket = io(Socket_API);
+          socket.emit("hostresbooking", {
+            userId: result.userId,
+            message: "Host confirm your booking",
+          });
+          navigation.navigate("Confirm");
+        }
+        if (value == 1) {
+          socket.emit("hostresbooking", {
+            userId: result.userId,
+            message: "Host cancel your booking",
+          });
+          navigation.navigate("Main");
+        }
       }
     } else {
       navigation.navigate("PaymentDetail");
@@ -95,8 +108,10 @@ const Detail = () => {
     const socket = io(Socket_API);
     socket.emit("requestCancel", {
       userId: curuser._id,
+      bookId: curbooking._id,
+      hostId: curbooking.hostId,
     });
-    nextStep();
+    nextStep("List");
   };
 
   useEffect(() => {
