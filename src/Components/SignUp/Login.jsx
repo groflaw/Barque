@@ -5,6 +5,7 @@ import {
   Text,
   Button,
   TouchableOpacity,
+  Platform
 } from "react-native";
 import Navbar from "../Navbar";
 import { useNavigation } from "@react-navigation/native";
@@ -36,8 +37,9 @@ const Login = () => {
 
   const [toastType, setToastType] = useState("success");
   const [errormessage, setErrorMessage] = useState("");
-
   const [remember, setRemeber] = useState(false);
+
+  const [channels, setChannels] = useState([]);
   const [notification, setNotification] = useState(undefined);
   const notificationListener = useRef();
   const responseListener = useRef();
@@ -77,25 +79,23 @@ const Login = () => {
       navigation.navigate("Main");
     }
   };
+
   const handleRemember = (id, status) => {
     setRemeber(status);
   };
 
-  const handleRegistrationError = (errorMessage) => {
-    setToastType("warning");
-    setErrorMessage(errorMessage);
-    handleShowToast();
-  };
+  async function registerForPushNotificationsAsync() {
+    let token;
 
-  const registerForPushNotificationsAsync = async () => {
     if (Platform.OS === "android") {
-      await Notifications.setNotificationChannelAsync("default", {
-        name: "default",
+      await Notifications.setNotificationChannelAsync("myNotificationChannel", {
+        name: "A channel is needed for the permissions prompt to appear",
         importance: Notifications.AndroidImportance.MAX,
         vibrationPattern: [0, 250, 250, 250],
         lightColor: "#FF231F7C",
       });
     }
+
     const { status: existingStatus } =
       await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
@@ -103,46 +103,49 @@ const Login = () => {
       const { status } = await Notifications.requestPermissionsAsync();
       finalStatus = status;
     }
+
     if (finalStatus !== "granted") {
-      handleRegistrationError(
-        "Permission not granted to get push token for push notification!"
-      );
+      alert("Failed to get push token for push notification!");
       return;
     }
-    const projectId =
-      Constants?.expoConfig?.extra?.eas?.projectId ??
-      Constants?.easConfig?.projectId;
-    if (!projectId) {
-      handleRegistrationError("Project ID not found");
-    }
+
     try {
-      const pushTokenString = (
-        await Notifications.getExpoPushTokenAsync({ projectId })
-      ).data;
-      return pushTokenString;
+      const projectId =
+        Constants?.expoConfig?.extra?.eas?.projectId ??
+        Constants?.easConfig?.projectId;
+      if (!projectId) {
+        throw new Error("Project ID not found");
+      }
+
+      token = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
     } catch (e) {
-      handleRegistrationError(`${e}`);
+      token = `${e}`;
     }
-  };
+
+    return token;
+  }
 
   useEffect(() => {
-    registerForPushNotificationsAsync()
-      .then((token) =>
+    registerForPushNotificationsAsync().then(
+      (token) =>
+        token &&
         setPersonInfo((prevState) => ({
           ...prevState,
-          expoPushToken: token ?? "",
+          expoPushToken: token,
         }))
-      )
-      .catch((error) =>
-        setPersonInfo((prevState) => ({
-          ...prevState,
-          expoPushToken: `${error}`,
-        }))
+    );
+
+    if (Platform.OS === "android") {
+      Notifications.getNotificationChannelsAsync().then((value) =>
+        setChannels(value ?? [])
       );
+    }
+
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         setNotification(notification);
       });
+
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
         console.log(response);
@@ -179,23 +182,21 @@ const Login = () => {
                 <Text style={styles.content}>Email</Text>
                 <CustomTextInput
                   placeholder="example@example.com"
-                  value={personInfo.email} // Ensure you're using the correct property
+                  value={personInfo.email}
                   onChange={handleChange}
                   name="email"
                   sort={false}
                 />
-              
               </View>
               <View className="mt-3">
                 <Text style={styles.content}>Password</Text>
                 <CustomTextInput
                   placeholder="Enter a password of at least 6 characters."
-                  value={personInfo.password} // Ensure you're using the correct property
+                  value={personInfo.password}
                   onChange={handleChange}
                   name="password"
                   sort={true}
                 />
-               
               </View>
               <View className="flex flex-row items-center mt-3">
                 <CustomSwitch
@@ -230,6 +231,11 @@ const Login = () => {
               </View>
             </>
           </View>
+          <ToastMessage
+            type={toastType}
+            description={errormessage}
+            ref={toastRef}
+          />
         </ScrollView>
       )}
       <Navbar></Navbar>
@@ -241,12 +247,12 @@ const styles = StyleSheet.create({
     margin: 20,
     backgroundColor: "#ffffff",
     borderRadius: 10,
-    shadowColor: "rgba(0, 0, 0, 0.1)", // Shadow color for iOS
-    shadowOffset: { width: 0, height: 2 }, // Offset for iOS
-    shadowOpacity: 1, // Opacity for iOS
-    shadowRadius: 10, // Radius for iOS
-    elevation: 5, // Shadow for Android
-    padding: 20, // Optional: Add padding if needed
+    shadowColor: "rgba(0, 0, 0, 0.1)",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 10,
+    elevation: 5,
+    padding: 20,
   },
   Title: {
     color: "#17233c",
