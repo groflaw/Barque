@@ -18,7 +18,7 @@ export const Signup = (personInfo) => async (dispatch) => {
   try {
     const emailValidation = isValidEmail(personInfo.email);
     const passwordValidation = isValidPassword(personInfo.password);
-    const dateValidation = isValidDate(personInfo.birthDay);
+    // const dateValidation = isValidDate(personInfo.birthDay);
     const firstNameValidation = isValidString(personInfo.firstName);
     const lastNameValidation = isValidString(personInfo.lastName);
 
@@ -28,9 +28,9 @@ export const Signup = (personInfo) => async (dispatch) => {
     if (!passwordValidation.valid) {
       errors.password = passwordValidation.message;
     }
-    if (!dateValidation.valid) {
-      errors.birthDay = dateValidation.message;
-    }
+    // if (!dateValidation.valid) {
+    //   errors.birthDay = dateValidation.message;
+    // }
     if (!firstNameValidation.valid) {
       errors.firstName = "FirstName" + firstNameValidation.message;
     }
