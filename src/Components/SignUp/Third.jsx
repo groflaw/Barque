@@ -4,10 +4,11 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  Platform
+  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import PhoneInput from "react-native-international-phone-number";
+import * as Localization from "expo-localization";
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Notifications from "expo-notifications";
@@ -42,7 +43,10 @@ const Third = () => {
 
   const [checkPolish, setCheckPolish] = useState(false);
   const [checkSMS, setCheckSMS] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState(null);
+  const [
+    
+    
+    selectedCountry, setSelectedCountry] = useState();
   const [inputValue, setInputValue] = useState("");
   const [startshow, setStartShow] = useState(false);
   const [curdate, setCurdate] = useState(null);
@@ -247,6 +251,7 @@ const Third = () => {
                   value={inputValue}
                   onChangePhoneNumber={handleInputValue}
                   selectedCountry={selectedCountry}
+                  defaultCountry={Localization.locale.split("-")[1]}
                   onChangeSelectedCountry={handleSelectedCountry}
                 />
               </View>
