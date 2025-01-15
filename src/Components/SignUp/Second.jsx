@@ -37,24 +37,24 @@ const Second = () => {
             </Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={SSO}>
+        {/* <TouchableOpacity onPress={SSO}>
           <View style={styles.item} className="flex flex-row justify-center">
             <Image source={appleImage}></Image>
             <Text className="ml-2">Sign Up with Apple</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity onPress={SSO}>
           <View style={styles.item} className="flex flex-row justify-center">
             <Image source={googleImage}></Image>
             <Text className="ml-2">Sign Up with google</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={SSO}>
+        {/* <TouchableOpacity onPress={SSO}>
           <View style={styles.item} className="flex flex-row justify-center">
             <Image source={facebookImage}></Image>
             <Text className="ml-2 ">Sing Up with FaceBook</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </ScrollView>
     </>
   );
