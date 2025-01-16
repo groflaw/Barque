@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "989899569554",
+    "project_id": "barque-ace43",
+    "storage_bucket": "barque-ace43.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:989899569554:android:266df8abef6ea3c731294b",
+        "android_client_info": {
+          "package_name": "com.Barque"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPZb8GfoMHx5owxizhQ1m9v0_zrPq_XHs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

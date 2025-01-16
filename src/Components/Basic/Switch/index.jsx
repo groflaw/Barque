@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 
 const CustomSwitch = ({ id, flag, onSwitchChange }) => {
-  const [isOn, setIsOn] = useState(flag); // Initialize with the flag value
+  const [isOn, setIsOn] = useState(flag);
 
   const toggleSwitch = () => {
     setIsOn((previousState) => {
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
 
     justifyContent: "center",
-    backgroundColor: "#e0e0e0", // Grey background for closed state
+    backgroundColor: "#e0e0e0", 
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -41,26 +41,26 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   open: {
-    backgroundColor: "green", // Green background for open state
+    backgroundColor: "green", 
   },
   closed: {
-    backgroundColor: "#fff", // White background for closed state
+    backgroundColor: "#fff", 
   },
   circle: {
     width: 20,
     height: 20,
     borderRadius: 11,
-    backgroundColor: "#fff", // White circle
+    backgroundColor: "#fff", 
     position: "absolute",
     top: 4,
   },
   circleClosed: {
-    left: 4, // Position circle to the left when closed
-    backgroundColor: "#17233c", // Dark color for the circle when closed
+    left: 4,
+    backgroundColor: "#17233c",
   },
   circleOpen: {
-    right: 4, // Position circle to the right when open
-    backgroundColor: "#fff", // White color for the circle when open
+    right: 4, 
+    backgroundColor: "#fff", 
   },
 });
 

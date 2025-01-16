@@ -6,12 +6,13 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
 import CheckBox from "../Basic/CheckBox";
 import LoadingIndicator from "../Basic/LoadingIndicator";
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 
 import { getAccessories } from "../../Actions/BasicBoat/basicboat";
 import { submitAccessories } from "../../Actions/AddBoat/addboat";
@@ -20,6 +21,7 @@ import { setLoading } from "../../Store/Global";
 const Accessories = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const toastRef = useRef(null);
 
   const accessories = useSelector((state) => state.BasicBoat.accessories);
   const curboat = useSelector((state) => state.Global.curboat);
@@ -28,6 +30,7 @@ const Accessories = () => {
   const [access, setAccess] = useState(
     curboat.accessories ? curboat.accessories : []
   );
+  const [toastType, setToastType] = useState("success");
   const [errorMessages, setErrorMessages] = useState({});
 
   useEffect(() => {
@@ -35,8 +38,14 @@ const Accessories = () => {
       try {
         await dispatch(setLoading(true));
         let result = await dispatch(getAccessories());
-        if (result.errors) {
-          setErrorMessages(result.errors);
+        if (result?.errors) {
+          setToastType("warning");
+          for (let key in result.errors) {
+            if (result.errors.hasOwnProperty(key)) {
+              setErrorMessages(`${result.errors[key]}`);
+              handleShowToast();
+            }
+          }
         }
         await dispatch(setLoading(false));
       } catch (error) {
@@ -45,7 +54,7 @@ const Accessories = () => {
     };
     const unsubscribe = navigation.addListener("focus", async () => {
       fetchBoatTypes();
-    })
+    });
     return unsubscribe;
   }, [navigation]);
 
@@ -57,13 +66,27 @@ const Accessories = () => {
     }
   };
 
+  const handleShowToast = () => {
+    if (toastRef.current) {
+      toastRef.current.show();
+    }
+  };
+
   const handleSubmit = async () => {
     const result = await dispatch(submitAccessories(curboat._id, access));
-    if (result.errors) {
-      setErrorMessages(result.errors);
+
+    if (result?.errors) {
+      setToastType("warning");
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessages(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
     }
     navigation.navigate("Allowed");
   };
+
   return (
     <>
       {loading ? (
@@ -111,11 +134,13 @@ const Accessories = () => {
                   CONTINUAR
                 </Text>
               </TouchableOpacity>
-              {errorMessages.general && (
-                <Text style={styles.error}>{errorMessages.general}</Text>
-              )}
             </View>
           </View>
+          <ToastMessage
+            type={toastType}
+            description={errorMessages}
+            ref={toastRef}
+          />
         </ScrollView>
       )}
     </>

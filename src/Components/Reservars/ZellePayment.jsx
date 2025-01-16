@@ -8,12 +8,34 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
 
 import CustomTextInput from "../Basic/Input";
 import zelle from "../../../assets/Icons/zelle.png";
+import { setLoading } from "../../Store/Global";
 
 const ZellePayment = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const curbooking = useSelector((state) => state.Global.curbooking);
+  const [plan, setPlan] = useState({});
+
+  useEffect(() => {
+    const fetchBoatTypes = async () => {
+      await dispatch(setLoading(true));
+      let result = curbooking.boatId.plans.find(
+        (item) => item._id === curbooking.planId
+      );
+      console.log(curbooking.boatId.plans);
+      // setPlan(result);
+      await dispatch(setLoading(false));
+    };
+
+    const unsubscribe = navigation.addListener("focus", async () => {
+      fetchBoatTypes();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const nextStep = () => {
     navigation.navigate("PaymentConfirm");
@@ -30,7 +52,7 @@ const ZellePayment = () => {
           your payment via Zelle using our registered
         </Text>
         <Text style={[styles.des, { fontWeight: 700 }]}>
-          email: pagos@barquea.com{" "}
+          email: pagos@barquea.com
         </Text>
         <View style={styles.hr}></View>
         <Text style={styles.des} className="mt-3 mb-3">
@@ -39,7 +61,11 @@ const ZellePayment = () => {
         </Text>
       </View>
       <Text style={styles.title} className="mt-4">
-        Amount: $500
+        Amount:
+        {new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+        }).format(plan.price * 1.1)}
       </Text>
       <Text style={[styles.des, { fontWeight: 700 }]} className="mt-4">
         Enter your Zelle Confirmation Number:

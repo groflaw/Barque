@@ -7,13 +7,14 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 
 import CustomTextInput from "../Basic/Input";
 import LoadingIndicator from "../Basic/LoadingIndicator";
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 
 import { AddCoHost, getUser } from "../../Actions/Auth/auth.acitons";
 
@@ -23,11 +24,14 @@ import photoImage from "../../../assets/Icons/photo.png";
 const HostProfileMain = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const toastRef = useRef(null);
 
   const curuser = useSelector((state) => state.Slice.user);
   const loading = useSelector((state) => state.Global.loading);
 
-  const [errorMessages, setErrorMessages] = useState({});
+  const [toastType, setToastType] = useState("success");
+  const [errormessage, setErrorMessage] = useState("");
+
   const [profile, setProfile] = useState({
     profileImage: null,
     frontID: null,
@@ -35,6 +39,12 @@ const HostProfileMain = () => {
     idNumber: "",
     email: "",
   });
+
+  const handleShowToast = () => {
+    if (toastRef.current) {
+      toastRef.current.show();
+    }
+  };
 
   const pickImage = async (field) => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -65,13 +75,21 @@ const HostProfileMain = () => {
     if (curuser.cohost) {
       navigation.navigate("ChangePassword");
     } else {
-      setErrorMessages({ changepassword: "You should add co-host profile." });
+      setToastType("warning");
+      setErrorMessage("You should add co-host profile.");
+      handleShowToast();
     }
   };
   const handleSubmit = async () => {
     const result = await dispatch(AddCoHost(curuser._id, profile));
-    if (result.errors) {
-      setErrorMessages(result.errors);
+    if (result?.errors) {
+      setToastType("warning");
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
     }
   };
 
@@ -91,6 +109,7 @@ const HostProfileMain = () => {
     });
     return unsubscribe;
   }, [navigation]);
+  
   return (
     <>
       {loading ? (
@@ -121,11 +140,7 @@ const HostProfileMain = () => {
               onChange={handleChange}
               name="idNumber"
             ></CustomTextInput>
-            {errorMessages.idNumber && (
-              <Text style={styles.error} className="text-center">
-                {errorMessages.idNumber}
-              </Text>
-            )}
+            
           </View>
           <View className="flex px-5 mt-4">
             <Text>Email Address</Text>
@@ -135,11 +150,7 @@ const HostProfileMain = () => {
               onChange={handleChange}
               name="email"
             ></CustomTextInput>
-            {errorMessages.email && (
-              <Text style={styles.error} className="text-center">
-                {errorMessages.email}
-              </Text>
-            )}
+           
           </View>
           <View className="px-5 mt-5">
             <Text>Subir Identificación</Text>
@@ -199,11 +210,7 @@ const HostProfileMain = () => {
                 )}
               </View>
             </View>
-            {errorMessages.image && (
-              <Text style={styles.error} className="text-center">
-                {errorMessages.image}
-              </Text>
-            )}
+          
           </View>
           <View className="px-5 mt-5">
             <TouchableOpacity
@@ -215,11 +222,7 @@ const HostProfileMain = () => {
                 Change Password
               </Text>
             </TouchableOpacity>
-            {errorMessages.changepassword && (
-              <Text style={styles.error} className="text-center">
-                {errorMessages.changepassword}
-              </Text>
-            )}
+           
           </View>
           <View style={styles.save} className="mt-5">
             <TouchableOpacity
@@ -231,12 +234,13 @@ const HostProfileMain = () => {
                 Save Changes
               </Text>
             </TouchableOpacity>
-            {errorMessages.general && (
-              <Text style={styles.error} className="text-center">
-                {errorMessages.general}
-              </Text>
-            )}
+           
           </View>
+          <ToastMessage
+            type={toastType}
+            description={errormessage}
+            ref={toastRef}
+          />
         </ScrollView>
       )}
     </>

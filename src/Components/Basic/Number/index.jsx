@@ -11,7 +11,7 @@ const Number = ({ value = 0, onChange, width, name, max }) => {
   const [numberValue, setNumberValue] = useState(value);
 
   useEffect(() => {
-    setNumberValue(value ?? 0); // Ensure a valid value on prop change
+    setNumberValue(value ?? 0); 
   }, [value]);
 
   const handleIncrease = useCallback(() => {
@@ -37,6 +37,8 @@ const Number = ({ value = 0, onChange, width, name, max }) => {
       const updatedValue = max != null && numericValue > max ? max : numericValue;
       setNumberValue(updatedValue);
       onChange({ target: { name, value: updatedValue } });
+    }else{
+      setNumberValue("");
     }
   }, [name, onChange]);
 

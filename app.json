@@ -30,13 +30,16 @@
           "apiKey": "AIzaSyBUHaXnKMYi8ipKF-UgCHWH1TSdVCse8p0"
         }
       },
-      "package": "com.foreve0914.Baraquea"
+      "package": "com.foreve0914.Baraquea",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-localization"
+      "expo-localization",
+      "@react-native-firebase/app",
+      "expo-font"
     ],
     "extra": {
       "eas": {
@@ -44,7 +47,7 @@
       }
     },
     "owner": "foreve0914",
-    "sdkVersion": "48.0.0"
+    "sdkVersion": "52.0.0"
   },
-  "name": "Baraqua"
+  "name": "Barquea"
 }

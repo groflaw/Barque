@@ -27,7 +27,7 @@ import backImage from "../../assets/Icons/headerback.png";
 import hostmarkImage from "../../assets/Icons/headermark.png";
 
 const Reservas = () => {
-  const Stack = createNativeStackNavigator(); //Navigator Screen
+  const Stack = createNativeStackNavigator();
   const navigation = useNavigation();
   const HomeHeaderRight = () => {
     const state = navigation.getState();
@@ -40,22 +40,25 @@ const Reservas = () => {
     const handleBackPress = () => {
       if (currentRoute === "List") {
         navigation.navigate("Main");
+      } else if (["Detail"].includes(currentRoute)) {
+        navigation.navigate("List");
+      } else if (["PaymentDetail"].includes(currentRoute)) {
+        navigation.navigate("Detail");
+      } else if (["SelectPayment"].includes(currentRoute)) {
+        navigation.navigate("PaymentDetail");
       } else if (
         [
-          "Detail",
           "Confirm",
-          "PaymentDetail",
-          "SelectPayment",
-          "CashPayment",
-          "CardPayment",
           "PaymentConfirm",
+          "BankPayment",
           "ZellePayment",
           "BinancePayment",
           "PaypalPayment",
-          "BankPayment",
+          "CashPayment",
+          "CardPayment",
         ].includes(currentRoute)
       ) {
-        navigation.navigate("List"); 
+        navigation.navigate("SelectPayment");
       }
     };
     return (

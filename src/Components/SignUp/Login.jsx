@@ -3,29 +3,46 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  Button,
   TouchableOpacity,
+  Platform
 } from "react-native";
 import Navbar from "../Navbar";
 import { useNavigation } from "@react-navigation/native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import * as Notifications from "expo-notifications";
+import Constants from "expo-constants";
+import io from "socket.io-client";
 
 import CustomTextInput from "../Basic/Input";
 import CustomSwitch from "../Basic/Switch";
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 import LoadingIndicator from "../Basic/LoadingIndicator";
+import { Socket_API } from "../../Utils/Constant";
 
 import { Signin } from "../../Actions/Auth/auth.acitons";
+
 const Login = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.Global.loading);
+  const toastRef = useRef(null);
 
   const [personInfo, setPersonInfo] = useState({
     email: "",
     password: "",
+    expoPushToken: "",
   });
-  const [errorMessages, setErrorMessages] = useState({});
+
+  const [toastType, setToastType] = useState("success");
+  const [errormessage, setErrorMessage] = useState("");
   const [remember, setRemeber] = useState(false);
+
+  const [channels, setChannels] = useState([]);
+  const [notification, setNotification] = useState(undefined);
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
   const nextStep = (url) => {
     navigation.navigate(url);
@@ -40,12 +57,25 @@ const Login = () => {
     }));
   };
 
+  const handleShowToast = () => {
+    if (toastRef.current) {
+      toastRef.current.show();
+    }
+  };
+
   const handleLogin = async () => {
     const result = await dispatch(Signin(personInfo));
-
-    if (result.errors) {
-      setErrorMessages(result.errors); // Set error messages in state
+    if (result?.errors) {
+      setToastType("warning");
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
     } else {
+      socket = io(Socket_API);
+      socket.emit("registerUser", result._id);
       navigation.navigate("Main");
     }
   };
@@ -53,6 +83,84 @@ const Login = () => {
   const handleRemember = (id, status) => {
     setRemeber(status);
   };
+
+  async function registerForPushNotificationsAsync() {
+    let token;
+
+    if (Platform.OS === "android") {
+      await Notifications.setNotificationChannelAsync("myNotificationChannel", {
+        name: "A channel is needed for the permissions prompt to appear",
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: "#FF231F7C",
+      });
+    }
+
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
+      return;
+    }
+
+    try {
+      const projectId =
+        Constants?.expoConfig?.extra?.eas?.projectId ??
+        Constants?.easConfig?.projectId;
+      if (!projectId) {
+        throw new Error("Project ID not found");
+      }
+
+      token = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
+    } catch (e) {
+      token = `${e}`;
+    }
+
+    return token;
+  }
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then(
+      (token) =>
+        token &&
+        setPersonInfo((prevState) => ({
+          ...prevState,
+          expoPushToken: token,
+        }))
+    );
+
+    if (Platform.OS === "android") {
+      Notifications.getNotificationChannelsAsync().then((value) =>
+        setChannels(value ?? [])
+      );
+    }
+
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
+
+    return () => {
+      notificationListener.current &&
+        Notifications.removeNotificationSubscription(
+          notificationListener.current
+        );
+      responseListener.current &&
+        Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
+
   return (
     <>
       {loading ? (
@@ -74,27 +182,21 @@ const Login = () => {
                 <Text style={styles.content}>Email</Text>
                 <CustomTextInput
                   placeholder="example@example.com"
-                  value={personInfo.email} // Ensure you're using the correct property
+                  value={personInfo.email}
                   onChange={handleChange}
                   name="email"
                   sort={false}
                 />
-                {errorMessages.email && (
-                  <Text style={styles.error}>{errorMessages.email}</Text>
-                )}
               </View>
               <View className="mt-3">
                 <Text style={styles.content}>Password</Text>
                 <CustomTextInput
                   placeholder="Enter a password of at least 6 characters."
-                  value={personInfo.password} // Ensure you're using the correct property
+                  value={personInfo.password}
                   onChange={handleChange}
                   name="password"
                   sort={true}
                 />
-                {errorMessages.password && (
-                  <Text style={styles.error}>{errorMessages.password}</Text>
-                )}
               </View>
               <View className="flex flex-row items-center mt-3">
                 <CustomSwitch
@@ -129,6 +231,11 @@ const Login = () => {
               </View>
             </>
           </View>
+          <ToastMessage
+            type={toastType}
+            description={errormessage}
+            ref={toastRef}
+          />
         </ScrollView>
       )}
       <Navbar></Navbar>
@@ -140,12 +247,12 @@ const styles = StyleSheet.create({
     margin: 20,
     backgroundColor: "#ffffff",
     borderRadius: 10,
-    shadowColor: "rgba(0, 0, 0, 0.1)", // Shadow color for iOS
-    shadowOffset: { width: 0, height: 2 }, // Offset for iOS
-    shadowOpacity: 1, // Opacity for iOS
-    shadowRadius: 10, // Radius for iOS
-    elevation: 5, // Shadow for Android
-    padding: 20, // Optional: Add padding if needed
+    shadowColor: "rgba(0, 0, 0, 0.1)",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 10,
+    elevation: 5,
+    padding: 20,
   },
   Title: {
     color: "#17233c",

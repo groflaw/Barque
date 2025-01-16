@@ -18,7 +18,7 @@ export const Signup = (personInfo) => async (dispatch) => {
   try {
     const emailValidation = isValidEmail(personInfo.email);
     const passwordValidation = isValidPassword(personInfo.password);
-    const dateValidation = isValidDate(personInfo.birthDay);
+    // const dateValidation = isValidDate(personInfo.birthDay);
     const firstNameValidation = isValidString(personInfo.firstName);
     const lastNameValidation = isValidString(personInfo.lastName);
 
@@ -28,14 +28,14 @@ export const Signup = (personInfo) => async (dispatch) => {
     if (!passwordValidation.valid) {
       errors.password = passwordValidation.message;
     }
-    if (!dateValidation.valid) {
-      errors.birthDay = dateValidation.message;
-    }
+    // if (!dateValidation.valid) {
+    //   errors.birthDay = dateValidation.message;
+    // }
     if (!firstNameValidation.valid) {
-      errors.firstName = firstNameValidation.message;
+      errors.firstName = "FirstName" + firstNameValidation.message;
     }
     if (!lastNameValidation.valid) {
-      errors.lastName = lastNameValidation.message;
+      errors.lastName = "LastName" + lastNameValidation.message;
     }
 
     if (Object.keys(errors).length > 0) {
@@ -51,6 +51,8 @@ export const Signup = (personInfo) => async (dispatch) => {
     if (response.data.flag == false) {
       errors[response.data.sort] = response.data.error;
       return { errors };
+    } else {
+      return response.data.data;
     }
   } catch (error) {
     errors.general = "There was an error fetching the data.";
@@ -61,8 +63,7 @@ export const Signup = (personInfo) => async (dispatch) => {
   return {};
 };
 
-export const Signin = (personInfo) => async (dispatch) => {  
-
+export const Signin = (personInfo) => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};
 
@@ -81,10 +82,11 @@ export const Signin = (personInfo) => async (dispatch) => {
     }
 
     const response = await axios.get(
-      `${Backend_API}/users/${personInfo.email}/${personInfo.password}`
+      `${Backend_API}/users/${personInfo.email}/${personInfo.password}/${personInfo.expoPushToken}`
     );
     if (response.data.flag == true) {
       dispatch(addUser(response.data.existingUser));
+      return response.data.existingUser;
     } else {
       errors[response.data.sort] = response.data.error;
       return { errors };
@@ -95,7 +97,6 @@ export const Signin = (personInfo) => async (dispatch) => {
   } finally {
     await dispatch(setLoading(false)); // Hide loading indicator once done
   }
-  return {};
 };
 
 export const setAvatar = (id, data) => async (dispatch) => {
@@ -131,20 +132,18 @@ export const changeProfile = (id, profile) => async (dispatch) => {
   let errors = {};
   try {
     const emailValidation = isValidEmail(profile.email);
-    const dateValidation = isValidDate(profile.birthDay);
+
     const firstNameValidation = isValidString(profile.firstName);
     const lastNameValidation = isValidString(profile.lastName);
     if (!emailValidation.valid) {
       errors.email = emailValidation.message;
     }
-    if (!dateValidation.valid) {
-      errors.birthDay = dateValidation.message;
-    }
+
     if (!firstNameValidation.valid) {
-      errors.firstName = firstNameValidation.message;
+      errors.firstName = "FirstName" + firstNameValidation.message;
     }
     if (!lastNameValidation.valid) {
-      errors.lastName = lastNameValidation.message;
+      errors.lastName = "LastName" + lastNameValidation.message;
     }
 
     if (Object.keys(errors).length > 0) {
@@ -173,7 +172,6 @@ export const changeProfile = (id, profile) => async (dispatch) => {
   } finally {
     await dispatch(setLoading(false));
   }
-  return {};
 };
 
 export const setNotifi = (id, field, value) => async (dispatch) => {
@@ -219,16 +217,16 @@ export const AddCoHost = (id, profile) => async (dispatch) => {
       errors.email = emailValidation.message;
     }
     if (!idNumberValidation.valid) {
-      errors.idNumber = idNumberValidation.message;
+      errors.idNumber = "ID Number" + idNumberValidation.message;
     }
     if (!profileValidation.valid) {
-      errors.image = profileValidation.message;
+      errors.image = "Profile Image" + profileValidation.message;
     }
     if (!frontValidation.valid) {
-      errors.image = frontValidation.message;
+      errors.image ="ID Front Image" + frontValidation.message;
     }
     if (!backValidation.valid) {
-      errors.image = backValidation.message;
+      errors.image ="ID Back Image" + backValidation.message;
     }
 
     if (Object.keys(errors).length > 0) {
@@ -279,29 +277,29 @@ export const AddCoHost = (id, profile) => async (dispatch) => {
   return {};
 };
 
-export const getUser = (id) => async(dispatch) =>{
+export const getUser = (id) => async (dispatch) => {
   await dispatch(setLoading(true));
-  let errors = {}
-  try{
+  let errors = {};
+  try {
     const response = await axios.get(`${Backend_API}/users/${id}`);
-    if(response.data.flag == true){
-      return response.data.data
-    }else{
-      errors[response.data.sort] = response.data.error
-      return {errors}
+    if (response.data.flag == true) {
+      return response.data.data;
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
     }
-  }catch(error){
+  } catch (error) {
     errors.general = "There was an error fetching the data";
-  }finally{
-    await dispatch(setLoading(false))
+  } finally {
+    await dispatch(setLoading(false));
   }
-}
+};
 
-export const changePassword =(id, data) =>async (dispatch) =>{
+export const changePassword = (id, data) => async (dispatch) => {
   await dispatch(setLoading(true));
-  const {curpassword, newpassword, confirmpassword} = data;
-  let errors = {}
-  try{
+  const { curpassword, newpassword, confirmpassword } = data;
+  let errors = {};
+  try {
     const curpasswordValidation = isValidPassword(curpassword);
     if (!curpasswordValidation.valid) {
       errors.curpassword = curpasswordValidation.message;
@@ -310,27 +308,31 @@ export const changePassword =(id, data) =>async (dispatch) =>{
     if (!newpasswordValidation.valid) {
       errors.newpassword = newpasswordValidation.message;
     }
-    if(newpassword != confirmpassword){
+    if (newpassword != confirmpassword) {
       errors.confirmpassword = "Please confirm password again";
     }
     if (Object.keys(errors).length > 0) {
       return { errors };
     }
-    const response = await axios.post(`${Backend_API}/users/changePassword/${id}`,{curpassword,newpassword}, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    })
+    const response = await axios.post(
+      `${Backend_API}/users/changePassword/${id}`,
+      { curpassword, newpassword },
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
     if (response.data.flag == true) {
       dispatch(addUser(response.data.data));
     } else {
       errors[response.data.sort] = response.data.error;
       return { errors };
     }
-  }catch(error){
+  } catch (error) {
     errors.general = "There was an error fetching the data";
-  }finally{
-    await dispatch(setLoading(false))
+  } finally {
+    await dispatch(setLoading(false));
   }
-}
+};

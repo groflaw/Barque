@@ -30,19 +30,14 @@ const HostBoats = () => {
 
   const HomeHeaderRight = () => {
     const gotoMain = () => {
-      // Access the navigation state
       const state = navigation.getState();
-
-      // We want to drill down to the nested route
       const currentRoute = state.routes[state.index];
-
-      // Check if we have a nested state
       let currentRouteName = "";
       if (currentRoute.state) {
         const nestedState = currentRoute.state;
-        currentRouteName = nestedState.routes[nestedState.index].name; // Correctly get the name of the current nested route
+        currentRouteName = nestedState.routes[nestedState.index].name;
       } else {
-        currentRouteName = currentRoute.name; // Fallback to the current route name if no state
+        currentRouteName = currentRoute.name;
       }
       switch (currentRouteName) {
         case "Myboats":

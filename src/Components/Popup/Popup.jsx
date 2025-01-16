@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   Text,
   TextInput,
-  Slider,
 } from "react-native";
+import Slider from "@react-native-community/slider";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -70,7 +70,7 @@ export default function Popup({
     }));
   };
 
-  const search = async () => {   
+  const search = async () => {
     let result = await dispatch(filterBoats(filter));
     setBoats(result);
     dismiss();
@@ -79,7 +79,7 @@ export default function Popup({
       boattype: 0,
       capacity: 0,
       price: 100,
-      any : true
+      any: true,
     });
   };
 
@@ -130,11 +130,13 @@ export default function Popup({
           <View className="flex mt-3 w-72">
             <View className="flex flex-row justify-between">
               <Text style={styles.sizeTitle}>Price Range</Text>
-              <Text style={styles.sizeTitle}>{filter.price } - 1000 $</Text>
+              <Text style={styles.sizeTitle}>{filter.price} - 1000 $</Text>
             </View>
 
             <View style={styles.SliderContainer} className="mt-2">
-              <View style={{ ...styles.slider, width: `${filter.price /10}%` }} />
+              <View
+                style={{ ...styles.slider, width: `${filter.price / 10}%` }}
+              />
               <Slider
                 minimumValue={1}
                 maximumValue={1000}

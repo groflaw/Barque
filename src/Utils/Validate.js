@@ -55,13 +55,13 @@ export const isValidDate = (dateString) => {
 
 export const isValidString = (inputString) => {
   if (!inputString) {
-    return { valid: false, message: "This field is required." };
+    return { valid: false, message: " field is required." };
   }
 
   if (inputString.trim().length === 0) {
     return {
       valid: false,
-      message: "This field must not be empty or consist only of spaces.",
+      message: " field must not be empty or consist only of spaces.",
     };
   }
   return { valid: true, message: "Valid input string." };
@@ -71,8 +71,14 @@ export const isValidNumber = (value) => {
   if (value <= 0 || value == null) {
     return {
       valid: false,
-      message: "This fields must not be empty",
+      message: " fields must not be empty",
     };
   }
-  return { valid: true, message: "Valid input number" };
+  return { valid: true, message: "field is required" };
+};
+
+export const calculateAverageReview = (reviews) => {
+  if (!reviews || reviews.length === 0) return 0;
+  const total = reviews.reduce((sum, review) => sum + review.review, 0);
+  return (total / reviews.length).toFixed(2);
 };

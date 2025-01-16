@@ -6,38 +6,56 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
 import Radio from "../Basic/Radio";
 import LoadingIndicator from "../Basic/LoadingIndicator";
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 
 import { submitCancellation } from "../../Actions/AddBoat/addboat";
 
 const Cancellation = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const toastRef = useRef(null);
+
   const curboat = useSelector((state) => state.Global.curboat);
   const loading = useSelector((state) => state.Global.loading);
 
   const [cancellation, setCancellation] = useState(
     curboat.cancellation ? curboat.cancellation : null
   );
-  const [errorMessages, setErrorMessages] = useState({});
+  const [toastType, setToastType] = useState("success");
+  const [errormessage, setErrorMessage] = useState("");
 
   const handleSubmit = async () => {
     navigation.navigate("Accessories");
   };
+
   const handleChange = async (value) => {
     setCancellation(value);
     const result = await dispatch(submitCancellation(curboat._id, value));
-    if (result.errors) {
-      setErrorMessages(result.errors);
+    if (result?.errors) {
+      setToastType("warning");
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
     } else {
-      setErrorMessages({});
+      setErrorMessage({});
     }
   };
+
+  const handleShowToast = () => {
+    if (toastRef.current) {
+      toastRef.current.show();
+    }
+  };
+
   return (
     <>
       {loading ? (
@@ -127,19 +145,16 @@ const Cancellation = () => {
                     CONTINUAR
                   </Text>
                 </TouchableOpacity>
-                {errorMessages.general && (
-                  <Text style={styles.error} className="text-center">
-                    {errorMessages.general}
-                  </Text>
-                )}
-                {errorMessages.cancellation && (
-                  <Text style={styles.error} className="text-center">
-                    {errorMessages.cancellation}
-                  </Text>
-                )}
+               
+                
               </View>
             </>
           </View>
+          <ToastMessage
+            type={toastType}
+            description={errormessage}
+            ref={toastRef}
+          />
         </ScrollView>
       )}
     </>

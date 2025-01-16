@@ -10,7 +10,7 @@ import {
 
 const BoatCard = ({ cover, boatContent,toBoat,boatId,hostId }) => {
   return (
-    <TouchableOpacity className="pt-5 w-32 rounded-2xl" onPress={()=>{
+    <TouchableOpacity className="pt-2 w-28 rounded-2xl" onPress={()=>{
       toBoat(boatId,hostId);
     }}>
       <Image className="mx-auto object-fit" source={{ uri: cover}} style={{width : 90, height : 90, borderRadius : 10 }}/>

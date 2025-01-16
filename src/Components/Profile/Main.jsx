@@ -6,12 +6,13 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 
 import Convert from "../Basic/Convert";
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 
 import { setAvatar } from "../../Actions/Auth/auth.acitons";
 import { setMode } from "../../Store/Global";
@@ -24,15 +25,20 @@ import notifiImage from "../../../assets/Icons/notification.png";
 
 const Main = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const toastRef = useRef(null);
 
   const curuser = useSelector((state) => state.Slice.user);
   const mode = useSelector((state) => state.Global.mode);
 
   const [user, setUser] = useState(curuser);
-  const dispatch = useDispatch();
+  const [toastType, setToastType] = useState("success");
+  const [errormessage, setErrorMessage] = useState("");
+
   const nextStep = (url) => {
     navigation.navigate(url);
   };
+
   const formDataFromImagePicker = (result) => {
     const formData = new FormData();
 
@@ -48,6 +54,7 @@ const Main = () => {
 
     return formData;
   };
+
   const pickImage = async (options) => {
     let temp = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -57,19 +64,34 @@ const Main = () => {
       const result = await dispatch(
         setAvatar(user._id, formDataFromImagePicker(temp))
       );
-      if (result.errors) {
-        setErrorMessages(result.errors);
+      if (result?.errors) {
+        setToastType("warning");
+        for (let key in result.errors) {
+          if (result.errors.hasOwnProperty(key)) {
+            setErrorMessage(`${result.errors[key]}`);
+            handleShowToast();
+          }
+        }
       }
       setUser(result);
     }
   };
+
+  const handleShowToast = () => {
+    if (toastRef.current) {
+      toastRef.current.show();
+    }
+  };
+
   const pickImageWithResults = async () => {
     await pickImage({});
   };
+
   const changeMode = async () => {
     await dispatch(setMode(true));
     navigation.navigate("Main", { key: Math.random() });
   };
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -133,7 +155,7 @@ const Main = () => {
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => nextStep("Support")}>
-         < View className="flex flex-row items-center justify-between mt-6 mb-3">
+          <View className="flex flex-row items-center justify-between mt-6 mb-3">
             <View className="flex flex-row items-center">
               <Image source={supportImage}></Image>
               <Text style={styles.key}>Support</Text>
@@ -149,6 +171,11 @@ const Main = () => {
           <Convert></Convert>
         </TouchableOpacity>
       </View>
+      <ToastMessage
+        type={toastType}
+        description={errormessage}
+        ref={toastRef}
+      />
     </ScrollView>
   );
 };
@@ -192,17 +219,17 @@ const styles = StyleSheet.create({
   },
   name: {
     color: "#0a252f",
-    fontSize: 19, 
-    fontFamily: "Lexend Deca", 
-    fontWeight: "700", 
+    fontSize: 19,
+    fontFamily: "Lexend Deca",
+    fontWeight: "700",
     lineHeight: 27,
   },
   key: {
     marginLeft: 15,
     color: "#17233c",
-    fontSize: 16, 
-    fontFamily: "Lexend Deca", 
-    fontWeight: "500", 
+    fontSize: 16,
+    fontFamily: "Lexend Deca",
+    fontWeight: "500",
     lineHeight: 23,
   },
 });

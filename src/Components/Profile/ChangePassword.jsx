@@ -5,18 +5,20 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { useState } from "react";
-import { useSelector,useDispatch } from "react-redux";
+import { useState, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import { changePassword } from "../../Actions/Auth/auth.acitons";
 
 import CustomTextInput from "../Basic/Input";
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 
 const ChangePasword = () => {
-
   const dispatch = useDispatch();
+  const toastRef = useRef(null);
 
-  const [errorMessages, setErrorMessages] = useState({});
+  const [toastType, setToastType] = useState("success");
+  const [errormessage, setErrorMessage] = useState("");
 
   const curuser = useSelector((state) => state.Slice.user);
 
@@ -25,6 +27,12 @@ const ChangePasword = () => {
     newpassword: "",
     confirmpassword: "",
   });
+
+  const handleShowToast = () => {
+    if (toastRef.current) {
+      toastRef.current.show();
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,10 +44,16 @@ const ChangePasword = () => {
 
   const handleSubmit = async () => {
     const result = await dispatch(changePassword(curuser.cohost, data));
-    if (result.errors) {
-      setErrorMessages(result.errors);
-    }else{
-        setErrorMessages({})
+    if (result?.errors) {
+      setToastType("warning");
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
+    } else {
+      setErrorMessage({});
     }
   };
 
@@ -56,9 +70,7 @@ const ChangePasword = () => {
             name="curpassword"
             sort={true}
           />
-          {errorMessages.curpassword && (
-            <Text style={styles.error}>{errorMessages.curpassword}</Text>
-          )}
+        
         </View>
         <View className="mt-4">
           <Text style={styles.item}>New Password </Text>
@@ -69,9 +81,7 @@ const ChangePasword = () => {
             name="newpassword"
             sort={true}
           />
-          {errorMessages.newpassword && (
-            <Text style={styles.error}>{errorMessages.newpassword}</Text>
-          )}
+          
         </View>
         <View className="mt-5">
           <Text style={styles.item}>Confirm New Password </Text>
@@ -82,9 +92,7 @@ const ChangePasword = () => {
             name="confirmpassword"
             sort={true}
           />
-          {errorMessages.confirmpassword && (
-            <Text style={styles.error}>{errorMessages.confirmpassword}</Text>
-          )}
+         
         </View>
         <View className="mt-5">
           <TouchableOpacity
@@ -96,13 +104,14 @@ const ChangePasword = () => {
               Change Password
             </Text>
           </TouchableOpacity>
-          {errorMessages.general && (
-            <Text style={styles.error} className="text-center">
-              {errorMessages.general}
-            </Text>
-          )}
+          
         </View>
       </View>
+      <ToastMessage
+        type={toastType}
+        description={errormessage}
+        ref={toastRef}
+      />
     </ScrollView>
   );
 };

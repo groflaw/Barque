@@ -7,9 +7,7 @@ export const getAllboats = () => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};
   try {
-    const response = await axios.get(
-      `${Backend_API}/boats/getAllboats`
-    );
+    const response = await axios.get(`${Backend_API}/boats/getAllboats`);
     if (response.data.flag == true) {
       return response.data.data;
     } else {
@@ -23,61 +21,63 @@ export const getAllboats = () => async (dispatch) => {
     await dispatch(setLoading(false));
   }
 };
-export const getBoatsCity = (location1) =>async(dispatch)=>{
+export const getBoatsCity = (location1) => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};
-  try{
-    const response = await axios.get(`${Backend_API}/boats/getAllboatsCity/${location1}`)
-    if(response.data.flag == true){
-      return response.data.data
-    }else{
-      errors[response.data.sort]=response.data.error;
-      return {errors}
+  try {
+    const response = await axios.get(
+      `${Backend_API}/boats/getAllboatsCity/${location1}`
+    );
+    if (response.data.flag == true) {
+      return response.data.data;
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
     }
-  }catch(error){
+  } catch (error) {
     errors.general = "There was an error fetching the boats from City";
-    return {errors}
-  }finally{
-    await dispatch(setLoading(false))
+    return { errors };
+  } finally {
+    await dispatch(setLoading(false));
   }
 };
 
-export const getTopDes = () =>async(dispatch)=>{
+export const getTopDes = () => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};
-  try{
+  try {
     const response = await axios.get(`${Backend_API}/boats/getTopdes`);
-    if(response.data.flag == true){
-      return response.data.data
-    }else{
+    if (response.data.flag == true) {
+      return response.data.data;
+    } else {
       errors[response.data.sort] = response.data.error;
-      return {errors}
+      return { errors };
     }
-  }catch(error){
+  } catch (error) {
     errors.general = "There was an error fetching the Top Destinations";
-    return {errors};
-  }finally{
-    await dispatch(setLoading(false))
+    return { errors };
+  } finally {
+    await dispatch(setLoading(false));
   }
-}
-export const getNewBoats = () => async(dispatch)=>{
+};
+export const getNewBoats = () => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};
-  try{
+  try {
     const response = await axios.get(`${Backend_API}/boats/getNewBoats`);
-    if(response.data.flag == true){
-      return response.data.data
-    }else{
+    if (response.data.flag == true) {
+      return response.data.data;
+    } else {
       errors[response.data.sort] = response.data.error;
-      return {errors}
+      return { errors };
     }
-  }catch(error){
+  } catch (error) {
     errors.general = "There was an error fetching the New boats";
-    return {errors};
-  }finally{
-    await dispatch(setLoading(false))
+    return { errors };
+  } finally {
+    await dispatch(setLoading(false));
   }
-}
+};
 export const getSimilar = (location, boatId) => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};
@@ -94,8 +94,8 @@ export const getSimilar = (location, boatId) => async (dispatch) => {
   } catch (error) {
     errors.general = "There was an error fetching the boats";
     return { errors };
-  }finally{
-    await dispatch(setLoading(false))
+  } finally {
+    await dispatch(setLoading(false));
   }
 };
 
@@ -191,13 +191,22 @@ export const getuserBookings = (userId) => async (dispatch) => {
 };
 
 export const reservation =
-  (userId, hostId, boatId, planId) => async (dispatch) => {
+  ({ userId, hostId, boatId, planId, count, start, end }) =>
+  async (dispatch) => {
     await dispatch(setLoading(true));
     let errors = {};
     try {
       const response = await axios.post(
         `${Backend_API}/reservation/save`,
-        { userId, hostId, boatId, planId },
+        {
+          userId,
+          hostId,
+          boatId,
+          planId,
+          count,
+          start,
+          end,
+        },
         {
           headers: {
             Accept: "application/json",
@@ -218,6 +227,27 @@ export const reservation =
       await dispatch(setLoading(false));
     }
   };
+
+export const getBoatBookings = (boatId) => async (dispatch) => {
+  await dispatch(setLoading(true));
+  let errors = {};
+  try {
+    const response = await axios.get(
+      `${Backend_API}/reservation/getBoatBookings/${boatId}`
+    );
+    if (response.data.flag == true) {
+      return response.data.data;
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
+    }
+  } catch (error) {
+    errors.general = "There was an error fetching the boat's reservations";
+    return { errors };
+  } finally {
+    await dispatch(setLoading(false));
+  }
+};
 
 export const getResrvations = (userId) => async (dispatch) => {
   await dispatch(setLoading(true));
@@ -304,7 +334,7 @@ export const getUserNews = (userId) => async (dispatch) => {
 };
 
 export const setBookStatus = (bookId, value) => async (dispatch) => {
-  await dispatch(setLoading);
+  await dispatch(setLoading(true));
   let errors = {};
   try {
     const response = await axios.post(
@@ -330,3 +360,119 @@ export const setBookStatus = (bookId, value) => async (dispatch) => {
     await dispatch(setLoading(false));
   }
 };
+
+export const checkUserReview = (userId) => async (dispatch) => {
+  await dispatch(setLoading(true));
+  let errors = {};
+  try {
+    const today = new Date();
+    const response = await axios.post(
+      `${Backend_API}/reservation/checkUserReview/${userId}`,
+      { today },
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.data.flag == true) {
+      return response.data.data;
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
+    }
+  } catch (error) {
+    errors.general = "There was an error check review";
+    return { errors };
+  } finally {
+    await dispatch(setLoading(false));
+  }
+};
+
+export const checkHostReview = (hostId) => async (dispatch) => {
+  await dispatch(setLoading(true));
+  let errors = {};
+  try {
+    const today = new Date();
+    const response = await axios.post(
+      `${Backend_API}/reservation/checkHostReview/${hostId}`,
+      { today },
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.data.flag == true) {
+      return response.data.data;
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
+    }
+  } catch (error) {
+    errors.general = "There was an error check review";
+    return { errors };
+  } finally {
+    await dispatch(setLoading(false));
+  }
+};
+
+export const setHostReview =
+  (data, boatId, reservationId) => async (dispatch) => {
+    await dispatch(setLoading(true));
+    let errors = {};
+    try {
+      const response = await axios.post(
+        `${Backend_API}/boats/setHostReview/${boatId}/${reservationId}`,
+        { data },
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data.flag == true) {
+        return response.data.data;
+      } else {
+        errors[response.data.sort] = response.data.error;
+        return { errors };
+      }
+    } catch (error) {
+      errors.general = "There was an error setting Review";
+      return { errors };
+    } finally {
+      await dispatch(setLoading(false));
+    }
+  };
+
+export const setUserReview =
+  (userId, review, reservationId) => async (dispatch) => {
+    await dispatch(setLoading(true));
+    let errors = {};
+    try {
+      const response = await axios.post(
+        `${Backend_API}/boats/setUserReview/${userId}/${reservationId}`,
+        { review },
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.data.flag == true) {
+        return response.data.data;
+      } else {
+        errors[response.data.sort] = response.data.error;
+        return { errors };
+      }
+    } catch (error) {
+      errors.general = "There was an error setting Review";
+      return { errors };
+    } finally {
+      await dispatch(setLoading(false));
+    }
+  };

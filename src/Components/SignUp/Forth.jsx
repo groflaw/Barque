@@ -9,10 +9,9 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import PhoneInput from "react-native-international-phone-number";
+import * as Localization from "expo-localization";
 
 import { useState } from "react";
-
-import Option from "../Basic/Option";
 import CheckBox from "../Basic/CheckBox";
 
 const Third = () => {
@@ -48,6 +47,7 @@ const Third = () => {
               value={inputValue}
               onChangePhoneNumber={handleInputValue}
               selectedCountry={selectedCountry}
+              defaultCountry={Localization.locale.split("-")[1]}
               onChangeSelectedCountry={handleSelectedCountry}
             />
           </View>

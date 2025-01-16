@@ -9,7 +9,9 @@ import MapView, { Marker } from "react-native-maps";
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+import io from "socket.io-client";
 
+import { Socket_API } from "../../Utils/Constant";
 import { BookingStatus, apiKey, cancelback } from "../../Utils/Constant";
 import { setCurhost, setLoading } from "../../Store/Global";
 import { getAllBoatTypes } from "../../Actions/BasicBoat/basicboat";
@@ -25,6 +27,7 @@ const Detail = () => {
   const toastRef = useRef(null);
 
   const loading = useSelector((state) => state.Global.loading);
+  const curuser = useSelector((state) => state.Slice.user);
   const mode = useSelector((state) => state.Global.mode);
   const curbooking = useSelector((state) => state.Global.curbooking);
   const boatTypes = useSelector((state) => state.BasicBoat.boattypes);
@@ -73,11 +76,49 @@ const Detail = () => {
     }
   };
 
+  const SubmitStatus = async (value) => {
+    if (mode) {
+      let result = await dispatch(setBookStatus(curbooking._id, value));
+      if (result?.errors) {
+        setErrorMessage(result.errors.general);
+        handleShowToast();
+      } else {
+        if (value == 2) {
+          const socket = io(Socket_API);
+          socket.emit("hostresbooking", {
+            userId: result.userId,
+            message: "Host confirm your booking",
+          });
+          navigation.navigate("Confirm");
+        }
+        if (value == 1) {
+          socket.emit("hostresbooking", {
+            userId: result.userId,
+            message: "Host cancel your booking",
+          });
+          navigation.navigate("Main");
+        }
+      }
+    } else {
+      navigation.navigate("PaymentDetail");
+    }
+  };
+
+  const reqCancel = async () => {
+    const socket = io(Socket_API);
+    socket.emit("requestCancel", {
+      userId: curuser._id,
+      bookId: curbooking._id,
+      hostId: curbooking.hostId._id,
+    });
+    navigation.navigate("List");
+  };
+
   useEffect(() => {
     const fetchBoatTypes = async () => {
       await dispatch(setLoading(true));
       let result = await dispatch(getAllBoatTypes());
-      if (result.errors) {
+      if (result?.errors) {
         setErrorMessage(response.errors.general);
         handleShowToast();
       }
@@ -90,24 +131,9 @@ const Detail = () => {
     };
     const unsubscribe = navigation.addListener("focus", async () => {
       fetchBoatTypes();
-    })
+    });
     return unsubscribe;
   }, [navigation]);
-
-  const SubmitStatus = async (value) => {
-    if(mode){
-      let result = await dispatch(setBookStatus(curbooking._id, value));
-      if (result.errors) {
-        setErrorMessage(result.errors.general);
-        handleShowToast();
-      } else {
-        if (value == 2) navigation.navigate("Confirm");
-        if (value == 1) navigation.navigate("Main");
-      }
-    }else{
-      navigation.navigate("PaymentDetail");
-    }
-  };
 
   return (
     <>
@@ -119,7 +145,7 @@ const Detail = () => {
             <View style={styles.card} className="mt-3">
               <View className="flex flex-row items-center justify-between">
                 <Text style={styles.title}>Booking Status</Text>
-                <View className="flex flex-row gap-2" style={{width : '50%'}}>
+                <View className="flex flex-row gap-2" style={{ width: "50%" }}>
                   <View
                     style={[
                       styles.type,
@@ -159,14 +185,16 @@ const Detail = () => {
                     }}
                     style={[styles.btn, { backgroundColor: "#2a8500" }]}
                   >
-                    <Text style={styles.btntext}>{mode ? "Confirm" :"Pay Now!"}</Text>
+                    <Text style={styles.btntext}>
+                      {mode ? "Confirm" : "Pay Now!"}
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => {
-                      if(mode){
+                      if (mode) {
                         SubmitStatus(1);
-                      }else{
-                        
+                      } else {
+                        reqCancel();
                       }
                     }}
                     style={[styles.btn, { backgroundColor: "#ff3b30" }]}
@@ -384,7 +412,7 @@ const styles = StyleSheet.create({
     fontFamily: "Lexend Deca",
     fontWeight: 800,
     textAlign: "center",
-    width:'100%'
+    width: "100%",
   },
   approve: {
     borderRadius: 6,
@@ -400,12 +428,14 @@ const styles = StyleSheet.create({
     height: 250,
   },
   btn: {
-    paddingTop: 8,
-    paddingBottom: 8,
+    paddingTop: 4,
+    paddingBottom: 4,
     paddingLeft: 10,
     paddingRight: 10,
     borderRadius: 6,
     width: "40%",
+    alignItems: "center",
+    justifyContent: "center",
   },
   btntext: {
     textAlign: "center",

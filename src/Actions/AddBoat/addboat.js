@@ -31,24 +31,26 @@ export const getMyboats = (userid) => async (dispatch) => {
   }
   return {};
 };
-export const delMyboat = (boatId) => async(dispatch)=>{
+export const delMyboat = (boatId) => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};
-  try{
-    const response = await axios.delete(`${Backend_API}/boats/delboat/${boatId}`);
-    if(response.data.flag == true){
-      return response.data.data
-    }else{
-      errors[response.data.sort] =response.data.error;
-      return {errors}
+  try {
+    const response = await axios.delete(
+      `${Backend_API}/boats/delboat/${boatId}`
+    );
+    if (response.data.flag == true) {
+      return response.data.data;
+    } else {
+      errors[response.data.sort] = response.data.error;
+      return { errors };
     }
-  }catch (error) {
+  } catch (error) {
     errors.general = "There was an error delete boat";
     return { errors };
   } finally {
     await dispatch(setLoading(false));
   }
-}
+};
 export const setBoatFlag = (id, flag) => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};
@@ -78,13 +80,13 @@ export const setBoatFlag = (id, flag) => async (dispatch) => {
   return {};
 };
 
-export const submitBasic = (basicdata,boatId) => async (dispatch) => {
+export const submitBasic = (basicdata, boatId) => async (dispatch) => {
   await dispatch(setLoading(true));
   let errors = {};
 
   try {
     const modelValidation = isValidString(basicdata.model);
-    const descriptionValidation = isValidString(basicdata.model);
+    const descriptionValidation = isValidString(basicdata.description);
     const locationValidation = isValidString(basicdata.location1);
     const yearValidation = isValidNumber(basicdata.year);
     const sizeValidation = isValidNumber(basicdata.size);
@@ -97,57 +99,53 @@ export const submitBasic = (basicdata,boatId) => async (dispatch) => {
     const cabinscountValidation = isValidNumber(basicdata.cabinscount);
 
     if (!modelValidation.valid) {
-      errors.model = modelValidation.message;
+      errors.model = "Model" + modelValidation.message;
     }
     if (!descriptionValidation.valid) {
-      errors.description = descriptionValidation.message;
+      errors.description = "Description" + descriptionValidation.message;
     }
     if (!locationValidation.valid) {
-      errors.location1 = locationValidation.message;
+      errors.location1 = "Location" + locationValidation.message;
     }
     if (!yearValidation.valid) {
-      errors.year = yearValidation.message;
+      errors.year ="Year" + yearValidation.message;
     }
     if (!sizeValidation.valid) {
-      errors.size = sizeValidation.message;
+      errors.size ="Size" + sizeValidation.message;
     }
     if (!boattypeValidation.valid) {
-      errors.boattype = boattypeValidation.message;
+      errors.boattype ="Boat Type" + boattypeValidation.message;
     }
     if (!boatbrandValidation.valid) {
-      errors.boatbrand = boatbrandValidation.message;
+      errors.boatbrand ="Boat Brand" + boatbrandValidation.message;
     }
     if (!enginecountValidation.valid) {
-      errors.enginecount = enginecountValidation.message;
+      errors.enginecount ="Engine Count" + enginecountValidation.message;
     }
     if (!bathroomcountValidation.valid) {
-      errors.bathroomcount = bathroomcountValidation.message;
+      errors.bathroomcount ="BathRoom Count" + bathroomcountValidation.message;
     }
     if (!powerValidation.valid) {
-      errors.powers = powerValidation.message;
+      errors.powers ="Power Type" + powerValidation.message;
     }
     if (!capacityValidation.valid) {
-      errors.capacity = capacityValidation.message;
+      errors.capacity = "Capacity" + capacityValidation.message;
     }
     if (!cabinscountValidation.valid) {
-      errors.cabinscount = cabinscountValidation.message;
+      errors.cabinscount ="Cabins Count" +  cabinscountValidation.message;
     }
     if (Object.keys(errors).length > 0) {
       return { errors };
     }
     let response = {};
-    if(boatId == null){
-      response = await axios.post(
-        `${Backend_API}/boats/addboat`,
-        basicdata,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      );
-    }else{
+    if (boatId == null) {
+      response = await axios.post(`${Backend_API}/boats/addboat`, basicdata, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+    } else {
       response = await axios.put(
         `${Backend_API}/boats/updateboat/${boatId}`,
         basicdata,
@@ -184,13 +182,13 @@ export const addPlan = (id, plan) => async (dispatch) => {
     const captainValidation = isValidNumber(plan.captain);
 
     if (!priceValidation.valid) {
-      errors.price = priceValidation.message;
+      errors.price ="Price" + priceValidation.message;
     }
     if (!descriptionValidation.valid) {
-      errors.description = descriptionValidation.message;
+      errors.description = "Description" + descriptionValidation.message;
     }
     if (!captainValidation.valid) {
-      errors.captain = captainValidation.message;
+      errors.captain ="Captain Option" + captainValidation.message;
     }
     if (Object.keys(errors).length > 0) {
       return { errors };
@@ -256,7 +254,7 @@ export const uploadDocImage = (id, data, type) => async (dispatch) => {
   let errors = {};
   try {
     const response = await axios.post(
-      `https://baraqua-server.vercel.app/api/boats/adddocImage/${id}/${type}`,
+      `${Backend_API}/boats/adddocImage/${id}/${type}`,
       data,
       {
         headers: {
@@ -287,16 +285,16 @@ export const submitLocation = (id, location) => async (dispatch) => {
     const marinanameValidation = isValidString(location.marinaname);
     const addressValidation = isValidString(location.address);
     if (!boatnameValidation.valid) {
-      errors.boatname = boatnameValidation.message;
+      errors.boatname = "Boat Name" + boatnameValidation.message;
     }
     if (!locationtypeValidation.valid) {
-      errors.locationtype = locationtypeValidation.message;
+      errors.locationtype ="Location" + locationtypeValidation.message;
     }
     if (!marinanameValidation.valid) {
-      errors.marinaname = marinanameValidation.message;
+      errors.marinaname = "Marina Name" + marinanameValidation.message;
     }
     if (!addressValidation.valid) {
-      errors.address = addressValidation.message;
+      errors.address = "Address" + addressValidation.message;
     }
     if (Object.keys(errors).length > 0) {
       return { errors };
@@ -331,7 +329,7 @@ export const uploadBoatImage = (id, data, type) => async (dispatch) => {
   let errors = {};
   try {
     const response = await axios.post(
-      `https://baraqua-server.vercel.app/api/boats/addboatImage/${id}/${type}`,
+      `${Backend_API}/boats/addboatImage/${id}/${type}`,
       data,
       {
         headers: {
@@ -379,7 +377,7 @@ export const submitCancellation = (id, cancellation) => async (dispatch) => {
     const cancellationValidation = isValidNumber(cancellation);
 
     if (!cancellationValidation.valid) {
-      errors.cancellation = cancellationValidation.message;
+      errors.cancellation ="Cancellation" + cancellationValidation.message;
     }
 
     if (Object.keys(errors).length > 0) {

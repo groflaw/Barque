@@ -4,8 +4,6 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-url-polyfill/auto";
 import { Provider } from "react-redux";
 
-import CarDetailed from "./src/Components/CarDetailed/CarDetailed";
-
 import Chat from "./src/Screens/Chat";
 import HomeScreen from "./src/Screens/HomeScreen";
 import MainBody from "./src/Screens/MainScreen";
@@ -19,13 +17,13 @@ import PaymentHistory from "./src/Screens/PaymentHistory";
 import HostBoats from "./src/Screens/HostBoats";
 import Reservas from "./src/Screens/Reservas";
 import GuestProfile from "./src/Screens/GuestProfile";
+import Booking from "./src/Screens/Booking";
 
 import { I18nextProvider, useTranslation } from "react-i18next";
 import { LogBox } from "react-native";
 import { store } from "./src/Store/Store";
-import 'react-native-get-random-values';
+import "react-native-get-random-values";
 import i18n from "./i18n";
-
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -70,13 +68,13 @@ export default function App() {
                 }}
               />
               <Stack.Screen
-                name="CarDetails"
-                component={CarDetailed}
+                name="Booking"
+                component={Booking}
                 options={{
                   headerShown: false,
                 }}
               />
-               <Stack.Screen
+              <Stack.Screen
                 name="GuestProfile"
                 component={GuestProfile}
                 options={{

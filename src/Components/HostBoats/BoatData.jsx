@@ -6,9 +6,11 @@ import {
   Text,
 } from "react-native";
 import * as Location from "expo-location";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+import io from "socket.io-client";
+
 import {
   getAllBoatTypes,
   getAllBoatBrands,
@@ -21,6 +23,7 @@ import {
 
 import { submitBasic } from "../../Actions/AddBoat/addboat";
 import { setLoading } from "../../Store/Global";
+import { Socket_API } from "../../Utils/Constant";
 
 import Navbar from "../Navbar";
 import CustomTextInput from "../Basic/Input";
@@ -28,10 +31,12 @@ import Option from "../Basic/Option";
 import Number from "../Basic/Number";
 import GoogleAddress from "../Basic/GoogleAddress";
 import LoadingIndicator from "../Basic/LoadingIndicator";
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 
 const BoatData = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const toastRef = useRef(null);
 
   const boatTypes = useSelector((state) => state.BasicBoat.boattypes);
   const boatBrands = useSelector((state) => state.BasicBoat.boatbrands);
@@ -45,7 +50,8 @@ const BoatData = () => {
   const curuser = useSelector((state) => state.Slice.user);
   const curboat = useSelector((state) => state.Global.curboat);
 
-  const [errorMessages, setErrorMessages] = useState({});
+  const [toastType, setToastType] = useState("success");
+  const [errormessage, setErrorMessage] = useState("");
   const [location, setLocation] = useState(null);
   const [locationPermission, setLocationPermission] = useState(false);
 
@@ -54,32 +60,74 @@ const BoatData = () => {
       try {
         await dispatch(setLoading(true));
         let result = await dispatch(getAllBoatTypes());
-        if (result.errors) {
-          setErrorMessages(result.errors);
+        if (result?.errors) {
+          setToastType("warning");
+          for (let key in result.errors) {
+            if (result.errors.hasOwnProperty(key)) {
+              setErrorMessage(`${result.errors[key]}`);
+              handleShowToast();
+            }
+          }
         }
         result = await dispatch(getAllBoatBrands());
-        if (result.errors) {
-          setErrorMessages(result.errors);
+        if (result?.errors) {
+          setToastType("warning");
+          for (let key in result.errors) {
+            if (result.errors.hasOwnProperty(key)) {
+              setErrorMessage(`${result.errors[key]}`);
+              handleShowToast();
+            }
+          }
         }
         result = await dispatch(getEnginesCount());
-        if (result.errors) {
-          setErrorMessages(result.errors);
+        if (result?.errors) {
+          setToastType("warning");
+          for (let key in result.errors) {
+            if (result.errors.hasOwnProperty(key)) {
+              setErrorMessage(`${result.errors[key]}`);
+              handleShowToast();
+            }
+          }
         }
         result = await dispatch(getBathroomCount());
-        if (result.errors) {
-          setErrorMessages(result.errors);
+        if (result?.errors) {
+          setToastType("warning");
+          for (let key in result.errors) {
+            if (result.errors.hasOwnProperty(key)) {
+              setErrorMessage(`${result.errors[key]}`);
+              handleShowToast();
+            }
+          }
         }
         result = await dispatch(getCabinscount());
-        if (result.errors) {
-          setErrorMessages(result.errors);
+        if (result?.errors) {
+          setToastType("warning");
+          for (let key in result.errors) {
+            if (result.errors.hasOwnProperty(key)) {
+              setErrorMessage(`${result.errors[key]}`);
+              handleShowToast();
+            }
+          }
         }
         result = await dispatch(getCapacity());
-        if (result.errors) {
-          setErrorMessages(result.errors);
+        if (result?.errors) {
+          setToastType("warning");
+          for (let key in result.errors) {
+            if (result.errors.hasOwnProperty(key)) {
+              setErrorMessage(`${result.errors[key]}`);
+              handleShowToast();
+            }
+          }
         }
         result = await dispatch(getPowers());
-        if (result.errors) {
-          setErrorMessages(result.errors);
+        if (result?.errors) {
+          setToastType("warning");
+          for (let key in result.errors) {
+            if (result.errors.hasOwnProperty(key)) {
+              setErrorMessage(`${result.errors[key]}`);
+              handleShowToast();
+            }
+          }
         }
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status === "granted") {
@@ -96,7 +144,7 @@ const BoatData = () => {
     };
     const unsubscribe = navigation.addListener("focus", async () => {
       fetchBoatTypes();
-    })
+    });
     return unsubscribe;
   }, [navigation]);
 
@@ -127,10 +175,23 @@ const BoatData = () => {
 
   const handleSubmit = async () => {
     const result = await dispatch(submitBasic(boatdata, curboat?._id));
-    if (result.errors) {
-      setErrorMessages(result.errors);
+    if (result?.errors) {
+      setToastType("warning");
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
     } else {
+      const socket = io(Socket_API);
+      await socket.emit("addnewboat");
       navigation.navigate("AddPlans");
+    }
+  };
+  const handleShowToast = () => {
+    if (toastRef.current) {
+      toastRef.current.show();
     }
   };
   return (
@@ -151,9 +212,6 @@ const BoatData = () => {
                 name="model"
                 // sort={false}
               ></CustomTextInput>
-              {errorMessages.model && (
-                <Text style={styles.error}>{errorMessages.model}</Text>
-              )}
             </View>
             <View className="mt-2">
               <Text style={styles.item}>Description </Text>
@@ -163,22 +221,21 @@ const BoatData = () => {
                 name="description"
                 sort={false}
               ></CustomTextInput>
-              {errorMessages.description && (
-                <Text style={styles.error}>{errorMessages.description}</Text>
-              )}
             </View>
             <View className="mt-2">
               <Text style={styles.item}>Location </Text>
-              <GoogleAddress value={boatdata.location1} name="location1" onChange={handleChange} type={true}></GoogleAddress>
+              <GoogleAddress
+                value={boatdata.location1}
+                name="location1"
+                onChange={handleChange}
+                type={true}
+              ></GoogleAddress>
               {/* <CustomTextInput
                 value={boatdata.location1} // Ensure you're using the correct property
                 onChange={handleChange}
                 name="location1"
                 sort={false}
               ></CustomTextInput> */}
-              {errorMessages.location1 && (
-                <Text style={styles.error}>{errorMessages.location1}</Text>
-              )}
             </View>
             <View className="mt-2">
               <Text style={styles.item}>Year</Text>
@@ -187,9 +244,6 @@ const BoatData = () => {
                 onChange={handleChange}
                 name="year"
               ></Number>
-              {errorMessages.year && (
-                <Text style={styles.error}>{errorMessages.year}</Text>
-              )}
             </View>
             <View className="mt-6">
               <Text style={styles.item}>Size (ft)</Text>
@@ -198,9 +252,6 @@ const BoatData = () => {
                 onChange={handleChange}
                 name="size"
               ></Number>
-              {errorMessages.size && (
-                <Text style={styles.error}>{errorMessages.size}</Text>
-              )}
             </View>
             <View className="mt-6">
               <Text style={styles.item} className="mb-2">
@@ -213,9 +264,6 @@ const BoatData = () => {
                 placeholder="Select Type"
                 defaultValue={boatdata.boattype}
               ></Option>
-              {errorMessages.boattype && (
-                <Text style={styles.error}>{errorMessages.boattype}</Text>
-              )}
             </View>
             <View className="mt-6">
               <Text style={styles.item} className="mb-2">
@@ -228,9 +276,6 @@ const BoatData = () => {
                 placeholder="Choose a brand"
                 defaultValue={boatdata.boatbrand}
               ></Option>
-              {errorMessages.boatbrand && (
-                <Text style={styles.error}>{errorMessages.boatbrand}</Text>
-              )}
             </View>
             <View className="mt-6">
               <Text style={styles.item} className="mb-2">
@@ -249,9 +294,6 @@ const BoatData = () => {
                 placeholder="Select number of engines"
                 defaultValue={boatdata.enginecount}
               ></Option> */}
-              {errorMessages.enginecount && (
-                <Text style={styles.error}>{errorMessages.enginecount}</Text>
-              )}
             </View>
             <View className="mt-6">
               <Text style={styles.item} className="mb-2">
@@ -270,9 +312,6 @@ const BoatData = () => {
                 placeholder="Select N* bathrooms"
                 defaultValue={boatdata.bathroomcount}
               ></Option> */}
-              {errorMessages.bathroomcount && (
-                <Text style={styles.error}>{errorMessages.bathroomcount}</Text>
-              )}
             </View>
             <View className="mt-6">
               <Text style={styles.item} className="mb-2">
@@ -285,9 +324,6 @@ const BoatData = () => {
                 placeholder="Select propulation of type"
                 defaultValue={boatdata.power}
               ></Option>
-              {errorMessages.powers && (
-                <Text style={styles.error}>{errorMessages.powers}</Text>
-              )}
             </View>
             <View className="mt-6">
               <Text style={styles.item} className="mb-2">
@@ -306,9 +342,6 @@ const BoatData = () => {
                 placeholder="Select capacity"
                 defaultValue={boatdata.capacity}
               ></Option> */}
-              {errorMessages.capacity && (
-                <Text style={styles.error}>{errorMessages.capacity}</Text>
-              )}
             </View>
             <View className="mt-6">
               <Text style={styles.item} className="mb-2">
@@ -327,9 +360,6 @@ const BoatData = () => {
                 placeholder="Select cabins"
                 defaultValue={boatdata.cabinscount}
               ></Option> */}
-              {errorMessages.cabinscount && (
-                <Text style={styles.error}>{errorMessages.cabinscount}</Text>
-              )}
             </View>
             <View className="mt-6">
               <TouchableOpacity onPress={handleSubmit}>
@@ -338,10 +368,12 @@ const BoatData = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-            {errorMessages.general && (
-              <Text style={styles.error}>{errorMessages.general}</Text>
-            )}
           </View>
+          <ToastMessage
+            type={toastType}
+            description={errormessage}
+            ref={toastRef}
+          />
         </ScrollView>
       )}
 

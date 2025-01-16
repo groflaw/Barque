@@ -52,7 +52,6 @@ const PaymentDetail = () => {
         <View className="flex flex-row justify-between mt-3">
           <Text style={styles.total}>Total Amount</Text>
           <Text style={styles.total}>
-            $
             {new Intl.NumberFormat("en-US", {
               style: "currency",
               currency: "USD",

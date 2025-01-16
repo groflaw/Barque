@@ -2,7 +2,7 @@ import { View, StyleSheet, ScrollView, Image, Dimensions } from "react-native";
 import Navbar from "../Components/Navbar";
 import boatMark from "../../assets/Icons/nav-boat.png";
 
-import ChatUser from "../Components/Charts.jsx/ChatUser";
+import ChatUser from "../Components/Charts/ChatUser";
 
 const Chat = () => {
   const { height, width } = Dimensions.get("screen");

@@ -3,8 +3,9 @@ import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
-import { reservation } from "../../Actions/UserBoat/userboat";
 import { setCurboat, setCurhost } from "../../Store/Global";
+import { setBooking } from "../../Store/Global";
+import { calculateAverageReview } from "../../Utils/Validate";
 
 import HeaderImage from "./HeaderImage";
 import Summary from "./Summary";
@@ -68,15 +69,10 @@ const CarDetailed = () => {
       handleShowToast();
       return;
     }
-    let result = await dispatch(reservation(userId, curhost._id, boatId, plan));
-    if (result && result.errors) {
-      setErrorMessage(result.errors.general);
-      handleShowToast();
-    } else {
-      // await dispatch(setCurboat({}));
-      // await dispatch(setCurhost({}));
-      navigation.navigate("Reservas");
-    }
+    await dispatch(
+      setBooking({ userId, hostId: curhost._id, boatId, planId: plan })
+    );
+    navigation.navigate("Booking", { screen: "BookingDetail" });
   };
 
   return (
@@ -86,8 +82,8 @@ const CarDetailed = () => {
         <Summary
           location={curboat.location1}
           model={curboat.model}
-          review={curhost.review || 0}
-          booking={curhost.booking || 0}
+          review={calculateAverageReview(curboat.reviews) || 0}
+          booking={curboat.reviews.length || 0}
         ></Summary>
         <Services
           resrate={curhost.resrate || 100}

@@ -2,41 +2,50 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import io from "socket.io-client";
 
 import convertBoatImage from "../../../../assets/Icons/convertBoat.png";
 import asyncImage from "../../../../assets/Icons/async.png";
 
+import { Socket_API } from "../../../Utils/Constant";
 import { addUser } from "../../../Store/Slice";
-import { setMode,setCurboat,setCurhost } from "../../../Store/Global";
+import { setMode, setCurboat, setCurhost } from "../../../Store/Global";
 
 const Convert = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
- 
+
   const mode = useSelector((state) => state.Global.mode);
+  const curuser = useSelector((state) => state.Slice.user);
 
   const handlelogout = () => {
+    const socket = io(Socket_API);
+    socket.disconnect();
     dispatch(addUser({}));
     dispatch(setCurboat({}));
     dispatch(setCurhost({}));
     dispatch(setMode(false));
     navigation.navigate("Main");
   };
-  
+
   return (
     <>
       <View style={styles.container}>
         <View className="flex flex-row items-center justify-between ">
-          <View style={styles.boat} className="relative flex " >
+          <View style={styles.boat} className="relative flex ">
             <Image source={convertBoatImage}></Image>
             <View className="absolute" style={styles.async}>
               <Image source={asyncImage}></Image>
             </View>
           </View>
-          <View className="flex justify-around" style={{width:'72%'}}>
-            <Text style={styles.head}>{mode ? "Back to Customer Mode" : "Are you a boat owner?"}</Text>
+          <View className="flex justify-around" style={{ width: "72%" }}>
+            <Text style={styles.head}>
+              {mode ? "Back to Customer Mode" : "Are you a boat owner?"}
+            </Text>
             <Text style={styles.des}>
-              {mode ? "Click this button to switch to Customer mode to rent a boat." : "Click this button to switch to Host Mode and manage your boat reservations."}
+              {mode
+                ? "Click this button to switch to Customer mode to rent a boat."
+                : "Click this button to switch to Host Mode and manage your boat reservations."}
             </Text>
           </View>
         </View>
@@ -67,7 +76,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 15,
     margin: 10,
-    
   },
   async: {
     bottom: 8,

@@ -6,13 +6,14 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { changeProfile } from "../../Actions/Auth/auth.acitons";
 
 import CustomTextInput from "../Basic/Input";
+import ToastMessage from "../Basic/ToastMessage/ToastMessage";
 
 const Personal = () => {
   const dispatch = useDispatch();
@@ -21,9 +22,9 @@ const Personal = () => {
 
   const [startshow, setStartShow] = useState(false);
   const [curdate, setCurdate] = useState(null);
-
   const [isEdit, setEdit] = useState(false);
-  const [errorMessages, setErrorMessages] = useState({});
+  const [toastType, setToastType] = useState("success");
+  const [errormessage, setErrorMessage] = useState("");
   const [user, setUser] = useState({
     firstName: curuser.firstName,
     lastName: curuser.lastName,
@@ -35,6 +36,13 @@ const Personal = () => {
     city: curuser.city,
     bio: curuser.bio,
   });
+
+  const handleShowToast = () => {
+    if (toastRef.current) {
+      toastRef.current.show();
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -43,6 +51,7 @@ const Personal = () => {
       [name]: value, // Update the 'year' property
     }));
   };
+
   const onChangeStart = (event, selectedDate) => {
     if (selectedDate) {
       const currentDate = selectedDate.toLocaleDateString(); // Format Date directly
@@ -55,8 +64,15 @@ const Personal = () => {
 
   const handleSubmit = async () => {
     const result = await dispatch(changeProfile(curuser._id, user));
-    if (result.errors) {
-      setErrorMessages(result.errors);
+    console.log(result);
+    if (result?.errors) {
+      setToastType("warning");
+      for (let key in result.errors) {
+        if (result.errors.hasOwnProperty(key)) {
+          setErrorMessage(`${result.errors[key]}`);
+          handleShowToast();
+        }
+      }
     } else {
       setUser({
         firstName: result.firstName,
@@ -81,6 +97,7 @@ const Personal = () => {
     setStartShow(true); // setshow datapicker
     setCurdate(date); // selected date
   };
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -96,9 +113,7 @@ const Personal = () => {
               name="firstName"
             ></CustomTextInput>
           )}
-          {errorMessages.firstName && (
-            <Text style={styles.error}>{errorMessages.firstName}</Text>
-          )}
+         
         </View>
         <View className="mt-2">
           <Text style={styles.key}>LastName</Text>
@@ -111,9 +126,7 @@ const Personal = () => {
               name="lastName"
             ></CustomTextInput>
           )}
-          {errorMessages.lastName && (
-            <Text style={styles.error}>{errorMessages.lastName}</Text>
-          )}
+
         </View>
         <View className="mt-2">
           <Text style={styles.key}>Email</Text>
@@ -125,9 +138,7 @@ const Personal = () => {
               name="email"
             ></CustomTextInput>
           )}
-          {errorMessages.email && (
-            <Text style={styles.error}>{errorMessages.email}</Text>
-          )}
+         
         </View>
         <View className="mt-2">
           <Text style={styles.key}>Telephone Number</Text>
@@ -154,9 +165,7 @@ const Personal = () => {
               </View>
             </TouchableOpacity>
           )}
-          {errorMessages.birthDay && (
-            <Text style={styles.error}>{errorMessages.birthDay}</Text>
-          )}
+        
         </View>
         {startshow && (
           <DateTimePicker
@@ -238,6 +247,11 @@ const Personal = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <ToastMessage
+        type={toastType}
+        description={errormessage}
+        ref={toastRef}
+      />
     </ScrollView>
   );
 };
@@ -299,13 +313,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     elevation: 2,
   },
-  birthDaytext : {
-    paddingTop : 7,
+  birthDaytext: {
+    paddingTop: 7,
     height: 40,
     borderRadius: 4,
     paddingHorizontal: 10,
     fontSize: 16,
     backgroundColor: "#fff",
-  }
+  },
 });
 export default Personal;
