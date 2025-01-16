@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Baraquea",
-    "slug": "baraquea",
+    "slug": "barquea",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -40,7 +40,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "162f0bfc-1e05-4dae-bdf5-15d256ab3e1a"
+        "projectId": "e3e014fb-1e59-4463-9a7f-cc156fe240a2"
       }
     },
     "owner": "foreve0914",
